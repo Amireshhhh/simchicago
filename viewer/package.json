@@ -1,0 +1,16 @@
+{
+  "name": "simchicago-viewer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/core.test.mjs"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

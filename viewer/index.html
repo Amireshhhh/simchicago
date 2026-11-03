@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SimChicago</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<canvas id="gl" tabindex="0" aria-label="3D view of simulated Chicago"></canvas>
+<div id="labels" aria-hidden="true"></div>
+
+<header class="hud-top">
+  <div class="brand">
+    <span class="star" aria-hidden="true"></span>
+    <div>
+      <h1>SimChicago</h1>
+      <p id="clock">Loading</p>
+    </div>
+  </div>
+  <div class="counters" id="counters"></div>
+  <div class="controls-right">
+    <button id="missionsToggle" class="ghost" aria-expanded="false" aria-controls="missions">Missions</button>
+    <label class="select">Ground
+      <select id="lens">
+        <option value="none">Plain</option>
+        <option value="income">Median income (ACS)</option>
+        <option value="transit">Transit commute share (ACS)</option>
+        <option value="safety">Perceived safety (simulated)</option>
+        <option value="incidents">Recorded carjackings this week (CPD)</option>
+      </select>
+    </label>
+    <label class="select">Quality
+      <select id="quality">
+        <option value="low">Low</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
+      </select>
+    </label>
+    <button id="weatherBtn" class="ghost" aria-pressed="false" title="Hypothetical rain; no weather data is loaded">Rain (what-if)</button>
+    <button id="footprintsBtn" class="ghost" title="Fetch real building footprints around the camera target from data.cityofchicago.org">Real buildings here</button>
+  </div>
+</header>
+
+<aside id="missions" class="drawer left hidden" aria-label="Missions">
+  <h2>Missions</h2>
+  <ol id="missionList"></ol>
+  <p class="fine">Progress is kept in this browser only.</p>
+</aside>
+
+<aside id="inspector" class="drawer right hidden" aria-label="Inspector">
+  <button id="closeInspector" class="icon" aria-label="Close inspector">×</button>
+  <div id="inspectorBody"></div>
+</aside>
+
+<aside id="timelines" class="drawer right hidden" aria-label="Alternate timelines">
+  <button id="closeTimelines" class="icon" aria-label="Close">×</button>
+  <div id="timelinesBody"></div>
+</aside>
+
+<div id="legend" class="legend"></div>
+
+<footer class="ribbon-wrap">
+  <div class="transport">
+    <button id="play" class="primary" aria-label="Play">Play</button>
+    <div class="speeds" role="radiogroup" aria-label="Speed">
+      <button data-speed="1">1 min/s</button>
+      <button data-speed="10" class="on">10 min/s</button>
+      <button data-speed="60">1 h/s</button>
+      <button data-speed="240">4 h/s</button>
+    </div>
+    <button id="timelinesBtn" class="ghost">Compare timelines</button>
+  </div>
+  <div class="ribbon" id="ribbon">
+    <canvas id="ribbonSky"></canvas>
+    <div id="ribbonTicks"></div>
+    <div id="ribbonDays"></div>
+    <div id="playhead"></div>
+    <input id="scrub" type="range" min="0" max="10080" step="1" value="420" aria-label="Simulation time">
+  </div>
+</footer>
+
+<div id="toasts" aria-live="polite"></div>
+<div id="tip" role="tooltip"></div>
+<div id="boot"><div><h1>SimChicago</h1><p id="bootmsg">Loading the city…</p></div></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
