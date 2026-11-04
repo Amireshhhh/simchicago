@@ -1,7 +1,7 @@
 {
  "n_agents": 1944,
  "build_seed": 1,
- "seconds": 28.37716031074524,
+ "seconds": 31.369436979293823,
  "checks": {
   "data_integrity": {
    "pass": true,

@@ -8,6 +8,7 @@ import tomllib
 from dataclasses import dataclass
 from functools import lru_cache
 
+import numpy as np
 import pandas as pd
 from shapely.ops import unary_union
 
@@ -97,10 +98,10 @@ def load_cds() -> CDS:
     t["name"] = t["GEOG"]
 
     # Frame origin: centroid of the city in UTM 16N.
+    import shapely
     from shapely.geometry import shape
-    from shapely.ops import transform
     city_ll = unary_union([shape(ft["geometry"]) for ft in feats])
-    utm_city = transform(lambda lon, lat, *_: to_utm(lon, lat), city_ll)
+    utm_city = shapely.transform(city_ll, lambda ll: np.column_stack(to_utm(ll[:, 0], ll[:, 1])))
     c = utm_city.centroid
     frame = LocalFrame(c.x, c.y)
 

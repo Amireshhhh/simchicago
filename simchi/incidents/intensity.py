@@ -81,9 +81,9 @@ def fit_intensity(df: pd.DataFrame, start, end) -> IntensityModel:
     pi = (area_n + 0.5) / (n + 0.5 * 77)
     hour_n = np.bincount(d["time"].dt.hour, minlength=24).astype(float)
     eta = (hour_n + 0.5) / (n + 0.5 * 24)
-    dow_n = np.bincount(d["time"].dt.weekday, minlength=7).astype(float)
+    dow_n = np.bincount(d["time"].dt.day_of_week, minlength=7).astype(float)
     # Weekday frequencies relative to the number of each weekday in the window.
-    n_dow = np.bincount(pd.date_range(start, end - pd.Timedelta(days=1)).weekday, minlength=7)
+    n_dow = np.bincount(pd.date_range(start, end - pd.Timedelta(days=1)).day_of_week, minlength=7)
     rate = (dow_n + 0.5) / n_dow
     omega = rate / rate.mean()
     W = weekly_area_counts(df, start, end)

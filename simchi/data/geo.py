@@ -10,7 +10,6 @@ import numpy as np
 import shapely
 from pyproj import Transformer
 from shapely.geometry import MultiPolygon, Polygon, shape
-from shapely.ops import transform
 
 _FWD = Transformer.from_crs("EPSG:4326", "EPSG:32616", always_xy=True)
 _INV = Transformer.from_crs("EPSG:32616", "EPSG:4326", always_xy=True)
@@ -44,7 +43,7 @@ class LocalFrame:
     def geometry(self, geojson_geom) -> Polygon | MultiPolygon:
         """Project a GeoJSON (Multi)Polygon; invalid rings are repaired with make_valid and
         only the polygonal parts kept."""
-        g = transform(lambda lon, lat, *_: self.from_lonlat(lon, lat), shape(geojson_geom))
+        g = shapely.transform(shape(geojson_geom), lambda ll: np.column_stack(self.from_lonlat(ll[:, 0], ll[:, 1])))
         if not g.is_valid:
             g = shapely.make_valid(g)
             if g.geom_type == "GeometryCollection":
