@@ -1,0 +1,20 @@
+name = "remote_work"
+description = "What-if: more or less working from home than the ACS 2015-19 shares."
+replicates = 10
+baseline = "ACS work-from-home shares"
+
+[build]
+n = 2000
+seed = 1
+
+[base]
+n_days = 7
+incident_mode = "both"
+
+[[scenario]]
+name = "ACS work-from-home shares"
+
+[[sweep]]
+param = "wfh_multiplier"
+label = "work-from-home x"
+values = [0.5, 2.0, 4.0, 8.0]

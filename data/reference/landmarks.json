@@ -1,0 +1,10 @@
+{
+  "provenance": "Copied from the SimChicago v0.1 export, which recorded: '5 tallest buildings: heights and coordinates from Wikipedia (2026-10-14); box geometry is schematic'. Not re-verified in v0.2.",
+  "landmarks": [
+    {"name": "Willis Tower", "h": 442, "ll": [-87.6358, 41.8789]},
+    {"name": "Trump International Hotel and Tower", "h": 423, "ll": [-87.6264, 41.8889]},
+    {"name": "St. Regis Chicago", "h": 363, "ll": [-87.61722, 41.88722]},
+    {"name": "Aon Center", "h": 346, "ll": [-87.62139, 41.88528]},
+    {"name": "875 North Michigan Avenue", "h": 344, "ll": [-87.623, 41.8988]}
+  ]
+}

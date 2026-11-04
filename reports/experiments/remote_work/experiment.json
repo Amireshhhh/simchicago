@@ -1,0 +1,1948 @@
+{
+ "name": "remote_work",
+ "description": "What-if: more or less working from home than the ACS 2015-19 shares.",
+ "baseline": "ACS work-from-home shares",
+ "build": {
+  "n": 2000,
+  "seed": 1
+ },
+ "base": {
+  "n_days": 7,
+  "incident_mode": "both"
+ },
+ "seeds": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "scenarios": [
+  {
+   "name": "ACS work-from-home shares",
+   "set": {}
+  },
+  {
+   "name": "work-from-home x = 0.5",
+   "set": {
+    "wfh_multiplier": 0.5
+   }
+  },
+  {
+   "name": "work-from-home x = 2.0",
+   "set": {
+    "wfh_multiplier": 2.0
+   }
+  },
+  {
+   "name": "work-from-home x = 4.0",
+   "set": {
+    "wfh_multiplier": 4.0
+   }
+  },
+  {
+   "name": "work-from-home x = 8.0",
+   "set": {
+    "wfh_multiplier": 8.0
+   }
+  }
+ ],
+ "metrics": {
+  "incidents_observed": "recorded incidents replayed (total)",
+  "incidents_simulated": "model-drawn incidents (total)",
+  "agents_exposed": "agent-days with a direct exposure (total, unweighted)",
+  "activities_cancelled": "evening activities cancelled (total, unweighted)",
+  "activities_cancelled_weighted": "evening activities cancelled (total, population-weighted)",
+  "mean_out_of_home_min": "minutes out of home per resident per day",
+  "mean_evening_out_min": "minutes out of home after 18:00 per resident per day",
+  "final_perceived_safety": "mean perceived safety at the end of the run",
+  "trips_car": "car trips per day (population-weighted)",
+  "trips_transit": "transit trips per day (population-weighted)",
+  "trips_walk": "walk trips per day (population-weighted)",
+  "trips_other": "other-mode trips per day (population-weighted)",
+  "pkm_car": "car person-km per day (population-weighted, straight-line x 1.3)",
+  "pkm_transit": "transit person-km per day",
+  "pkm_walk": "walk person-km per day",
+  "pkm_other": "other-mode person-km per day",
+  "participation_work": "share of residents working away from home, mean per day",
+  "participation_shop": "share of residents shopping, mean per day",
+  "participation_social": "share of residents visiting, mean per day",
+  "participation_leisure": "share of residents on leisure trips, mean per day",
+  "participation_errand": "share of residents on errands, mean per day"
+ },
+ "summary": [
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "agents_exposed",
+   "mean": 18.6,
+   "se": 4.342810150121692,
+   "ci_low": 6.542426015891312,
+   "ci_high": 30.65757398410869,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "activities_cancelled",
+   "mean": 2.0,
+   "se": 0.8944271909999159,
+   "ci_low": -0.483327996407533,
+   "ci_high": 4.483327996407533,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "activities_cancelled_weighted",
+   "mean": 2603.913870377179,
+   "se": 1143.444508407921,
+   "ci_low": -570.797038057296,
+   "ci_high": 5778.624778811654,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "mean_out_of_home_min",
+   "mean": 345.0700185568878,
+   "se": 1.0085538681622408,
+   "ci_low": 342.26982410630046,
+   "ci_high": 347.8702130074752,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "mean_evening_out_min",
+   "mean": 48.07785198191067,
+   "se": 0.36466310113886413,
+   "ci_low": 47.06538489970742,
+   "ci_high": 49.09031906411392,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "final_perceived_safety",
+   "mean": 0.8290421731505836,
+   "se": 0.0005017752497955929,
+   "ci_low": 0.8276490217143793,
+   "ci_high": 0.8304353245867879,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "trips_car",
+   "mean": 2208385.7751268432,
+   "se": 11179.483625202125,
+   "ci_low": 2177346.552537012,
+   "ci_high": 2239424.9977166746,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "trips_transit",
+   "mean": 1087593.0537671563,
+   "se": 7305.576958232388,
+   "ci_low": 1067309.5203808262,
+   "ci_high": 1107876.5871534864,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "trips_walk",
+   "mean": 1853883.637907487,
+   "se": 6031.920154736162,
+   "ci_low": 1837136.342718926,
+   "ci_high": 1870630.9330960482,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "trips_other",
+   "mean": 46323.329132612285,
+   "se": 1001.1781440048376,
+   "ci_low": 43543.612975259035,
+   "ci_high": 49103.045289965536,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "pkm_car",
+   "mean": 27394728.34808106,
+   "se": 80465.74695275334,
+   "ci_low": 27171319.618818004,
+   "ci_high": 27618137.077344116,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "pkm_transit",
+   "mean": 11936291.537276063,
+   "se": 60223.694953586084,
+   "ci_low": 11769083.754205253,
+   "ci_high": 12103499.320346873,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "pkm_walk",
+   "mean": 2413126.7295870096,
+   "se": 9202.205620073248,
+   "ci_low": 2387577.3108361335,
+   "ci_high": 2438676.1483378857,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "pkm_other",
+   "mean": 1030806.8105793949,
+   "se": 23592.857937342054,
+   "ci_low": 965302.5356416345,
+   "ci_high": 1096311.0855171552,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "participation_work",
+   "mean": 0.3427490141912295,
+   "se": 0.0002124891219993647,
+   "ci_low": 0.34215904980854656,
+   "ci_high": 0.34333897857391243,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "participation_shop",
+   "mean": 0.30824240574586526,
+   "se": 0.002048466472634644,
+   "ci_low": 0.302554951034757,
+   "ci_high": 0.3139298604569735,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "participation_social",
+   "mean": 0.1763487432983549,
+   "se": 0.002208020509175016,
+   "ci_low": 0.17021829556347956,
+   "ci_high": 0.18247919103323024,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "participation_leisure",
+   "mean": 0.21076853442445148,
+   "se": 0.0018406644881701093,
+   "ci_low": 0.20565803051596018,
+   "ci_high": 0.21587903833294278,
+   "n": 5
+  },
+  {
+   "scenario": "ACS work-from-home shares",
+   "metric": "participation_errand",
+   "mean": 0.08031861431539293,
+   "se": 0.0015119934030264,
+   "ci_low": 0.07612064763246892,
+   "ci_high": 0.08451658099831694,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "agents_exposed",
+   "mean": 19.0,
+   "se": 4.289522117905443,
+   "ci_low": 7.090377312103739,
+   "ci_high": 30.90962268789626,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "activities_cancelled",
+   "mean": 2.0,
+   "se": 0.8944271909999159,
+   "ci_low": -0.483327996407533,
+   "ci_high": 4.483327996407533,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "activities_cancelled_weighted",
+   "mean": 2603.913870377179,
+   "se": 1143.444508407921,
+   "ci_low": -570.797038057296,
+   "ci_high": 5778.624778811654,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "mean_out_of_home_min",
+   "mean": 350.0622396972981,
+   "se": 0.9825719003767107,
+   "ci_low": 347.33418275399225,
+   "ci_high": 352.7902966406039,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "mean_evening_out_min",
+   "mean": 48.353222606122685,
+   "se": 0.3570190329265916,
+   "ci_low": 47.3619788596912,
+   "ci_high": 49.34446635255417,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "final_perceived_safety",
+   "mean": 0.829003818358955,
+   "se": 0.0004942570283541885,
+   "ci_low": 0.8276315408518714,
+   "ci_high": 0.8303760958660386,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_car",
+   "mean": 2213143.4417084805,
+   "se": 11353.0911339715,
+   "ci_low": 2181622.207400701,
+   "ci_high": 2244664.67601626,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_transit",
+   "mean": 1123347.99321434,
+   "se": 7041.6004452864145,
+   "ci_low": 1103797.3761252658,
+   "ci_high": 1142898.610303414,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_walk",
+   "mean": 1848540.9490384385,
+   "se": 6398.120953277198,
+   "ci_low": 1830776.9174352486,
+   "ci_high": 1866304.9806416284,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_other",
+   "mean": 46323.329132612285,
+   "se": 1001.1781440048376,
+   "ci_low": 43543.612975259035,
+   "ci_high": 49103.045289965536,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_car",
+   "mean": 27529210.118057538,
+   "se": 80908.18314500219,
+   "ci_low": 27304572.988994148,
+   "ci_high": 27753847.247120928,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_transit",
+   "mean": 12406931.347829241,
+   "se": 64122.40646938926,
+   "ci_low": 12228899.006253801,
+   "ci_high": 12584963.689404681,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_walk",
+   "mean": 2410144.588365854,
+   "se": 10513.14290026978,
+   "ci_low": 2380955.424220155,
+   "ci_high": 2439333.7525115535,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_other",
+   "mean": 1030806.8105793949,
+   "se": 23592.857937342054,
+   "ci_low": 965302.5356416345,
+   "ci_high": 1096311.0855171552,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_work",
+   "mean": 0.35231052210827657,
+   "se": 0.0002728400360147498,
+   "ci_low": 0.35155299672578144,
+   "ci_high": 0.3530680474907717,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_shop",
+   "mean": 0.3081550640260932,
+   "se": 0.0020179192429431838,
+   "ci_low": 0.30255242202133914,
+   "ci_high": 0.3137577060308473,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_social",
+   "mean": 0.1763487432983549,
+   "se": 0.002208020509175016,
+   "ci_low": 0.17021829556347956,
+   "ci_high": 0.18247919103323024,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_leisure",
+   "mean": 0.21073883280769806,
+   "se": 0.0018264011631521544,
+   "ci_low": 0.2056679302381367,
+   "ci_high": 0.21580973537725942,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_errand",
+   "mean": 0.08027484907728735,
+   "se": 0.0014926057813318817,
+   "ci_low": 0.07613071106171851,
+   "ci_high": 0.0844189870928562,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "agents_exposed",
+   "mean": 18.4,
+   "se": 4.422668877499196,
+   "ci_low": 6.120702643156713,
+   "ci_high": 30.679297356843286,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "activities_cancelled",
+   "mean": 2.0,
+   "se": 0.8944271909999159,
+   "ci_low": -0.483327996407533,
+   "ci_high": 4.483327996407533,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "activities_cancelled_weighted",
+   "mean": 2603.913870377179,
+   "se": 1143.444508407921,
+   "ci_low": -570.797038057296,
+   "ci_high": 5778.624778811654,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "mean_out_of_home_min",
+   "mean": 333.2611697702825,
+   "se": 1.0107518083272622,
+   "ci_low": 330.45487285948246,
+   "ci_high": 336.0674666810825,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "mean_evening_out_min",
+   "mean": 47.37676514995759,
+   "se": 0.37490512581287627,
+   "ci_low": 46.335861648480865,
+   "ci_high": 48.41766865143432,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "final_perceived_safety",
+   "mean": 0.8290695856855862,
+   "se": 0.0005005965697222177,
+   "ci_low": 0.8276797067899021,
+   "ci_high": 0.8304594645812703,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_car",
+   "mean": 2173910.9402136425,
+   "se": 10692.271778102342,
+   "ci_low": 2144224.4345718855,
+   "ci_high": 2203597.4458553996,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_transit",
+   "mean": 1044207.2063607192,
+   "se": 8069.27201613907,
+   "ci_low": 1021803.3155690003,
+   "ci_high": 1066611.097152438,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_walk",
+   "mean": 1855742.1891244077,
+   "se": 6350.569525875791,
+   "ci_low": 1838110.1814490715,
+   "ci_high": 1873374.196799744,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_other",
+   "mean": 41144.29484689799,
+   "se": 1037.3745202304267,
+   "ci_low": 38264.08143794731,
+   "ci_high": 44024.50825584867,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_car",
+   "mean": 26584298.172359474,
+   "se": 77334.10065302216,
+   "ci_low": 26369584.287136517,
+   "ci_high": 26799012.05758243,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_transit",
+   "mean": 11219511.359873924,
+   "se": 65917.98872325527,
+   "ci_low": 11036493.682738759,
+   "ci_high": 11402529.03700909,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_walk",
+   "mean": 2384168.526965635,
+   "se": 10767.28104383953,
+   "ci_low": 2354273.7622151775,
+   "ci_high": 2414063.2917160923,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_other",
+   "mean": 950336.289739778,
+   "se": 22695.19902539082,
+   "ci_low": 887324.3154942419,
+   "ci_high": 1013348.2639853142,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_work",
+   "mean": 0.3212988606255235,
+   "se": 0.0002809009518100145,
+   "ci_low": 0.32051895455282514,
+   "ci_high": 0.32207876669822183,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_shop",
+   "mean": 0.3082864626336194,
+   "se": 0.0020644825118883215,
+   "ci_low": 0.30255454026872064,
+   "ci_high": 0.3140183849985182,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_social",
+   "mean": 0.17639187325796346,
+   "se": 0.002231049501552141,
+   "ci_low": 0.17019748678992502,
+   "ci_high": 0.1825862597260019,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_leisure",
+   "mean": 0.2107971967706627,
+   "se": 0.0018300096667687917,
+   "ci_low": 0.20571627538889783,
+   "ci_high": 0.21587811815242755,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_errand",
+   "mean": 0.08033268890312681,
+   "se": 0.0015060838293241754,
+   "ci_low": 0.07615112982718214,
+   "ci_high": 0.08451424797907148,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "agents_exposed",
+   "mean": 17.4,
+   "se": 3.7894590642992827,
+   "ci_low": 6.8787749295788245,
+   "ci_high": 27.921225070421173,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "activities_cancelled",
+   "mean": 1.4,
+   "se": 0.5099019513592785,
+   "ci_low": -0.01571477698227497,
+   "ci_high": 2.815714776982275,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "activities_cancelled_weighted",
+   "mean": 1812.8376811594203,
+   "se": 640.6652123381639,
+   "ci_low": 34.06588829261682,
+   "ci_high": 3591.609474026224,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "mean_out_of_home_min",
+   "mean": 309.9028082778591,
+   "se": 0.9227172115453632,
+   "ci_low": 307.3409345923822,
+   "ci_high": 312.464681963336,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "mean_evening_out_min",
+   "mean": 45.948965999810596,
+   "se": 0.4036677356195629,
+   "ci_low": 44.82820469112338,
+   "ci_high": 47.06972730849781,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "final_perceived_safety",
+   "mean": 0.8292234913447526,
+   "se": 0.00043900704935312304,
+   "ci_low": 0.8280046123714287,
+   "ci_high": 0.8304423703180764,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_car",
+   "mean": 2100816.4622458117,
+   "se": 10676.266459691642,
+   "ci_low": 2071174.3944920134,
+   "ci_high": 2130458.52999961,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_transit",
+   "mean": 972563.4253016328,
+   "se": 8699.691045510492,
+   "ci_low": 948409.2106815921,
+   "ci_high": 996717.6399216736,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_walk",
+   "mean": 1845838.945962801,
+   "se": 6492.198242770653,
+   "ci_low": 1827813.7139296867,
+   "ci_high": 1863864.1779959155,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_other",
+   "mean": 33807.105719746076,
+   "se": 1020.7371299720328,
+   "ci_low": 30973.085111541575,
+   "ci_high": 36641.12632795057,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_car",
+   "mean": 24644819.513842724,
+   "se": 77843.40575427368,
+   "ci_low": 24428691.570964344,
+   "ci_high": 24860947.456721105,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_transit",
+   "mean": 10364056.0878531,
+   "se": 70412.73583207771,
+   "ci_low": 10168558.992108542,
+   "ci_high": 10559553.183597658,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_walk",
+   "mean": 2289177.7977777747,
+   "se": 11708.388527956995,
+   "ci_low": 2256670.0997595745,
+   "ci_high": 2321685.495795975,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_other",
+   "mean": 767438.1822133939,
+   "se": 22986.04301099001,
+   "ci_low": 703618.6956076645,
+   "ci_high": 831257.6688191232,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_work",
+   "mean": 0.27842680497288674,
+   "se": 0.00036041479898235986,
+   "ci_low": 0.2774261330684113,
+   "ci_high": 0.2794274768773622,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_shop",
+   "mean": 0.3084172442814378,
+   "se": 0.002101239274008078,
+   "ci_low": 0.30258326878426867,
+   "ci_high": 0.3142512197786069,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_social",
+   "mean": 0.17643586554886387,
+   "se": 0.0022325305456013427,
+   "ci_low": 0.17023736704332446,
+   "ci_high": 0.18263436405440328,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_leisure",
+   "mean": 0.21088460290107158,
+   "se": 0.0018085189027286439,
+   "ci_low": 0.20586334944593296,
+   "ci_high": 0.2159058563562102,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_errand",
+   "mean": 0.08034737114608978,
+   "se": 0.001510362310706376,
+   "ci_low": 0.07615393310145382,
+   "ci_high": 0.08454080919072574,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "agents_exposed",
+   "mean": 16.6,
+   "se": 3.501428280002319,
+   "ci_low": 6.878476590786416,
+   "ci_high": 26.321523409213587,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "activities_cancelled",
+   "mean": 1.4,
+   "se": 0.5099019513592785,
+   "ci_low": -0.01571477698227497,
+   "ci_high": 2.815714776982275,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "activities_cancelled_weighted",
+   "mean": 1812.8376811594203,
+   "se": 640.6652123381639,
+   "ci_low": 34.06588829261682,
+   "ci_high": 3591.609474026224,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "mean_out_of_home_min",
+   "mean": 271.22022896963733,
+   "se": 1.000501929617066,
+   "ci_low": 268.4423902844111,
+   "ci_high": 273.9980676548636,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "mean_evening_out_min",
+   "mean": 43.375231650691774,
+   "se": 0.39409486121201315,
+   "ci_low": 42.28104890229607,
+   "ci_high": 44.469414399087476,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "final_perceived_safety",
+   "mean": 0.8293266408648421,
+   "se": 0.0003888309732943111,
+   "ci_low": 0.8282470730122898,
+   "ci_high": 0.8304062087173943,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_car",
+   "mean": 1968311.8177417181,
+   "se": 12561.699225386874,
+   "ci_low": 1933434.9494144258,
+   "ci_high": 2003188.6860690105,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_transit",
+   "mean": 868486.377456742,
+   "se": 8976.23777789088,
+   "ci_low": 843564.3460152253,
+   "ci_high": 893408.4088982587,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_walk",
+   "mean": 1824893.0635025625,
+   "se": 7071.540942344637,
+   "ci_low": 1805259.3182669838,
+   "ci_high": 1844526.808738141,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_other",
+   "mean": 20653.96573341661,
+   "se": 732.4662157273159,
+   "ci_low": 18620.31349403775,
+   "ci_high": 22687.617972795473,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_car",
+   "mean": 21465011.927036677,
+   "se": 100007.28969123747,
+   "ci_low": 21187347.17708934,
+   "ci_high": 21742676.676984012,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_transit",
+   "mean": 8600970.027605167,
+   "se": 78986.59877455847,
+   "ci_low": 8381668.072061322,
+   "ci_high": 8820271.983149013,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_walk",
+   "mean": 2108781.8478585924,
+   "se": 12458.634065545071,
+   "ci_low": 2074191.1342898593,
+   "ci_high": 2143372.5614273255,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_other",
+   "mean": 428649.4069579796,
+   "se": 16779.187931864468,
+   "ci_low": 382062.91275536054,
+   "ci_high": 475235.9011605987,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_work",
+   "mean": 0.20767373976668538,
+   "se": 0.000718123312073906,
+   "ci_low": 0.20567990981194936,
+   "ci_high": 0.2096675697214214,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_shop",
+   "mean": 0.30860695019191536,
+   "se": 0.002116846843141967,
+   "ci_low": 0.30272964113582046,
+   "ci_high": 0.31448425924801027,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_social",
+   "mean": 0.17654376238375885,
+   "se": 0.002242267927862033,
+   "ci_low": 0.1703182285709043,
+   "ci_high": 0.1827692961966134,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_leisure",
+   "mean": 0.2109430334440237,
+   "se": 0.0017931770241000915,
+   "ci_low": 0.20596437587270786,
+   "ci_high": 0.21592169101533956,
+   "n": 5
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_errand",
+   "mean": 0.08040685163949876,
+   "se": 0.0015182505892943055,
+   "ci_low": 0.07619151222238892,
+   "ci_high": 0.0846221910566086,
+   "n": 5
+  }
+ ],
+ "effects": [
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "incidents_observed",
+   "baseline_mean": 28.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "incidents_simulated",
+   "baseline_mean": 23.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "agents_exposed",
+   "baseline_mean": 18.6,
+   "diff": 0.4,
+   "se": 0.24494897427831783,
+   "ci_low": -0.280087380658257,
+   "ci_high": 1.0800873806582572,
+   "rel_diff": 0.02150537634408602,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "activities_cancelled",
+   "baseline_mean": 2.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "activities_cancelled_weighted",
+   "baseline_mean": 2603.913870377179,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "mean_out_of_home_min",
+   "baseline_mean": 345.0700185568878,
+   "diff": 4.992221140410265,
+   "se": 0.08064161044186363,
+   "ci_low": 4.768324135823685,
+   "ci_high": 5.2161181449968455,
+   "rel_diff": 0.014467270037797427,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "mean_evening_out_min",
+   "baseline_mean": 48.07785198191067,
+   "diff": 0.2753706242120174,
+   "se": 0.010215160821468042,
+   "ci_low": 0.24700879095044415,
+   "ci_high": 0.3037324574735907,
+   "rel_diff": 0.00572759831940133,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "final_perceived_safety",
+   "baseline_mean": 0.8290421731505836,
+   "diff": -3.835479162865863e-05,
+   "se": 2.4143555710803717e-05,
+   "ci_low": -0.00010538804870398997,
+   "ci_high": 2.8678465446672712e-05,
+   "rel_diff": -4.6263981339936044e-05,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_car",
+   "baseline_mean": 2208385.7751268432,
+   "diff": 4757.666581637505,
+   "se": 484.26268251640676,
+   "ci_low": 3413.137827134872,
+   "ci_high": 6102.195336140138,
+   "rel_diff": 0.002154363895666842,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_transit",
+   "baseline_mean": 1087593.0537671563,
+   "diff": 35754.93944718372,
+   "se": 657.7036594309326,
+   "ci_low": 33928.86134128603,
+   "ci_high": 37581.017553081416,
+   "rel_diff": 0.032875292209100966,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_walk",
+   "baseline_mean": 1853883.637907487,
+   "diff": -5342.688869048562,
+   "se": 520.2443203529498,
+   "ci_low": -6787.118665799465,
+   "ci_high": -3898.2590722976593,
+   "rel_diff": -0.002881890081881813,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "trips_other",
+   "baseline_mean": 46323.329132612285,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_car",
+   "baseline_mean": 27394728.34808106,
+   "diff": 134481.7699764818,
+   "se": 4905.838665543061,
+   "ci_low": 120860.97822664466,
+   "ci_high": 148102.56172631893,
+   "rel_diff": 0.00490903827436208,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_transit",
+   "baseline_mean": 11936291.537276063,
+   "diff": 470639.8105531797,
+   "se": 11952.370719164437,
+   "ci_low": 437454.70937444613,
+   "ci_high": 503824.9117319133,
+   "rel_diff": 0.03942931597166591,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_walk",
+   "baseline_mean": 2413126.7295870096,
+   "diff": -2982.141221154947,
+   "se": 1665.8057666949308,
+   "ci_low": -7607.159488305354,
+   "ci_high": 1642.8770459954603,
+   "rel_diff": -0.0012357996720981663,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "pkm_other",
+   "baseline_mean": 1030806.8105793949,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_work",
+   "baseline_mean": 0.3427490141912295,
+   "diff": 0.009561507917047051,
+   "se": 0.00015091002742423473,
+   "ci_low": 0.00914251451007977,
+   "ci_high": 0.009980501324014334,
+   "rel_diff": 0.027896529300336405,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_shop",
+   "baseline_mean": 0.30824240574586526,
+   "diff": -8.734171977208272e-05,
+   "se": 4.274592778985298e-05,
+   "ci_low": -0.00020602344175135859,
+   "ci_high": 3.134000220719315e-05,
+   "rel_diff": -0.00028335400368011924,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_social",
+   "baseline_mean": 0.1763487432983549,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_leisure",
+   "baseline_mean": 0.21076853442445148,
+   "diff": -2.970161675345806e-05,
+   "se": 1.819373499603818e-05,
+   "ci_low": -8.021552322847416e-05,
+   "ci_high": 2.0812289721558037e-05,
+   "rel_diff": -0.00014092054506411345,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 0.5",
+   "metric": "participation_errand",
+   "baseline_mean": 0.08031861431539293,
+   "diff": -4.3765238105580864e-05,
+   "se": 2.9146952584386783e-05,
+   "ci_low": -0.0001246901519399339,
+   "ci_high": 3.7159675728772146e-05,
+   "rel_diff": -0.0005448953331506036,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "incidents_observed",
+   "baseline_mean": 28.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "incidents_simulated",
+   "baseline_mean": 23.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "agents_exposed",
+   "baseline_mean": 18.6,
+   "diff": -0.2,
+   "se": 0.20000000000000004,
+   "ci_low": -0.75528902103956,
+   "ci_high": 0.3552890210395599,
+   "rel_diff": -0.01075268817204301,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "activities_cancelled",
+   "baseline_mean": 2.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "activities_cancelled_weighted",
+   "baseline_mean": 2603.913870377179,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "mean_out_of_home_min",
+   "baseline_mean": 345.0700185568878,
+   "diff": -11.808848786605335,
+   "se": 0.05865514808278871,
+   "ci_low": -11.971701585394445,
+   "ci_high": -11.645995987816224,
+   "rel_diff": -0.03422160185341788,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "mean_evening_out_min",
+   "baseline_mean": 48.07785198191067,
+   "diff": -0.7010868319530829,
+   "se": 0.01907037825802572,
+   "ci_low": -0.7540346903218489,
+   "ci_high": -0.6481389735843168,
+   "rel_diff": -0.014582324356272559,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "final_perceived_safety",
+   "baseline_mean": 0.8290421731505836,
+   "diff": 2.7412535002580006e-05,
+   "se": 1.828541865761998e-05,
+   "ci_low": -2.3355926125861495e-05,
+   "ci_high": 7.818099613102151e-05,
+   "rel_diff": 3.30653082440969e-05,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_car",
+   "baseline_mean": 2208385.7751268432,
+   "diff": -34474.8349132007,
+   "se": 500.1607449603892,
+   "ci_low": -35863.50376535806,
+   "ci_high": -33086.16606104334,
+   "rel_diff": -0.015610875283427582,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_transit",
+   "baseline_mean": 1087593.0537671563,
+   "diff": -43385.84740643711,
+   "se": 879.7967017095621,
+   "ci_low": -45828.55465246779,
+   "ci_high": -40943.14016040643,
+   "rel_diff": -0.03989161870440341,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_walk",
+   "baseline_mean": 1853883.637907487,
+   "diff": 1858.5512169205117,
+   "se": 927.477957855522,
+   "ci_low": -716.5404193463028,
+   "ci_high": 4433.642853187326,
+   "rel_diff": 0.0010025177303027999,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "trips_other",
+   "baseline_mean": 46323.329132612285,
+   "diff": -5179.0342857142805,
+   "se": 317.1481601101075,
+   "ci_low": -6059.578742474476,
+   "ci_high": -4298.489828954085,
+   "rel_diff": -0.11180185843051091,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_car",
+   "baseline_mean": 27394728.34808106,
+   "diff": -810430.1757215842,
+   "se": 7556.069080528317,
+   "ci_low": -831409.1867347535,
+   "ci_high": -789451.1647084149,
+   "rel_diff": -0.02958343537574641,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_transit",
+   "baseline_mean": 11936291.537276063,
+   "diff": -716780.1774021394,
+   "se": 7631.3918569584475,
+   "ci_low": -737968.317969238,
+   "ci_high": -695592.0368350408,
+   "rel_diff": -0.060050491826853715,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_walk",
+   "baseline_mean": 2413126.7295870096,
+   "diff": -28958.20262137456,
+   "se": 2151.6354604701696,
+   "ci_low": -34932.10036376697,
+   "ci_high": -22984.304878982144,
+   "rel_diff": -0.012000282565487375,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "pkm_other",
+   "baseline_mean": 1030806.8105793949,
+   "diff": -80470.52083961692,
+   "se": 6787.3190425407965,
+   "ci_low": -99315.13957269513,
+   "ci_high": -61625.90210653871,
+   "rel_diff": -0.07806556962345458,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_work",
+   "baseline_mean": 0.3427490141912295,
+   "diff": -0.021450153565706044,
+   "se": 0.00013249970458956362,
+   "ci_low": -0.02181803172195389,
+   "ci_high": -0.021082275409458198,
+   "rel_diff": -0.06258268493148281,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_shop",
+   "baseline_mean": 0.30824240574586526,
+   "diff": 4.40568877541625e-05,
+   "se": 2.938145411744526e-05,
+   "ci_low": -3.7519106713812094e-05,
+   "ci_high": 0.0001256328822221371,
+   "rel_diff": 0.0001429293534338874,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_social",
+   "baseline_mean": 0.1763487432983549,
+   "diff": 4.3129959608584346e-05,
+   "se": 2.872605608454772e-05,
+   "ci_low": -3.6626358198995616e-05,
+   "ci_high": 0.00012288627741616432,
+   "rel_diff": 0.0002445719703010024,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_leisure",
+   "baseline_mean": 0.21076853442445148,
+   "diff": 2.8662346211183465e-05,
+   "se": 1.755474119910718e-05,
+   "ci_low": -2.0077429064091796e-05,
+   "ci_high": 7.740212148645873e-05,
+   "rel_diff": 0.00013598968313487648,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 2.0",
+   "metric": "participation_errand",
+   "baseline_mean": 0.08031861431539293,
+   "diff": 1.407458773388659e-05,
+   "se": 1.4422247633536407e-05,
+   "ci_low": -2.5967991114196102e-05,
+   "ci_high": 5.4117166581969285e-05,
+   "rel_diff": 0.0001752344441429092,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "incidents_observed",
+   "baseline_mean": 28.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "incidents_simulated",
+   "baseline_mean": 23.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "agents_exposed",
+   "baseline_mean": 18.6,
+   "diff": -1.2,
+   "se": 0.8602325267042625,
+   "ci_low": -3.5883883880999843,
+   "ci_high": 1.1883883880999846,
+   "rel_diff": -0.06451612903225806,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "activities_cancelled",
+   "baseline_mean": 2.0,
+   "diff": -0.6,
+   "se": 0.3999999999999999,
+   "ci_low": -1.7105780420791192,
+   "ci_high": 0.5105780420791192,
+   "rel_diff": -0.3,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "activities_cancelled_weighted",
+   "baseline_mean": 2603.913870377179,
+   "diff": -791.0761892177588,
+   "se": 525.8684211634528,
+   "ci_low": -2251.120993135122,
+   "ci_high": 668.9686146996041,
+   "rel_diff": -0.3038027479392668,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "mean_out_of_home_min",
+   "baseline_mean": 345.0700185568878,
+   "diff": -35.16721027902871,
+   "se": 0.23606977927053577,
+   "ci_low": -35.822645062169514,
+   "ci_high": -34.5117754958879,
+   "rel_diff": -0.10191325930343348,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "mean_evening_out_min",
+   "baseline_mean": 48.07785198191067,
+   "diff": -2.1288859821000727,
+   "se": 0.06349937251548689,
+   "ci_low": -2.305188504103828,
+   "ci_high": -1.9525834600963174,
+   "rel_diff": -0.04427997288441813,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "final_perceived_safety",
+   "baseline_mean": 0.8290421731505836,
+   "diff": 0.0001813181941690889,
+   "se": 0.00010195241619329485,
+   "ci_low": -0.00010174709273387336,
+   "ci_high": 0.0004643834810720512,
+   "rel_diff": 0.00021870804651593406,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_car",
+   "baseline_mean": 2208385.7751268432,
+   "diff": -107569.31288103173,
+   "se": 1371.879863477573,
+   "ci_low": -111378.26201290346,
+   "ci_high": -103760.36374916,
+   "rel_diff": -0.048709475533029664,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_transit",
+   "baseline_mean": 1087593.0537671563,
+   "diff": -115029.62846552343,
+   "se": 1576.2767507744027,
+   "ci_low": -119406.07433464812,
+   "ci_high": -110653.18259639875,
+   "rel_diff": -0.10576532101514342,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_walk",
+   "baseline_mean": 1853883.637907487,
+   "diff": -8044.6919446861375,
+   "se": 1399.444474202013,
+   "ci_low": -11930.172705080424,
+   "ci_high": -4159.211184291851,
+   "rel_diff": -0.004339372644642536,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "trips_other",
+   "baseline_mean": 46323.329132612285,
+   "diff": -12516.223412866202,
+   "se": 449.34879153074854,
+   "ci_low": -13763.815665638294,
+   "ci_high": -11268.63116009411,
+   "rel_diff": -0.27019265772188644,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_car",
+   "baseline_mean": 27394728.34808106,
+   "diff": -2749908.8342383294,
+   "se": 6487.499712095223,
+   "ci_low": -2767921.0210589482,
+   "ci_high": -2731896.6474177106,
+   "rel_diff": -0.10038094918473446,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_transit",
+   "baseline_mean": 11936291.537276063,
+   "diff": -1572235.4494229616,
+   "se": 16438.8214945538,
+   "ci_low": -1617876.934896736,
+   "ci_high": -1526593.9639491872,
+   "rel_diff": -0.13171892161924822,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_walk",
+   "baseline_mean": 2413126.7295870096,
+   "diff": -123948.93180923499,
+   "se": 4021.962029965672,
+   "ci_low": -135115.6886006246,
+   "ci_high": -112782.1750178454,
+   "rel_diff": -0.051364451891197614,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "pkm_other",
+   "baseline_mean": 1030806.8105793949,
+   "diff": -263368.62836600107,
+   "se": 9588.601190224366,
+   "ci_low": -289990.8532062933,
+   "ci_high": -236746.40352570883,
+   "rel_diff": -0.2554975633290268,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_work",
+   "baseline_mean": 0.3427490141912295,
+   "diff": -0.06432220921834282,
+   "se": 0.00025042710771388453,
+   "ci_low": -0.06501750633576388,
+   "ci_high": -0.06362691210092176,
+   "rel_diff": -0.1876656286528533,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_shop",
+   "baseline_mean": 0.30824240574586526,
+   "diff": 0.00017483853557251905,
+   "se": 5.5828563143482036e-05,
+   "ci_low": 1.9833594702572125e-05,
+   "ci_high": 0.000329843476442466,
+   "rel_diff": 0.0005672111698890227,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_social",
+   "baseline_mean": 0.1763487432983549,
+   "diff": 8.712225050898081e-05,
+   "se": 3.5374565787346374e-05,
+   "ci_low": -1.1093289519794542e-05,
+   "ci_high": 0.00018533779053775618,
+   "rel_diff": 0.0004940338608570824,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_leisure",
+   "baseline_mean": 0.21076853442445148,
+   "diff": 0.00011606847662009589,
+   "se": 3.6826255296189655e-05,
+   "ci_low": 1.3822400360225608e-05,
+   "ci_high": 0.00021831455287996617,
+   "rel_diff": 0.0005506916719663382,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 4.0",
+   "metric": "participation_errand",
+   "baseline_mean": 0.08031861431539293,
+   "diff": 2.875683069683832e-05,
+   "se": 1.7609944852792432e-05,
+   "ci_low": -2.0136214492500396e-05,
+   "ci_high": 7.764987588617704e-05,
+   "rel_diff": 0.00035803444745593826,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "incidents_observed",
+   "baseline_mean": 28.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "incidents_simulated",
+   "baseline_mean": 23.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "agents_exposed",
+   "baseline_mean": 18.6,
+   "diff": -2.0,
+   "se": 1.4832396974191324,
+   "ci_low": -6.118133597734414,
+   "ci_high": 2.1181335977344142,
+   "rel_diff": -0.1075268817204301,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "activities_cancelled",
+   "baseline_mean": 2.0,
+   "diff": -0.6,
+   "se": 0.3999999999999999,
+   "ci_low": -1.7105780420791192,
+   "ci_high": 0.5105780420791192,
+   "rel_diff": -0.3,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "activities_cancelled_weighted",
+   "baseline_mean": 2603.913870377179,
+   "diff": -791.0761892177588,
+   "se": 525.8684211634528,
+   "ci_low": -2251.120993135122,
+   "ci_high": 668.9686146996041,
+   "rel_diff": -0.3038027479392668,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "mean_out_of_home_min",
+   "baseline_mean": 345.0700185568878,
+   "diff": -73.84978958725046,
+   "se": 0.39399829649855017,
+   "ci_low": -74.94370422902013,
+   "ci_high": -72.75587494548078,
+   "rel_diff": -0.21401392649554593,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "mean_evening_out_min",
+   "baseline_mean": 48.07785198191067,
+   "diff": -4.702620331218894,
+   "se": 0.060723369889394245,
+   "ci_low": -4.871215434319418,
+   "ci_high": -4.534025228118369,
+   "rel_diff": -0.09781261302997185,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "final_perceived_safety",
+   "baseline_mean": 0.8290421731505836,
+   "diff": 0.0002844677142583629,
+   "se": 0.0001791916236467478,
+   "ci_low": -0.00021304799210809615,
+   "ci_high": 0.000781983420624822,
+   "rel_diff": 0.00034312815858005024,
+   "significant": false
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_car",
+   "baseline_mean": 2208385.7751268432,
+   "diff": -240073.95738512516,
+   "se": 2339.667243178256,
+   "ci_low": -246569.91505023907,
+   "ci_high": -233577.99972001126,
+   "rel_diff": -0.10871015385495136,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_transit",
+   "baseline_mean": 1087593.0537671563,
+   "diff": -219106.67631041436,
+   "se": 1865.8696822694892,
+   "ci_low": -224287.16105668846,
+   "ci_high": -213926.19156414026,
+   "rel_diff": -0.2014601652258466,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_walk",
+   "baseline_mean": 1853883.637907487,
+   "diff": -28990.574404924922,
+   "se": 2254.3647103707713,
+   "ci_low": -35249.6942703645,
+   "ci_high": -22731.45453948534,
+   "rel_diff": -0.015637752991685672,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "trips_other",
+   "baseline_mean": 46323.329132612285,
+   "diff": -25669.36339919566,
+   "se": 765.9275121645944,
+   "ci_low": -27795.919091281376,
+   "ci_high": -23542.807707109943,
+   "rel_diff": -0.5541346850462883,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_car",
+   "baseline_mean": 27394728.34808106,
+   "diff": -5929716.421044381,
+   "se": 37993.03868404693,
+   "ci_low": -6035202.007330294,
+   "ci_high": -5824230.834758469,
+   "rel_diff": -0.21645465308874817,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_transit",
+   "baseline_mean": 11936291.537276063,
+   "diff": -3335321.509670896,
+   "se": 23841.780418981445,
+   "ci_low": -3401516.9042143775,
+   "ci_high": -3269126.1151274145,
+   "rel_diff": -0.2794269475787316,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_walk",
+   "baseline_mean": 2413126.7295870096,
+   "diff": -304344.8817284169,
+   "se": 10722.386991407364,
+   "ci_low": -334115.0006067464,
+   "ci_high": -274574.76285008737,
+   "rel_diff": -0.12612055471305622,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "pkm_other",
+   "baseline_mean": 1030806.8105793949,
+   "diff": -602157.4036214154,
+   "se": 12035.707239307258,
+   "ci_low": -635573.8840735838,
+   "ci_high": -568740.923169247,
+   "rel_diff": -0.584161258386482,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_work",
+   "baseline_mean": 0.3427490141912295,
+   "diff": -0.13507527442454415,
+   "se": 0.0007024015575199288,
+   "ci_low": -0.13702545379080366,
+   "ci_high": -0.13312509505828463,
+   "rel_diff": -0.3940938378576394,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_shop",
+   "baseline_mean": 0.30824240574586526,
+   "diff": 0.0003645444460500857,
+   "se": 7.072997827635251e-05,
+   "ci_low": 0.00016816654407396015,
+   "ci_high": 0.0005609223480262113,
+   "rel_diff": 0.001182655076831445,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_social",
+   "baseline_mean": 0.1763487432983549,
+   "diff": 0.00019501908540398572,
+   "se": 3.922603856940556e-05,
+   "ci_low": 8.61101426216596e-05,
+   "ci_high": 0.00030392802818631187,
+   "rel_diff": 0.0011058717048753983,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_leisure",
+   "baseline_mean": 0.21076853442445148,
+   "diff": 0.0001744990195722218,
+   "se": 5.879143033115402e-05,
+   "ci_low": 1.1267840601711826e-05,
+   "ci_high": 0.0003377301985427318,
+   "rel_diff": 0.0008279177916605468,
+   "significant": true
+  },
+  {
+   "scenario": "work-from-home x = 8.0",
+   "metric": "participation_errand",
+   "baseline_mean": 0.08031861431539293,
+   "diff": 8.823732410582485e-05,
+   "se": 5.9023702634295514e-05,
+   "ci_low": -7.563874616381536e-05,
+   "ci_high": 0.00025211339437546505,
+   "rel_diff": 0.0010985912152236212,
+   "significant": false
+  }
+ ],
+ "wall_seconds": 4.426307439804077,
+ "workers": 4
+}

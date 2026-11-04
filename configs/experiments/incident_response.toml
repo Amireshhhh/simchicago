@@ -1,0 +1,32 @@
+name = "incident_response"
+description = "How much of the evening activity change comes from incidents, and how much from the hypothesised behavioural response? Same city, same random numbers, five incident/response settings."
+replicates = 10
+baseline = "no incidents"
+
+[build]
+n = 2000
+seed = 1
+
+[base]
+n_days = 7
+start_date = "2020-10-05"
+
+[[scenario]]
+name = "no incidents"
+set = { incident_mode = "none" }
+
+[[scenario]]
+name = "recorded incidents, no response"
+set = { incident_mode = "replay", "safety.a" = 0.0, "safety.b" = 0.0, "safety.gamma_cancel" = 0.0 }
+
+[[scenario]]
+name = "recorded incidents"
+set = { incident_mode = "replay" }
+
+[[scenario]]
+name = "recorded + simulated incidents"
+set = { incident_mode = "both" }
+
+[[scenario]]
+name = "recorded + 3x simulated incidents"
+set = { incident_mode = "both", simulated_incident_multiplier = 3.0 }

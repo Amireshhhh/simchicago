@@ -1,0 +1,17 @@
+name = "safety_sensitivity"
+description = "Sensitivity of evening cancellations to the strength of the (hypothesised) safety response."
+replicates = 8
+baseline = "response strength = 0.0"
+
+[build]
+n = 2000
+seed = 1
+
+[base]
+n_days = 7
+incident_mode = "both"
+
+[[sweep]]
+param = "safety.gamma_cancel"
+label = "response strength"
+values = [0.0, 0.25, 0.5, 1.0, 2.0]

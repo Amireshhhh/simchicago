@@ -1,0 +1,1097 @@
+{
+ "name": "transit_disruption",
+ "description": "What-if: transit trips take 50% longer, with and without commuters shifting away from transit.",
+ "baseline": "normal service",
+ "build": {
+  "n": 2000,
+  "seed": 1
+ },
+ "base": {
+  "n_days": 7,
+  "incident_mode": "both"
+ },
+ "seeds": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "scenarios": [
+  {
+   "name": "normal service",
+   "set": {}
+  },
+  {
+   "name": "transit 1.5x slower",
+   "set": {
+    "time_multiplier.transit": 1.5
+   }
+  },
+  {
+   "name": "transit 1.5x slower, riders shift",
+   "set": {
+    "time_multiplier.transit": 1.5,
+    "mode_shift.transit": -1.0
+   }
+  }
+ ],
+ "metrics": {
+  "incidents_observed": "recorded incidents replayed (total)",
+  "incidents_simulated": "model-drawn incidents (total)",
+  "agents_exposed": "agent-days with a direct exposure (total, unweighted)",
+  "activities_cancelled": "evening activities cancelled (total, unweighted)",
+  "activities_cancelled_weighted": "evening activities cancelled (total, population-weighted)",
+  "mean_out_of_home_min": "minutes out of home per resident per day",
+  "mean_evening_out_min": "minutes out of home after 18:00 per resident per day",
+  "final_perceived_safety": "mean perceived safety at the end of the run",
+  "trips_car": "car trips per day (population-weighted)",
+  "trips_transit": "transit trips per day (population-weighted)",
+  "trips_walk": "walk trips per day (population-weighted)",
+  "trips_other": "other-mode trips per day (population-weighted)",
+  "pkm_car": "car person-km per day (population-weighted, straight-line x 1.3)",
+  "pkm_transit": "transit person-km per day",
+  "pkm_walk": "walk person-km per day",
+  "pkm_other": "other-mode person-km per day",
+  "participation_work": "share of residents working away from home, mean per day",
+  "participation_shop": "share of residents shopping, mean per day",
+  "participation_social": "share of residents visiting, mean per day",
+  "participation_leisure": "share of residents on leisure trips, mean per day",
+  "participation_errand": "share of residents on errands, mean per day"
+ },
+ "summary": [
+  {
+   "scenario": "normal service",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "agents_exposed",
+   "mean": 18.6,
+   "se": 4.342810150121692,
+   "ci_low": 6.542426015891312,
+   "ci_high": 30.65757398410869,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "activities_cancelled",
+   "mean": 2.0,
+   "se": 0.8944271909999159,
+   "ci_low": -0.483327996407533,
+   "ci_high": 4.483327996407533,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "activities_cancelled_weighted",
+   "mean": 2603.913870377179,
+   "se": 1143.444508407921,
+   "ci_low": -570.797038057296,
+   "ci_high": 5778.624778811654,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "mean_out_of_home_min",
+   "mean": 345.0700185568878,
+   "se": 1.0085538681622408,
+   "ci_low": 342.26982410630046,
+   "ci_high": 347.8702130074752,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "mean_evening_out_min",
+   "mean": 48.07785198191067,
+   "se": 0.36466310113886413,
+   "ci_low": 47.06538489970742,
+   "ci_high": 49.09031906411392,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "final_perceived_safety",
+   "mean": 0.8290421731505836,
+   "se": 0.0005017752497955929,
+   "ci_low": 0.8276490217143793,
+   "ci_high": 0.8304353245867879,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "trips_car",
+   "mean": 2208385.7751268432,
+   "se": 11179.483625202125,
+   "ci_low": 2177346.552537012,
+   "ci_high": 2239424.9977166746,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "trips_transit",
+   "mean": 1087593.0537671563,
+   "se": 7305.576958232388,
+   "ci_low": 1067309.5203808262,
+   "ci_high": 1107876.5871534864,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "trips_walk",
+   "mean": 1853883.637907487,
+   "se": 6031.920154736162,
+   "ci_low": 1837136.342718926,
+   "ci_high": 1870630.9330960482,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "trips_other",
+   "mean": 46323.329132612285,
+   "se": 1001.1781440048376,
+   "ci_low": 43543.612975259035,
+   "ci_high": 49103.045289965536,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "pkm_car",
+   "mean": 27394728.34808106,
+   "se": 80465.74695275334,
+   "ci_low": 27171319.618818004,
+   "ci_high": 27618137.077344116,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "pkm_transit",
+   "mean": 11936291.537276063,
+   "se": 60223.694953586084,
+   "ci_low": 11769083.754205253,
+   "ci_high": 12103499.320346873,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "pkm_walk",
+   "mean": 2413126.7295870096,
+   "se": 9202.205620073248,
+   "ci_low": 2387577.3108361335,
+   "ci_high": 2438676.1483378857,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "pkm_other",
+   "mean": 1030806.8105793949,
+   "se": 23592.857937342054,
+   "ci_low": 965302.5356416345,
+   "ci_high": 1096311.0855171552,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "participation_work",
+   "mean": 0.3427490141912295,
+   "se": 0.0002124891219993647,
+   "ci_low": 0.34215904980854656,
+   "ci_high": 0.34333897857391243,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "participation_shop",
+   "mean": 0.30824240574586526,
+   "se": 0.002048466472634644,
+   "ci_low": 0.302554951034757,
+   "ci_high": 0.3139298604569735,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "participation_social",
+   "mean": 0.1763487432983549,
+   "se": 0.002208020509175016,
+   "ci_low": 0.17021829556347956,
+   "ci_high": 0.18247919103323024,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "participation_leisure",
+   "mean": 0.21076853442445148,
+   "se": 0.0018406644881701093,
+   "ci_low": 0.20565803051596018,
+   "ci_high": 0.21587903833294278,
+   "n": 5
+  },
+  {
+   "scenario": "normal service",
+   "metric": "participation_errand",
+   "mean": 0.08031861431539293,
+   "se": 0.0015119934030264,
+   "ci_low": 0.07612064763246892,
+   "ci_high": 0.08451658099831694,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "agents_exposed",
+   "mean": 18.4,
+   "se": 4.007492981902775,
+   "ci_low": 7.273415726281508,
+   "ci_high": 29.52658427371849,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "activities_cancelled",
+   "mean": 1.8,
+   "se": 0.7348469228349535,
+   "ci_low": -0.2402621419747708,
+   "ci_high": 3.8402621419747707,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "activities_cancelled_weighted",
+   "mean": 2343.3127340135425,
+   "se": 939.1982753325453,
+   "ci_low": -264.31972034371756,
+   "ci_high": 4950.9451883708025,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "mean_out_of_home_min",
+   "mean": 350.25739653103676,
+   "se": 1.0320679440742986,
+   "ci_low": 347.3919165394801,
+   "ci_high": 353.1228765225934,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "mean_evening_out_min",
+   "mean": 49.68032161539466,
+   "se": 0.377827165589179,
+   "ci_low": 48.631305230883825,
+   "ci_high": 50.729337999905496,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "final_perceived_safety",
+   "mean": 0.8290699686075105,
+   "se": 0.00046889809734327513,
+   "ci_low": 0.8277680987803052,
+   "ci_high": 0.8303718384347157,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_car",
+   "mean": 2208385.7751268432,
+   "se": 11179.483625202125,
+   "ci_low": 2177346.552537012,
+   "ci_high": 2239424.9977166746,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_transit",
+   "mean": 1087318.9441259787,
+   "se": 7286.113529912827,
+   "ci_low": 1067089.4498799369,
+   "ci_high": 1107548.4383720206,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_walk",
+   "mean": 1853964.4549063705,
+   "se": 6134.872203941281,
+   "ci_low": 1836931.3190047238,
+   "ci_high": 1870997.5908080172,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_other",
+   "mean": 46323.329132612285,
+   "se": 1001.1781440048376,
+   "ci_low": 43543.612975259035,
+   "ci_high": 49103.045289965536,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_car",
+   "mean": 27394728.34808106,
+   "se": 80465.74695275334,
+   "ci_low": 27171319.618818004,
+   "ci_high": 27618137.077344116,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_transit",
+   "mean": 11935043.961801961,
+   "se": 59657.330036258485,
+   "ci_low": 11769408.659833621,
+   "ci_high": 12100679.2637703,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_walk",
+   "mean": 2413361.0309287333,
+   "se": 9051.914265661735,
+   "ci_low": 2388228.8878731667,
+   "ci_high": 2438493.1739843,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_other",
+   "mean": 1030806.8105793949,
+   "se": 23592.857937342054,
+   "ci_low": 965302.5356416345,
+   "ci_high": 1096311.0855171552,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_work",
+   "mean": 0.3427490141912295,
+   "se": 0.0002124891219993647,
+   "ci_low": 0.34215904980854656,
+   "ci_high": 0.34333897857391243,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_shop",
+   "mean": 0.3082399563435921,
+   "se": 0.0021223483697691697,
+   "ci_low": 0.30234737260082195,
+   "ci_high": 0.3141325400863622,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_social",
+   "mean": 0.17637782344227215,
+   "se": 0.002206617797034905,
+   "ci_low": 0.17025127026065223,
+   "ci_high": 0.18250437662389207,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_leisure",
+   "mean": 0.2107825895422822,
+   "se": 0.0018153935874284607,
+   "ci_low": 0.20574224890245899,
+   "ci_high": 0.21582293018210544,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_errand",
+   "mean": 0.0802032833135243,
+   "se": 0.0014787472342082265,
+   "ci_low": 0.0760976227932821,
+   "ci_high": 0.08430894383376651,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "incidents_observed",
+   "mean": 28.0,
+   "se": 0.0,
+   "ci_low": 28.0,
+   "ci_high": 28.0,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "incidents_simulated",
+   "mean": 23.0,
+   "se": 2.569046515733026,
+   "ci_low": 15.867183376367581,
+   "ci_high": 30.13281662363242,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "agents_exposed",
+   "mean": 18.4,
+   "se": 4.007492981902775,
+   "ci_low": 7.273415726281508,
+   "ci_high": 29.52658427371849,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "activities_cancelled",
+   "mean": 1.8,
+   "se": 0.7348469228349535,
+   "ci_low": -0.2402621419747708,
+   "ci_high": 3.8402621419747707,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "activities_cancelled_weighted",
+   "mean": 2343.3127340135425,
+   "se": 939.1982753325453,
+   "ci_low": -264.31972034371756,
+   "ci_high": 4950.9451883708025,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "mean_out_of_home_min",
+   "mean": 349.94986559311496,
+   "se": 1.0319802726246439,
+   "ci_low": 347.0846290165256,
+   "ci_high": 352.81510216970435,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "mean_evening_out_min",
+   "mean": 49.62179203922227,
+   "se": 0.38199062522214844,
+   "ci_low": 48.56121603759279,
+   "ci_high": 50.68236804085175,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "final_perceived_safety",
+   "mean": 0.8290699686075105,
+   "se": 0.00046889809734327513,
+   "ci_low": 0.8277680987803052,
+   "ci_high": 0.8303718384347157,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_car",
+   "mean": 2303429.480604276,
+   "se": 10700.940712961992,
+   "ci_low": 2273718.906140761,
+   "ci_high": 2333140.055067791,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_transit",
+   "mean": 950871.6784057537,
+   "se": 7152.00139518501,
+   "ci_low": 931014.5391397245,
+   "ci_high": 970728.8176717829,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_walk",
+   "mean": 1873674.3304012152,
+   "se": 6333.077006266937,
+   "ci_low": 1856090.8897463246,
+   "ci_high": 1891257.7710561058,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_other",
+   "mean": 68280.17705469021,
+   "se": 1190.8587765246853,
+   "ci_low": 64973.82303362641,
+   "ci_high": 71586.53107575401,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_car",
+   "mean": 28217705.17786913,
+   "se": 79068.21790606099,
+   "ci_low": 27998176.611287136,
+   "ci_high": 28437233.744451124,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_transit",
+   "mean": 10596897.736882567,
+   "se": 62843.4761292942,
+   "ci_low": 10422416.275189774,
+   "ci_high": 10771379.19857536,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_walk",
+   "mean": 2511321.7238513394,
+   "se": 8856.18424460849,
+   "ci_low": 2486733.0144546665,
+   "ci_high": 2535910.4332480123,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_other",
+   "mean": 1448921.8191727146,
+   "se": 32449.271512179872,
+   "ci_low": 1358828.1981154885,
+   "ci_high": 1539015.4402299407,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_work",
+   "mean": 0.3427490141912295,
+   "se": 0.0002124891219993647,
+   "ci_low": 0.34215904980854656,
+   "ci_high": 0.34333897857391243,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_shop",
+   "mean": 0.3083128655271778,
+   "se": 0.002103543767097302,
+   "ci_low": 0.30247249173145113,
+   "ci_high": 0.31415323932290445,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_social",
+   "mean": 0.17637782344227215,
+   "se": 0.002206617797034905,
+   "ci_low": 0.17025127026065223,
+   "ci_high": 0.18250437662389207,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_leisure",
+   "mean": 0.21079701727050137,
+   "se": 0.0018231115532770347,
+   "ci_low": 0.2057352481221758,
+   "ci_high": 0.21585878641882694,
+   "n": 5
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_errand",
+   "mean": 0.08021757392552316,
+   "se": 0.0014829551112584493,
+   "ci_low": 0.07610023046564159,
+   "ci_high": 0.08433491738540473,
+   "n": 5
+  }
+ ],
+ "effects": [
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "incidents_observed",
+   "baseline_mean": 28.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "incidents_simulated",
+   "baseline_mean": 23.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "agents_exposed",
+   "baseline_mean": 18.6,
+   "diff": -0.2,
+   "se": 0.58309518948453,
+   "ci_low": -1.8189317847087063,
+   "ci_high": 1.4189317847087064,
+   "rel_diff": -0.01075268817204301,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "activities_cancelled",
+   "baseline_mean": 2.0,
+   "diff": -0.2,
+   "se": 0.20000000000000004,
+   "ci_low": -0.75528902103956,
+   "ci_high": 0.3552890210395599,
+   "rel_diff": -0.1,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "activities_cancelled_weighted",
+   "baseline_mean": 2603.913870377179,
+   "diff": -260.6011363636364,
+   "se": 258.6510219149635,
+   "ci_low": -978.7315001138454,
+   "ci_high": 457.5292273865726,
+   "rel_diff": -0.10008055156059678,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "mean_out_of_home_min",
+   "baseline_mean": 345.0700185568878,
+   "diff": 5.187377974148933,
+   "se": 0.026202923239134188,
+   "ci_low": 5.114626996179765,
+   "ci_high": 5.260128952118101,
+   "rel_diff": 0.015032827238492029,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "mean_evening_out_min",
+   "baseline_mean": 48.07785198191067,
+   "diff": 1.602469633483993,
+   "se": 0.015785526879959887,
+   "ci_low": 1.55864198464516,
+   "ci_high": 1.646297282322826,
+   "rel_diff": 0.03333072438608371,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "final_perceived_safety",
+   "baseline_mean": 0.8290421731505836,
+   "diff": 2.7795456926837937e-05,
+   "se": 5.7846160140518435e-05,
+   "ci_low": -0.00013281123124979247,
+   "ci_high": 0.00018840214510346836,
+   "rel_diff": 3.352719297886586e-05,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_car",
+   "baseline_mean": 2208385.7751268432,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_transit",
+   "baseline_mean": 1087593.0537671563,
+   "diff": -274.1096411777195,
+   "se": 192.95204930416938,
+   "ci_low": -809.8304140061649,
+   "ci_high": 261.61113165072595,
+   "rel_diff": -0.0002520332768109089,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_walk",
+   "baseline_mean": 1853883.637907487,
+   "diff": 80.81699888319709,
+   "se": 320.8324238251388,
+   "ci_low": -809.956613834855,
+   "ci_high": 971.5906116012493,
+   "rel_diff": 4.359335032182318e-05,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "trips_other",
+   "baseline_mean": 46323.329132612285,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_car",
+   "baseline_mean": 27394728.34808106,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_transit",
+   "baseline_mean": 11936291.537276063,
+   "diff": -1247.5754741016776,
+   "se": 1789.9350456196778,
+   "ci_low": -6217.23187013443,
+   "ci_high": 3722.0809219310754,
+   "rel_diff": -0.00010451952100915107,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_walk",
+   "baseline_mean": 2413126.7295870096,
+   "diff": 234.3013417233713,
+   "se": 262.1019420762654,
+   "ci_low": -493.4103124171127,
+   "ci_high": 962.0129958638554,
+   "rel_diff": 9.709450351307095e-05,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "pkm_other",
+   "baseline_mean": 1030806.8105793949,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_work",
+   "baseline_mean": 0.3427490141912295,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_shop",
+   "baseline_mean": 0.30824240574586526,
+   "diff": -2.449402273208001e-06,
+   "se": 8.454154925597543e-05,
+   "ci_low": -0.0002371743728907996,
+   "ci_high": 0.0002322755683443836,
+   "rel_diff": -7.946350753657967e-06,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_social",
+   "baseline_mean": 0.1763487432983549,
+   "diff": 2.9080143917242784e-05,
+   "se": 1.780888437421885e-05,
+   "ci_low": -2.03652459325907e-05,
+   "ci_high": 7.852553376707627e-05,
+   "rel_diff": 0.0001649013390928659,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_leisure",
+   "baseline_mean": 0.21076853442445148,
+   "diff": 1.405511783071356e-05,
+   "se": 6.231532311946348e-05,
+   "ci_low": -0.00015895995602314004,
+   "ci_high": 0.00018707019168456718,
+   "rel_diff": 6.668508593606755e-05,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower",
+   "metric": "participation_errand",
+   "baseline_mean": 0.08031861431539293,
+   "diff": -0.00011533100186863765,
+   "se": 5.4227963683034414e-05,
+   "ci_low": -0.00026589196620124253,
+   "ci_high": 3.5229962463967246e-05,
+   "rel_diff": -0.0014359187201083803,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "incidents_observed",
+   "baseline_mean": 28.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "incidents_simulated",
+   "baseline_mean": 23.0,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "agents_exposed",
+   "baseline_mean": 18.6,
+   "diff": -0.2,
+   "se": 0.58309518948453,
+   "ci_low": -1.8189317847087063,
+   "ci_high": 1.4189317847087064,
+   "rel_diff": -0.01075268817204301,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "activities_cancelled",
+   "baseline_mean": 2.0,
+   "diff": -0.2,
+   "se": 0.20000000000000004,
+   "ci_low": -0.75528902103956,
+   "ci_high": 0.3552890210395599,
+   "rel_diff": -0.1,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "activities_cancelled_weighted",
+   "baseline_mean": 2603.913870377179,
+   "diff": -260.6011363636364,
+   "se": 258.6510219149635,
+   "ci_low": -978.7315001138454,
+   "ci_high": 457.5292273865726,
+   "rel_diff": -0.10008055156059678,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "mean_out_of_home_min",
+   "baseline_mean": 345.0700185568878,
+   "diff": 4.879847036227147,
+   "se": 0.028219232865089552,
+   "ci_low": 4.801497885266433,
+   "ci_high": 4.958196187187862,
+   "rel_diff": 0.014141614089323329,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "mean_evening_out_min",
+   "baseline_mean": 48.07785198191067,
+   "diff": 1.5439400573116047,
+   "se": 0.023859575904417837,
+   "ci_low": 1.4776952545796884,
+   "ci_high": 1.610184860043521,
+   "rel_diff": 0.032113332723194735,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "final_perceived_safety",
+   "baseline_mean": 0.8290421731505836,
+   "diff": 2.7795456926837937e-05,
+   "se": 5.7846160140518435e-05,
+   "ci_low": -0.00013281123124979247,
+   "ci_high": 0.00018840214510346836,
+   "rel_diff": 3.352719297886586e-05,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_car",
+   "baseline_mean": 2208385.7751268432,
+   "diff": 95043.70547743328,
+   "se": 1590.3285652478578,
+   "ci_low": 90628.24551679463,
+   "ci_high": 99459.16543807193,
+   "rel_diff": 0.04303763705957318,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_transit",
+   "baseline_mean": 1087593.0537671563,
+   "diff": -136721.37536140258,
+   "se": 779.3234643906832,
+   "ci_low": -138885.12417947588,
+   "ci_high": -134557.62654332927,
+   "rel_diff": -0.12571004833823934,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_walk",
+   "baseline_mean": 1853883.637907487,
+   "diff": 19790.692493728224,
+   "se": 571.4472148353448,
+   "ci_low": 18204.100671219716,
+   "ci_high": 21377.28431623673,
+   "rel_diff": 0.01067526142906485,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "trips_other",
+   "baseline_mean": 46323.329132612285,
+   "diff": 21956.847922077934,
+   "se": 1144.5166128717087,
+   "ci_low": 18779.160374452713,
+   "ci_high": 25134.535469703154,
+   "rel_diff": 0.47399114729472236,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_car",
+   "baseline_mean": 27394728.34808106,
+   "diff": 822976.8297880724,
+   "se": 17091.29819742959,
+   "ci_low": 775523.778566343,
+   "ci_high": 870429.8810098018,
+   "rel_diff": 0.030041430574934688,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_transit",
+   "baseline_mean": 11936291.537276063,
+   "diff": -1339393.8003934962,
+   "se": 11013.063093305538,
+   "ci_low": -1369970.9655121388,
+   "ci_high": -1308816.6352748536,
+   "rel_diff": -0.11221188726923088,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_walk",
+   "baseline_mean": 2413126.7295870096,
+   "diff": 98194.99426433016,
+   "se": 4049.9005311772607,
+   "ci_low": 86950.66775800509,
+   "ci_high": 109439.32077065523,
+   "rel_diff": 0.040692017149524334,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "pkm_other",
+   "baseline_mean": 1030806.8105793949,
+   "diff": 418115.0085933198,
+   "se": 17910.962249488846,
+   "ci_low": 368386.20512634394,
+   "ci_high": 467843.81206029566,
+   "rel_diff": 0.40561917548672977,
+   "significant": true
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_work",
+   "baseline_mean": 0.3427490141912295,
+   "diff": 0.0,
+   "se": 0.0,
+   "ci_low": 0.0,
+   "ci_high": 0.0,
+   "rel_diff": 0.0,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_shop",
+   "baseline_mean": 0.30824240574586526,
+   "diff": 7.045978131255958e-05,
+   "se": 7.083087256090454e-05,
+   "ci_low": -0.0001261982481060529,
+   "ci_high": 0.00026711781073117207,
+   "rel_diff": 0.00022858561962642846,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_social",
+   "baseline_mean": 0.1763487432983549,
+   "diff": 2.9080143917242784e-05,
+   "se": 1.780888437421885e-05,
+   "ci_low": -2.03652459325907e-05,
+   "ci_high": 7.852553376707627e-05,
+   "rel_diff": 0.0001649013390928659,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_leisure",
+   "baseline_mean": 0.21076853442445148,
+   "diff": 2.84828460498765e-05,
+   "se": 4.872603971343236e-05,
+   "ci_low": -0.00010680232840815634,
+   "ci_high": 0.00016376802050790934,
+   "rel_diff": 0.00013513803722009547,
+   "significant": false
+  },
+  {
+   "scenario": "transit 1.5x slower, riders shift",
+   "metric": "participation_errand",
+   "baseline_mean": 0.08031861431539293,
+   "diff": -0.0001010403898697776,
+   "se": 5.423075477774871e-05,
+   "ci_low": -0.00025160910352364015,
+   "ci_high": 4.9528323784084956e-05,
+   "rel_diff": -0.0012579946844328634,
+   "significant": false
+  }
+ ],
+ "wall_seconds": 2.4448163509368896,
+ "workers": 4
+}
