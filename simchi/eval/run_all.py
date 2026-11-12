@@ -39,7 +39,7 @@ def _check(passed, summary, **details):
 
 def data_integrity():
     out = {}
-    for key in ("cds_2021", "carjackings_2020", "sdoh_tracts_2014", "cta_l_station_daily", "cta_bus_route_daily"):
+    for key in ("cds_2021", "carjackings_2020", "sdoh_tracts_2014", "cta_l_station_daily", "cta_bus_route_daily", "crimes_cta_by_area", "crimes_all_by_area"):
         s = source(key)
         out[key] = sha256(ROOT / s["file"]) == s["sha256"]
     return _check(all(out.values()), f"{sum(out.values())}/{len(out)} mirrors match their pinned sha256", files=out)

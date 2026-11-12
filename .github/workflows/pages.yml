@@ -3,10 +3,13 @@ name: Deploy viewer to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "41 9 * * *"     # daily: refresh the reliability lens from the polled history
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read            # list live.yml runs and download their vehicle-history artifacts
   pages: write
   id-token: write
 
@@ -45,6 +48,17 @@ jobs:
           npm ci --ignore-scripts
           npm run build
           npm test
+
+      - name: Reliability from the polled history (the latest 300 live.yml runs, about a day)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p hist
+          for id in $(gh run list -R "$GITHUB_REPOSITORY" -w live.yml -s success -L 300 --json databaseId -q '.[].databaseId'); do
+            gh run download "$id" -R "$GITHUB_REPOSITORY" -n "vehicles-$id" -D "hist/vehicles-$id" || echo "no artifact for run $id"
+          done
+          python -m simchi.transit.reliability hist --out reliability-report --viewer viewer/dist/data/reliability.json
+          cp reliability-report/summary.json viewer/dist/data/reliability_summary.json
 
       - name: Cache the built site for live.yml (without any live snapshot)
         uses: actions/cache/save@v6

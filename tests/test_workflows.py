@@ -34,3 +34,8 @@ def test_keys_only_from_secrets_and_never_echoed():
         if "echo" in line and ("CTA_BUS_KEY" in line or "CTA_TRAIN_KEY" in line):
             assert "::add-mask::" in line, line
     assert "retention-days: 14" in y
+
+
+def test_pages_workflow_never_sees_cta_keys():
+    y = (WF / "pages.yml").read_text()
+    assert "CTA_BUS_KEY" not in y and "CTA_TRAIN_KEY" not in y and "{{ secrets." not in y

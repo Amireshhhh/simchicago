@@ -1,0 +1,221 @@
+{
+ "label": "observed (polled CTA positions) vs scheduled (GTFS)",
+ "definitions": "(fixed before any polled data existed; all times in Chicago local time):\n  position    distance along the route-direction's representative GTFS shape (the pattern with\n              most weekday trips), by projecting the vehicle's point; direction of a vehicle =\n              sign of its movement along that shape between polls of the same run (vehicles seen\n              once take the majority direction of their Bus Tracker pattern id / train direction)\n  speed       median over (route, hour) of |movement| / time between consecutive polls of the\n              same vehicle in a run (only 0.5-25 m/s kept)\n  headway     at one poll, consecutive vehicles of a route-direction ordered by position:\n              distance between them / speed, minutes\n  scheduled headway   60 / scheduled trips of that route, direction, day type and hour (GTFS;\n              routes coded with one GTFS direction for both ways, e.g. Yellow: trips / 2)\n  bunching    share of headways below 0.25 x scheduled headway\n  gap         share of headways above 2 x scheduled headway\n  regularity  coefficient of variation of headways (route-direction-hour)\n  service delivered   mean vehicles observed per poll / scheduled vehicles in service, the latter\n              by Little's law: scheduled trips per hour x median scheduled run time / 60\n              (missing trips show as a ratio below 1; extra or early pull-outs above 1)\n  delayed     share of vehicle observations with CTA's delay flag (Bus Tracker `dly`, Train\n              Tracker `isDly`); CTA does not publish an on-time definition in these feeds, so\n              this is reported as \"flagged delayed\", not on-time performance",
+ "coverage": {
+  "runs": 0,
+  "polls": 0
+ },
+ "polling_bias_simulated": [
+  {
+   "label": "simulated",
+   "inputs": {
+    "n_days": 20,
+    "headway_min": 8.0,
+    "cv": 0.6,
+    "speed_cv": 0.0,
+    "skip": 0.0,
+    "delay_mean_s": 0.0,
+    "seed": 0
+   },
+   "truth": {
+    "bunching_share": 0.049107142857142856,
+    "gap_share": 0.06956845238095238,
+    "headway_cv": 0.6043558002485219
+   },
+   "estimate": {
+    "bunching_share": 0.056676571023105235,
+    "gap_share": 0.04965482578680503,
+    "headway_cv": 0.5999690659972112
+   },
+   "bias": {
+    "bunching_share": 0.007569428165962379,
+    "gap_share": -0.019913626594147353,
+    "headway_cv": -0.004386734251310642
+   },
+   "headways_true": 2688,
+   "headways_sampled": 67647,
+   "polls": 12960
+  },
+  {
+   "label": "simulated",
+   "inputs": {
+    "n_days": 20,
+    "headway_min": 8.0,
+    "cv": 0.6,
+    "speed_cv": 0.1,
+    "skip": 0.0,
+    "delay_mean_s": 0.0,
+    "seed": 0
+   },
+   "truth": {
+    "bunching_share": 0.12276785714285714,
+    "gap_share": 0.08854166666666667,
+    "headway_cv": 0.6871349402374836
+   },
+   "estimate": {
+    "bunching_share": 0.14214762551674773,
+    "gap_share": 0.06409863125757775,
+    "headway_cv": 0.6967835304002303
+   },
+   "bias": {
+    "bunching_share": 0.01937976837389059,
+    "gap_share": -0.024443035409088917,
+    "headway_cv": 0.009648590162746773
+   },
+   "headways_true": 2688,
+   "headways_sampled": 68457,
+   "polls": 12960
+  },
+  {
+   "label": "simulated",
+   "inputs": {
+    "n_days": 20,
+    "headway_min": 8.0,
+    "cv": 0.6,
+    "speed_cv": 0.1,
+    "skip": 0.2,
+    "delay_mean_s": 60.0,
+    "seed": 0
+   },
+   "truth": {
+    "bunching_share": 0.12276785714285714,
+    "gap_share": 0.08854166666666667,
+    "headway_cv": 0.6871349402374836
+   },
+   "estimate": {
+    "bunching_share": 0.14146807858135046,
+    "gap_share": 0.06351812097487057,
+    "headway_cv": 0.695697416493552
+   },
+   "bias": {
+    "bunching_share": 0.018700221438493328,
+    "gap_share": -0.0250235456917961,
+    "headway_cv": 0.00856247625606843
+   },
+   "headways_true": 2688,
+   "headways_sampled": 55433,
+   "polls": 10491
+  },
+  {
+   "label": "simulated",
+   "inputs": {
+    "n_days": 20,
+    "headway_min": 8.0,
+    "cv": 0.6,
+    "speed_cv": 0.1,
+    "skip": 0.5,
+    "delay_mean_s": 120.0,
+    "seed": 0
+   },
+   "truth": {
+    "bunching_share": 0.12276785714285714,
+    "gap_share": 0.08854166666666667,
+    "headway_cv": 0.6871349402374836
+   },
+   "estimate": {
+    "bunching_share": 0.13817984770270655,
+    "gap_share": 0.06231640190514217,
+    "headway_cv": 0.6920932315555863
+   },
+   "bias": {
+    "bunching_share": 0.015411990559849417,
+    "gap_share": -0.0262252647615245,
+    "headway_cv": 0.00495829131810277
+   },
+   "headways_true": 2688,
+   "headways_sampled": 35063,
+   "polls": 6591
+  },
+  {
+   "label": "simulated",
+   "inputs": {
+    "n_days": 20,
+    "headway_min": 8.0,
+    "cv": 0.3,
+    "speed_cv": 0.1,
+    "skip": 0.2,
+    "delay_mean_s": 60.0,
+    "seed": 0
+   },
+   "truth": {
+    "bunching_share": 0.07042253521126761,
+    "gap_share": 0.02928094885100074,
+    "headway_cv": 0.5102417427631812
+   },
+   "estimate": {
+    "bunching_share": 0.08495482660992192,
+    "gap_share": 0.024417073918453464,
+    "headway_cv": 0.5209644435789879
+   },
+   "bias": {
+    "bunching_share": 0.014532291398654307,
+    "gap_share": -0.004863874932547276,
+    "headway_cv": 0.010722700815806618
+   },
+   "headways_true": 2698,
+   "headways_sampled": 55453,
+   "polls": 10482
+  },
+  {
+   "label": "simulated",
+   "inputs": {
+    "n_days": 20,
+    "headway_min": 8.0,
+    "cv": 1.0,
+    "speed_cv": 0.1,
+    "skip": 0.2,
+    "delay_mean_s": 60.0,
+    "seed": 0
+   },
+   "truth": {
+    "bunching_share": 0.22197055492638731,
+    "gap_share": 0.14194035485088713,
+    "headway_cv": 1.0133723982454201
+   },
+   "estimate": {
+    "bunching_share": 0.2600930094676968,
+    "gap_share": 0.08682118837196376,
+    "headway_cv": 0.9593428286466524
+   },
+   "bias": {
+    "bunching_share": 0.0381224545413095,
+    "gap_share": -0.05511916647892337,
+    "headway_cv": -0.0540295695987677
+   },
+   "headways_true": 2649,
+   "headways_sampled": 53973,
+   "polls": 10440
+  },
+  {
+   "label": "simulated",
+   "inputs": {
+    "n_days": 20,
+    "headway_min": 8.0,
+    "cv": 0.6,
+    "speed_cv": 0.25,
+    "skip": 0.2,
+    "delay_mean_s": 60.0,
+    "seed": 0
+   },
+   "truth": {
+    "bunching_share": 0.17633928571428573,
+    "gap_share": 0.1212797619047619,
+    "headway_cv": 0.8033890654098058
+   },
+   "estimate": {
+    "bunching_share": 0.2116555716836011,
+    "gap_share": 0.06745416020154496,
+    "headway_cv": 0.807886253584188
+   },
+   "bias": {
+    "bunching_share": 0.03531628596931538,
+    "gap_share": -0.053825601703216944,
+    "headway_cv": 0.004497188174382161
+   },
+   "headways_true": 2688,
+   "headways_sampled": 59937,
+   "polls": 10491
+  }
+ ],
+ "note": "no polled history available"
+}

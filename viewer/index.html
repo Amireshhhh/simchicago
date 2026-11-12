@@ -46,6 +46,15 @@
         <label><input type="checkbox" id="lyrLabels" checked> Area names</label>
         <label><input type="checkbox" id="lyrIncidents" checked> Incidents</label>
         <label><input type="checkbox" id="lyrBusRoutes" checked> CTA bus routes (with Live CTA)</label>
+        <label class="select">Bus reliability (observed)
+          <select id="relMetric">
+            <option value="">Off</option>
+            <option value="bunching_share">Bunching</option>
+            <option value="gap_share">Gaps</option>
+            <option value="service_delivered">Service delivered</option>
+            <option value="delayed_share">Flagged delayed</option>
+          </select>
+        </label>
         <label><input type="checkbox" id="lyrRain"> Rain (what-if, no weather data)</label>
         <label class="select">Quality
           <select id="quality">

@@ -54,3 +54,23 @@ query = "date >= 2024-01-01 AND date <= 2026-08-31, columns route, date, daytype
 downloaded = "2026-11-12"
 contents = "111,918 rows: daily boardings per bus route (aggregated counts), 2024-01-01 to 2026-08-31."
 license = "City of Chicago Data Terms of Use (see docs/DATASETS.md); data owner Chicago Transit Authority"
+
+[crimes_cta_by_area]
+file = "data/raw/mirror/crimes_cta_by_area.csv.gz"
+sha256 = "fa7a82894266982627c2d2e509fccfc7fd816822b69e92a238248c42cc6b3850"
+title = "CPD reported crimes on CTA property, counts by community area, primary type and location (City of Chicago data portal ijzp-q8t2)"
+source_url = "https://data.cityofchicago.org/resource/ijzp-q8t2.csv"
+query = "date >= 2025-11-01 AND date < 2026-11-01 AND starts_with(location_description, 'CTA'); count(*) grouped by community_area, primary_type, location_description"
+downloaded = "2026-11-12"
+contents = "1,304 aggregated rows (no individual records): reported crimes whose location description starts with CTA, 12 months to 31 Oct 2026."
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md); data owner Chicago Police Department"
+
+[crimes_all_by_area]
+file = "data/raw/mirror/crimes_all_by_area.csv.gz"
+sha256 = "c03384286e041b51b279e6d5f105d28d112a625670e4f105fed350b900995549"
+title = "CPD reported crimes, counts by community area and primary type (City of Chicago data portal ijzp-q8t2)"
+source_url = "https://data.cityofchicago.org/resource/ijzp-q8t2.csv"
+query = "date >= 2025-11-01 AND date < 2026-11-01; count(*) grouped by community_area, primary_type"
+downloaded = "2026-11-12"
+contents = "1,836 aggregated rows (no individual records), 12 months to 31 Oct 2026."
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md); data owner Chicago Police Department"

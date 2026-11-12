@@ -176,3 +176,20 @@ export function snapshotAge(generatedUtc, nowMs, staleMin = 30) {
   const ageMin = (nowMs - Date.parse(generatedUtc)) / 60000;
   return { ageMin, stale: !(ageMin <= staleMin) };
 }
+
+// Reliability lens: observed metric -> colour from good (teal) to bad (red). `good` and `bad` are
+// the metric values mapped to the ends; values are clamped. Returns [r, g, b] in 0..1, or null
+// for a missing value.
+export const REL_METRICS = {
+  bunching_share: { label: 'Bunching (share of headways < 0.25 x scheduled)', good: 0, bad: 0.3, pct: true },
+  gap_share: { label: 'Gaps (share of headways > 2 x scheduled)', good: 0, bad: 0.3, pct: true },
+  service_delivered: { label: 'Service delivered (observed / scheduled vehicles)', good: 1, bad: 0.6, pct: true },
+  delayed_share: { label: 'Flagged delayed by CTA', good: 0, bad: 0.2, pct: true },
+};
+export function relColor(metric, value) {
+  const m = REL_METRICS[metric];
+  if (!m || value === null || value === undefined || !Number.isFinite(value)) return null;
+  const t = Math.min(1, Math.max(0, (value - m.good) / (m.bad - m.good)));
+  const a = [0.2, 0.85, 0.75], b = [1.0, 0.25, 0.2];
+  return a.map((x, i) => x * (1 - t) + b[i] * t);
+}

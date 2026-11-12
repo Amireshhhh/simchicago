@@ -129,6 +129,54 @@ typical factor of e^0.45 ≈ 1.57).
   0.496-0.506 ('L'; B_service 0.496). With 2,000 agents, route-level predictions
   from the agents themselves are noisy; the expected (analytic) OD above has no sampling noise.
 
+## Service reliability (scheduled vs observed)
+
+`simchi/transit/reliability.py` (definitions in its docstring, fixed before any polled data
+existed) measures, per route, direction, day type and hour: service delivered (vehicles observed
+per poll / scheduled vehicles in service by Little's law), headway regularity (CV), bunching
+(headways < 0.25 × scheduled), gaps (> 2 × scheduled) and the share of observations CTA flags
+as delayed. It is tested on a constructed history with known answers (`tests/test_reliability.py`).
+
+**Observed results: none yet.** The `live.yml` schedule had not started a single run by the
+time of this commit (it was added at 14:17 UTC on 12 Nov 2026; GitHub lists the workflow as
+active, and this session cannot dispatch it), so there is no polled history and no observed
+reliability number to report. `pages.yml` rebuilds the report and the viewer lens daily from
+the latest 300 `live.yml` runs once they exist; coverage (runs, polls per hour) is measured, not
+assumed.
+
+**Polling bias (simulated).** What the polling design (runs every 5 min, 3 polls 60 s apart)
+recovers on a 15 km line with gamma headways (mean 8 min), vehicle speeds varying around 5 m/s,
+headways converted from spatial gaps by the median speed, 20 service days per case
+(`polling_bias()`; truth = headways at the line's midpoint). Truth / estimate:
+
+| Case | Bunching share | Gap share | Headway CV |
+|---|---|---|---|
+| headway CV 0.6, equal speeds, every run fires | 0.049 / 0.057 | 0.070 / 0.050 | 0.604 / 0.600 |
+| + speed CV 0.1 | 0.123 / 0.142 | 0.089 / 0.064 | 0.687 / 0.697 |
+| + 20% of runs skipped, mean delay 60 s | 0.123 / 0.141 | 0.089 / 0.064 | 0.687 / 0.696 |
+| + 50% skipped, mean delay 120 s | 0.123 / 0.138 | 0.089 / 0.062 | 0.687 / 0.692 |
+| regular line (headway CV 0.3) | 0.070 / 0.085 | 0.029 / 0.024 | 0.510 / 0.521 |
+| irregular line (headway CV 1.0) | 0.222 / 0.260 | 0.142 / 0.087 | 1.013 / 0.959 |
+| speed CV 0.25 | 0.176 / 0.212 | 0.121 / 0.067 | 0.803 / 0.808 |
+
+- **Gaps are undercounted** (by 0.02 to 0.055 here): a gap is seen only while both vehicles are
+  on the line at a poll, so the longest gaps are censored. Treat observed gap shares as lower
+  bounds.
+- **Bunching is overcounted** (by 0.008 to 0.038), more with more speed variation: vehicles
+  that are close in space but moving at different speeds are not as close in time as the gap /
+  median-speed conversion implies.
+- **Skipped or delayed runs** change the estimates little (bunching 0.142 → 0.141 → 0.138 as
+  0%, 20%, 50% of runs are skipped) because snapshots are spread over the day; they reduce the
+  number of observations and leave hours unobserved when whole stretches are skipped, which the
+  coverage table reports.
+- The headway CV is recovered within 0.06 in every case.
+
+**Crime join (descriptive).** Reported violent crime (CPD, 12 months to Oct 2026, aggregated by
+community area; all locations and CTA locations separately) is joined to each route by its
+length share per area and reported next to the route's reliability with Spearman correlations.
+This is an association between places, not an effect in either direction; it waits for
+observed reliability data.
+
 ## Experiments
 
 Effects are paired differences against the baseline scenario over the same seeds, with

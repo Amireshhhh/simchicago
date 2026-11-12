@@ -57,8 +57,8 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 65 tests
-cd viewer && npm test            # 10 tests
+python -m pytest tests           # 71 tests
+cd viewer && npm test            # 11 tests
 ```
 
 The first command that needs the city builds it (about 25 s) and caches it in
@@ -142,6 +142,16 @@ buildings here** fetches footprints around the camera from the City of Chicago d
 - In the viewer, **Live CTA** draws the network and the latest snapshot, replays the observed
   ~2 minutes along route shapes, and shows the snapshot age (older than 30 minutes: marked
   stale and not animated).
+
+## Reliability (scheduled vs observed)
+
+`python -m simchi.transit.reliability <dir of vehicles-* artifacts>` measures service delivered,
+bunching, gaps, headway regularity and CTA-flagged delays per route and hour from the polled
+positions against the GTFS schedule (`reports/reliability/`); the viewer's **Layers → Bus
+reliability** colours bus routes by one of them once data are published. A simulated study
+quantifies what 5-minute polling can recover (gaps undercounted, bunching slightly overcounted;
+`docs/EVALUATION.md`). No observed reliability numbers exist yet: the polling workflow had not
+run when this was written.
 
 ## Results in one paragraph
 

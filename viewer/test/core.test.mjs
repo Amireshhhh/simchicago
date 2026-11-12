@@ -83,3 +83,14 @@ test('snapshot age and staleness', () => {
   assert.equal(snapshotAge('2026-11-17T13:20:00+00:00', t).stale, true);
   assert.equal(snapshotAge('not a date', t).stale, true);
 });
+
+test('reliability colours run from good to bad and clamp', async () => {
+  const { relColor } = await import('../src/core.js');
+  assert.deepEqual(relColor('bunching_share', 0), [0.2, 0.85, 0.75]);
+  assert.deepEqual(relColor('bunching_share', 0.3), [1.0, 0.25, 0.2]);
+  assert.deepEqual(relColor('bunching_share', 5), relColor('bunching_share', 0.3));
+  assert.deepEqual(relColor('service_delivered', 1), [0.2, 0.85, 0.75]);
+  assert.deepEqual(relColor('service_delivered', 0.6), [1.0, 0.25, 0.2]);
+  assert.equal(relColor('service_delivered', null), null);
+  assert.equal(relColor('nope', 0.1), null);
+});

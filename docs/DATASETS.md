@@ -13,6 +13,7 @@ access is needed to build or run anything.
 | CTA live positions | not stored in git; workflow artifacts | Bus Tracker `getvehicles` and Train Tracker `ttpositions`, 3 polls per scheduled run | live layer; reliability and operations analyses |
 | `cta_l_station_daily` | `data/raw/mirror/l_station_daily.csv.gz` (0.9 MB) | City of Chicago data portal 5neh-572f, "CTA - Ridership - 'L' Station Entries - Daily Totals": 140,074 rows, 2024-01-01 to 2026-08-31 (station id, name, date, day type, entries) | ridership calibration and held-out validation (stations) |
 | `cta_bus_route_daily` | `data/raw/mirror/bus_route_daily.csv.gz` (0.6 MB) | City of Chicago data portal jyb9-n7fm, "CTA - Ridership - Bus Routes - Daily Totals by Route": 111,918 rows, 2024-01-01 to 2026-08-31 | ridership calibration and held-out validation (routes) |
+| `crimes_all_by_area`, `crimes_cta_by_area` | `data/raw/mirror/crimes_*_by_area.csv.gz` (13 kB) | City of Chicago data portal ijzp-q8t2 (CPD reported crimes), 12 months to 31 Oct 2026, **counts only**, by community area and primary type (and location description for locations starting with "CTA") | descriptive crime join of the reliability report (not causal) |
 | landmarks | `data/reference/landmarks.json` | 5 tallest buildings: name, height, coordinates | viewer only; copied from the v0.1 export (which cites Wikipedia, 2026-10-14), not re-verified |
 
 ## Checks on the data
@@ -76,6 +77,10 @@ them. Shapes are simplified to 5 m.
 tests and `python -m simchi.cli validate` afterwards.
 
 ## Live positions: storage and retention
+
+`pages.yml` downloads the artifacts of the latest 300 successful `live.yml` runs (about a day)
+each time it runs (on push and daily) and publishes only aggregated per-route metrics
+(`data/reliability.json`, `data/reliability_summary.json`).
 
 Each `live.yml` run uploads `history.csv.gz` (one row per vehicle per poll: position, heading,
 route, CTA timestamp, delay flag, trip and pattern ids, passenger-load class for buses) and

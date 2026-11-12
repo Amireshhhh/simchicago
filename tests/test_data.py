@@ -7,7 +7,7 @@ from simchi.incidents.data import load_carjackings_2020
 
 
 def test_mirrors_match_pinned_sha256():
-    for key in ["cds_2021", "carjackings_2020", "sdoh_tracts_2014", "cta_l_station_daily", "cta_bus_route_daily"]:
+    for key in ["cds_2021", "carjackings_2020", "sdoh_tracts_2014", "cta_l_station_daily", "cta_bus_route_daily", "crimes_cta_by_area", "crimes_all_by_area"]:
         s = source(key)
         assert sha256(ROOT / s["file"]) == s["sha256"], key
 

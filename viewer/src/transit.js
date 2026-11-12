@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
-import { alongShape, bestShape, snapshotAge } from './core.js';
+import { alongShape, bestShape, snapshotAge, relColor } from './core.js';
 
 export const STALE_MIN = 30;           // snapshots older than this are shown as stale and not animated
 const REPLAY_SECONDS = 12;             // the observed window (about 2 min) is replayed in this many seconds
@@ -25,6 +25,31 @@ export function createTransit(scene, T) {
   const busGeo = new LineSegmentsGeometry().setPositions(busPos);
   const busMat = new LineMaterial({ color: 0x9fb4cc, linewidth: 1.1, transparent: true, opacity: 0.32, depthWrite: false, resolution: res });
   const busLines = new LineSegments2(busGeo, busMat); busLines.renderOrder = 3; group.add(busLines);
+
+  // reliability lens: bus routes coloured by an observed metric (data/reliability.json)
+  let relLines = null;
+  function setReliability(rel, metric) {
+    if (relLines) { group.remove(relLines); relLines.geometry.dispose(); relLines.material.dispose(); relLines = null; }
+    busLines.visible = busVisible && !(rel && metric);
+    if (!rel || !metric) return 0;
+    const pos = [], col = [];
+    let n = 0;
+    for (const r of T.routes.filter(x => x.type === 3)) {
+      const m = rel.routes[r.id], c = m ? relColor(metric, m[metric]) : null;
+      if (!c) continue;
+      n++;
+      const p = segmentsOf(r.shapes, 1.6);
+      pos.push(...p);
+      for (let i = 0; i < p.length / 3; i++) col.push(...c);
+    }
+    if (!n) return 0;
+    const g = new LineSegmentsGeometry().setPositions(pos);
+    g.setColors(col);
+    const mat = new LineMaterial({ vertexColors: true, linewidth: 2.4, transparent: true, opacity: 0.9, depthWrite: false, resolution: res });
+    relLines = new LineSegments2(g, mat); relLines.renderOrder = 4; group.add(relLines);
+    return n;
+  }
+  let busVisible = true;
 
   const railMats = [];
   for (const r of T.routes.filter(x => x.type === 1)) {
@@ -115,5 +140,5 @@ export function createTransit(scene, T) {
 
   refresh();
   setInterval(refresh, REFRESH_MS);
-  return { group, update, refresh, setBusVisible: v => { busLines.visible = v; }, get status() { return status; } };
+  return { group, update, refresh, setReliability, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; } };
 }

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { KINDS, sunPosition, clockLabel, utcMs, utmForward, parseFootprint } from './core.js';
+import { KINDS, sunPosition, clockLabel, utcMs, utmForward, parseFootprint, REL_METRICS } from './core.js';
 import { createScene, sunVector } from './scene.js';
 import { createCity } from './city.js';
 import { createAgents, ACT_COLOR, MODE_COLOR } from './agents.js';
@@ -303,6 +303,20 @@ async function toggleLive() {
 }
 $('#liveBtn').onclick = toggleLive;
 $('#lyrBusRoutes').onchange = e => { if (transit) transit.setBusVisible(e.target.checked); };
+let reliability, relNote = '';
+async function applyReliability() {
+  const metric = $('#relMetric').value;
+  if (metric && $('#liveBtn').getAttribute('aria-pressed') !== 'true') await toggleLive();
+  if (!transit) return;
+  if (metric && reliability === undefined) {
+    try { const r = await fetch('data/reliability.json', { cache: 'no-store' }); reliability = r.ok ? await r.json() : null; } catch { reliability = null; }
+  }
+  const n = transit.setReliability(metric ? reliability : null, metric);
+  relNote = !metric ? '' : reliability ? `Reliability lens: ${REL_METRICS[metric].label}; ${n} routes with observed data (teal good, red poor). Observed from polled positions vs GTFS schedule; see reports/reliability.`
+    : 'Reliability lens: no observed reliability data published yet (it is built from the polled history).';
+  toast(relNote);
+}
+$('#relMetric').onchange = applyReliability;
 function renderLivePanel(st) {
   const el = $('#livePanel');
   if (!st || st.state === 'loading') { el.innerHTML = '<h3>Live CTA</h3>Loading the latest snapshot…'; return; }
