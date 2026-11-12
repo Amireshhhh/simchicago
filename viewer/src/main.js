@@ -317,6 +317,15 @@ async function applyReliability() {
   toast(relNote);
 }
 $('#relMetric').onchange = applyReliability;
+function opsHtml(o) {
+  if (!o) return '';
+  const adv = o.holding.advice || [], A = o.anomalies || {};
+  const n = k => (A[k] || []).length;
+  return `<div class="ops"><b>Operations view</b> <span class="tag simulated">advisory</span>
+    <div>${adv.length ? `Holding advice for ${adv.length} bunched vehicle${adv.length > 1 ? 's' : ''}: ` + adv.slice(0, 4).map(a => `${esc(a.vehicle.replace(/^bus:/, 'bus '))} (route ${esc(a.route)}) hold ${a.hold_min} min`).join('; ') : 'No bunched vehicles flagged for holding.'}</div>
+    <div>Feed flags: ${n('jump')} position jumps, ${n('stuck')} stuck mid-route, ${n('off_route')} off route, ${n('outage')} route-directions with no vehicle while ≥3 scheduled.</div>
+    <div class="fine">Holding rule failed its simulated test; flags were tested on constructed labels only (docs/EVALUATION.md).</div></div>`;
+}
 function renderLivePanel(st) {
   const el = $('#livePanel');
   if (!st || st.state === 'loading') { el.innerHTML = '<h3>Live CTA</h3>Loading the latest snapshot…'; return; }
@@ -329,6 +338,7 @@ function renderLivePanel(st) {
     ${fmtInt(st.bus)} buses and ${fmtInt(st.train)} trains, snapshot
     <span class="age ${st.stale ? 'stale' : ''}">${age} old${st.stale ? ' (stale: not animated)' : ''}</span>.
     ${st.replaying ? '<div>Replaying the last ~2 minutes of observed positions along route shapes (×10).</div>' : ''}
+    ${opsHtml(transit && transit.ops)}
     <div class="fine">"Live" means near-live: GitHub runs the snapshot workflow at most every 5 minutes, and runs can be delayed or skipped. Positions may be missing, delayed or wrong. Data provided by Chicago Transit Authority; SimChicago is not affiliated with or endorsed by CTA.</div>`;
 }
 

@@ -77,7 +77,7 @@ export function createTransit(scene, T) {
   const mkV = (geo, n) => { const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.35, emissive: 0xffffff, emissiveIntensity: 0.55 }), n);
     m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); m.frustumCulled = false; m.count = 0; group.add(m); return m; };
   let busMesh = mkV(busGeoV, 1), trainMesh = mkV(trainGeoV, 1);
-  let snap = null, prepared = [], status = { state: 'loading' };
+  let snap = null, prepared = [], status = { state: 'loading' }, ops = null;
   const up = new THREE.Vector3(0, 1, 0), C = new THREE.Color();
 
   function prepare(s) {
@@ -99,7 +99,10 @@ export function createTransit(scene, T) {
       if (!r.ok) { status = { state: 'none' }; return; }
       const s = await r.json();
       if (s.schema !== 'simchi.live/1') { status = { state: 'none' }; return; }
-      if (!snap || s.generated_utc !== snap.generated_utc) { snap = s; prepare(s); }
+      if (!snap || s.generated_utc !== snap.generated_utc) {
+        snap = s; prepare(s); ops = null;
+        try { const o = await fetch(`live/ops.json?t=${Date.now()}`, { cache: 'no-store' }); if (o.ok) { const j = await o.json(); if (j.generated_from === s.generated_utc) ops = j; } } catch { ops = null; }
+      }
     } catch (e) { status = { state: 'none' }; return; }
     status = { state: 'ok' };
   }
@@ -140,5 +143,5 @@ export function createTransit(scene, T) {
 
   refresh();
   setInterval(refresh, REFRESH_MS);
-  return { group, update, refresh, setReliability, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; } };
+  return { group, update, refresh, setReliability, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; }, get ops() { return ops; } };
 }

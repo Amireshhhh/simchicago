@@ -99,8 +99,8 @@ def cmd_validate(args):
         jsonutil.dump(rep, f, indent=1)
     print("validation report:", out)
     for k, v in rep["checks"].items():
-        print(f"  {'PASS' if v['pass'] else 'FAIL'}  {k}: {v['summary']}")
-    if not all(v["pass"] for v in rep["checks"].values()):
+        print(f"  {'INFO' if v['pass'] is None else 'PASS' if v['pass'] else 'FAIL'}  {k}: {v['summary']}")
+    if any(v["pass"] is False for v in rep["checks"].values()):
         sys.exit(1)
 
 

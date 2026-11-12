@@ -37,20 +37,36 @@ def recommend(headways_front: np.ndarray, headways_back: np.ndarray, scheduled: 
 
 
 def simulate(control: bool, seed: int, n_bus=10, n_stops=40, H=8.0, rate=2.0, hours=6.0, warm=1.0,
-             tt_mean=90.0, tt_cv=0.25, dwell0=6.0, dwell1=3.0, control_every=10) -> dict:
+             tt_mean=90.0, tt_cv=0.25, dwell0=6.0, dwell1=3.0, control_every=10, start="spread") -> dict:
     """Event-by-event loop simulation. Each bus visits stops in order; arrival times are tracked per
     stop so that headways at each stop are exact. Random travel times come from one stream per
-    (bus, visit), shared between the controlled and uncontrolled runs."""
+    (bus, visit), shared between the controlled and uncontrolled runs.
+
+    start="spread" (default): buses start evenly spaced around the loop and every stop was last
+    served one even spacing ago, i.e. the line starts in regular operation. start="terminal" is the
+    initial condition of the first, pre-registered run: all buses leave stop 0 one headway apart
+    while passengers at every stop have been waiting since time -H, so the first bus meets very
+    long dwells (a start-up artifact; see docs/EVALUATION.md)."""
     rng = np.random.default_rng(seed)
     sig = np.sqrt(np.log(1 + tt_cv ** 2))
     mu = np.log(tt_mean) - sig ** 2 / 2
     T = hours * 3600.0
     max_visits = int(T / (tt_mean * 0.5)) + n_stops
     tt = rng.lognormal(mu, sig, size=(n_bus, max_visits))
-    t = np.array([i * H * 60.0 for i in range(n_bus)])[::-1].copy()     # bus 0 starts last
-    stop = np.zeros(n_bus, int)
+    if start == "terminal":
+        t = np.array([i * H * 60.0 for i in range(n_bus)])[::-1].copy()     # bus 0 starts last
+        stop = np.zeros(n_bus, int)
+        last_dep = np.full(n_stops, -H * 60.0)                           # passengers accumulate since the last departure
+    else:
+        per_stop = tt_mean + dwell0 + dwell1 * rate * H                  # mean time per stop at the scheduled headway
+        stop = (np.arange(n_bus) * n_stops // n_bus).astype(int)         # bus b ahead of bus b - 1
+        t = np.zeros(n_bus)
+        last_dep = np.empty(n_stops)
+        for s_ in range(n_stops):
+            ahead = (stop - s_) % n_stops
+            ahead[ahead == 0] = n_stops
+            last_dep[s_] = -ahead.min() * per_stop                       # the nearest bus ahead passed this long ago
     visit = np.zeros(n_bus, int)
-    last_dep = np.full(n_stops, -H * 60.0)                               # passengers accumulate since the last departure
     arrivals = [[] for _ in range(n_stops)]
     holds = 0.0
     laps = []
@@ -94,9 +110,10 @@ def simulate(control: bool, seed: int, n_bus=10, n_stops=40, H=8.0, rate=2.0, ho
             "hold_min_per_hour": holds / 60.0 / hours}
 
 
-def evaluate(seeds=range(1, 31)) -> dict:
-    rows = [(simulate(False, s), simulate(True, s)) for s in seeds]
-    out = {"label": "simulated", "seeds": len(rows), "criterion": "mean passenger wait lower with holding (paired 95% interval below 0)"}
+def evaluate(seeds=range(1, 31), start="spread") -> dict:
+    rows = [(simulate(False, s, start=start), simulate(True, s, start=start)) for s in seeds]
+    out = {"label": "simulated", "seeds": len(rows), "start": start,
+           "criterion": "mean passenger wait lower with holding (paired 95% interval below 0)"}
     for k in ("mean_wait_min", "bunching_share", "headway_cv", "round_trip_min", "hold_min_per_hour"):
         a = np.array([r[0][k] for r in rows])
         b = np.array([r[1][k] for r in rows])
@@ -144,10 +161,12 @@ def live_recommendations(snapshot: dict, max_items: int = 30) -> list:
         H_s = float(H["scheduled_headway_min"].iat[0])
         if not np.isfinite(H_s):
             continue
-        g = g.sort_values("s", ascending=(sg < 0))                      # order along the direction of travel
+        g = g.sort_values("s")                                           # headways() orders by s too
         hw = H["headway_min"].to_numpy()
-        hf = np.concatenate([[np.nan], hw])                              # leader ahead
-        hb = np.concatenate([hw, [np.nan]])
+        if sg > 0:      # moving towards larger s: the leader of vehicle k is k + 1
+            hf, hb = np.concatenate([hw, [np.nan]]), np.concatenate([[np.nan], hw])
+        else:
+            hf, hb = np.concatenate([[np.nan], hw]), np.concatenate([hw, [np.nan]])
         hold = recommend(hf, hb, H_s)
         for vid, hd, a, b_ in zip(g["id"], hold, hf, hb, strict=True):
             if hd > 0:
@@ -159,13 +178,15 @@ def live_recommendations(snapshot: dict, max_items: int = 30) -> list:
 def main():
     from simchi import jsonutil
     from simchi.paths import REPORTS
-    r = evaluate()
+    res = {"corrected_start": evaluate(start="spread"), "preregistered_run_terminal_start": evaluate(start="terminal")}
     (REPORTS / "ops").mkdir(parents=True, exist_ok=True)
     with open(REPORTS / "ops" / "holding.json", "w") as f:
-        jsonutil.dump(r, f, indent=1)
-    for k in ("mean_wait_min", "bunching_share", "headway_cv", "round_trip_min", "hold_min_per_hour"):
-        print(k, {a: round(b, 4) for a, b in r[k].items()})
-    print("PASS" if r["pass"] else "FAIL")
+        jsonutil.dump(res, f, indent=1)
+    for name, r in res.items():
+        print(name)
+        for k in ("mean_wait_min", "bunching_share", "headway_cv", "round_trip_min", "hold_min_per_hour"):
+            print("  ", k, {a: round(b, 4) for a, b in r[k].items()})
+        print("  ", "PASS" if r["pass"] else "FAIL")
 
 
 if __name__ == "__main__":

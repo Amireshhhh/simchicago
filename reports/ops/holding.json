@@ -1,0 +1,86 @@
+{
+ "corrected_start": {
+  "label": "simulated",
+  "seeds": 30,
+  "start": "spread",
+  "criterion": "mean passenger wait lower with holding (paired 95% interval below 0)",
+  "mean_wait_min": {
+   "no_control": 25.370229012653834,
+   "holding": 24.426671749675815,
+   "diff": -0.9435572629780148,
+   "ci_low": -1.7998728698314936,
+   "ci_high": -0.08724165612453605
+  },
+  "bunching_share": {
+   "no_control": 0.7158387718355697,
+   "holding": 0.6844502062023127,
+   "diff": -0.031388565633257016,
+   "ci_low": -0.03811282259729552,
+   "ci_high": -0.02466430866921851
+  },
+  "headway_cv": {
+   "no_control": 2.2405104975602472,
+   "holding": 2.112430063117563,
+   "diff": -0.12808043444268497,
+   "ci_low": -0.1787273452139419,
+   "ci_high": -0.07743352367142803
+  },
+  "round_trip_min": {
+   "no_control": 84.32720691156621,
+   "holding": 88.27324419331545,
+   "diff": 3.946037281749258,
+   "ci_low": 3.363267144151889,
+   "ci_high": 4.528807419346627
+  },
+  "hold_min_per_hour": {
+   "no_control": 0.0,
+   "holding": 24.390714095570683,
+   "diff": 24.390714095570683,
+   "ci_low": 23.78058610029583,
+   "ci_high": 25.000842090845534
+  },
+  "pass": true
+ },
+ "preregistered_run_terminal_start": {
+  "label": "simulated",
+  "seeds": 30,
+  "start": "terminal",
+  "criterion": "mean passenger wait lower with holding (paired 95% interval below 0)",
+  "mean_wait_min": {
+   "no_control": 29.57557205437538,
+   "holding": 32.154693333746614,
+   "diff": 2.5791212793712313,
+   "ci_low": 1.5700249606124872,
+   "ci_high": 3.588217598129975
+  },
+  "bunching_share": {
+   "no_control": 0.6913354405415865,
+   "holding": 0.677766871850108,
+   "diff": -0.013568568691478718,
+   "ci_low": -0.022544051075904157,
+   "ci_high": -0.004593086307053278
+  },
+  "headway_cv": {
+   "no_control": 2.4351870926371193,
+   "holding": 2.49191882499368,
+   "diff": 0.056731732356560226,
+   "ci_low": -0.0023774127665337486,
+   "ci_high": 0.1158408774796542
+  },
+  "round_trip_min": {
+   "no_control": 103.36027101999505,
+   "holding": 109.30159169924453,
+   "diff": 5.941320679249486,
+   "ci_low": 5.566717708383067,
+   "ci_high": 6.315923650115906
+  },
+  "hold_min_per_hour": {
+   "no_control": 0.0,
+   "holding": 22.702885814233323,
+   "diff": 22.702885814233323,
+   "ci_low": 22.186159082418076,
+   "ci_high": 23.21961254604857
+  },
+  "pass": false
+ }
+}

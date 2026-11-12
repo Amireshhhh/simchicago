@@ -1,0 +1,34 @@
+{
+ "label": "simulated base feed, constructed labels",
+ "seeds": 20,
+ "detectors": {
+  "jump": {
+   "tp": 410,
+   "fp": 0,
+   "fn": 17,
+   "precision": 1.0,
+   "recall": 0.9601873536299765
+  },
+  "stuck": {
+   "tp": 323,
+   "fp": 0,
+   "fn": 87,
+   "precision": 1.0,
+   "recall": 0.7878048780487805
+  },
+  "off_route": {
+   "tp": 337,
+   "fp": 6,
+   "fn": 97,
+   "precision": 0.9825072886297376,
+   "recall": 0.7764976958525346
+  },
+  "outage": {
+   "tp": 80,
+   "fp": 26,
+   "fn": 0,
+   "precision": 0.7547169811320755,
+   "recall": 1.0
+  }
+ }
+}

@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 71 tests
+python -m pytest tests           # 76 tests
 cd viewer && npm test            # 11 tests
 ```
 
@@ -152,6 +152,18 @@ reliability** colours bus routes by one of them once data are published. A simul
 quantifies what 5-minute polling can recover (gaps undercounted, bunching slightly overcounted;
 `docs/EVALUATION.md`). No observed reliability numbers exist yet: the polling workflow had not
 run when this was written.
+
+## Operations tools
+
+- `python -m simchi.ops.crowding`: one-week-ahead daily ridership per bus route and 'L' station
+  and a crowding index (rides per scheduled trip); beats the same-day-last-week baseline on
+  Jan-Aug 2026 (log error 0.134 vs 0.157 buses, 0.128 vs 0.151 stations).
+- `python -m simchi.ops.holding`: a bunching/holding rule; it **failed** its pre-registered
+  simulated test (passenger wait +2.6 min), so its advice is shown as advisory only.
+- `python -m simchi.ops.anomalies`: rule-based live-feed anomaly flags, evaluated on constructed
+  labels in a simulated feed only.
+- `live.yml` writes `live/ops.json` (holding advice and flags for each snapshot), shown in the
+  Live CTA panel.
 
 ## Results in one paragraph
 

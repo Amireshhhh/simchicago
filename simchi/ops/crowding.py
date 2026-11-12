@@ -70,8 +70,30 @@ def evaluate(F: pd.DataFrame) -> dict:
     return res
 
 
-def next_week(df: pd.DataFrame, service: pd.Series, asof: str | None = None) -> pd.DataFrame:
-    """M_med4 forecasts for the 7 days after the last date in the data, with the crowding index."""
+DAY = {"W": "weekday", "A": "saturday", "U": "sunday"}
+
+
+def service_by_daytype(graph, kind: str) -> dict:
+    """Scheduled daily vehicle trips per bus route, or train departures per 'L' station (parent),
+    for each GTFS reference day type."""
+    from simchi.transit.ridership import _parent
+    out = {d: {} for d in DAY.values()}
+    for i, p in enumerate(graph.pats):
+        rail = bool(graph.pat_rail[i])
+        if rail != (kind == "rail"):
+            continue
+        for d in DAY.values():
+            n = sum(p.get("trips_band", {}).get(d, {}).values())
+            keys = {_parent(graph, s) for s in p["stops"][:-1]} if rail else {p["route"]}
+            for k in keys:
+                out[d][k] = out[d].get(k, 0) + n
+    return out
+
+
+def next_week(df: pd.DataFrame, service: dict, asof: str | None = None) -> pd.DataFrame:
+    """M_med4 forecasts for the 7 days after the last date in the data, with the crowding index
+    (forecast rides per scheduled vehicle trip, or per scheduled train departure at a station,
+    for that day type; Sunday service stands for holidays)."""
     last = pd.Timestamp(asof) if asof else df["date"].max()
     rows = []
     for d in pd.date_range(last + pd.Timedelta(days=1), periods=7):
@@ -83,7 +105,7 @@ def next_week(df: pd.DataFrame, service: pd.Series, asof: str | None = None) -> 
             if len(h) < 2:
                 continue
             f = float(np.median(h["rides"].iloc[-4:]))
-            trips = service.get(uid, np.nan)
+            trips = service[DAY[dt]].get(uid, np.nan)
             rows.append({"id": uid, "date": d.date().isoformat(), "daytype": dt, "forecast_rides": f,
                          "scheduled_trips": trips, "rides_per_trip": f / trips if trips and np.isfinite(trips) else None})
     return pd.DataFrame(rows)
@@ -91,11 +113,10 @@ def next_week(df: pd.DataFrame, service: pd.Series, asof: str | None = None) -> 
 
 def run() -> dict:
     from simchi.transit import network as N
-    from simchi.transit.ridership import scheduled_service
     out = {"design": "see module docstring (pre-registered)", "test_period": TEST}
     g = N._graph()
-    sb, ss = scheduled_service(g)
-    for kind, service in (("bus", sb), ("rail", ss)):
+    for kind in ("bus", "rail"):
+        service = service_by_daytype(g, kind)
         df = load_observed(kind)
         F = forecasts(df, *TEST)
         out[kind] = evaluate(F)

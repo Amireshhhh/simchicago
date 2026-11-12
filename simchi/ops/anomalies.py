@@ -147,6 +147,9 @@ def inject(feed: pd.DataFrame, scheduled: dict, seed: int, rate=0.02, outage_rat
         r, d = rds[j]
         feed = feed[~((feed["route"] == r) & (feed["direction"] == d))]
         labels["outage"].add((r, d))
+    present = set(feed["id"])
+    for k in ("jump", "stuck", "off_route"):                 # vehicles removed by an outage cannot be detected
+        labels[k] &= present
     return feed, labels
 
 

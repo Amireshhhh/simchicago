@@ -242,6 +242,18 @@ work-from-home share); `mode_shift.{transit,walk,other}` (utility shifts); `time
 (travel-time multipliers per mode); `simulated_incident_multiplier`; schedule parameters
 (e.g. `schedule.discretionary_multiplier`); `local_trip_share`; `n_days`, `start_date`.
 
+## 10b. Operations tools
+
+- **Holding** (`simchi/ops/holding.py`): two-way headway rule, hold = min(2, max(0, (h_back −
+  h_front)/2)) for a vehicle closer than half the scheduled headway to its leader; evaluated in an
+  event-driven loop simulation with headway-dependent dwells; applied to live snapshots through
+  the reliability module's positions and headways (`live/ops.json`).
+- **Crowding forecast** (`simchi/ops/crowding.py`): the median of the last four same-type days
+  known a week ahead; crowding index = forecast rides per scheduled vehicle trip or departure.
+- **Anomaly detection** (`simchi/ops/anomalies.py`): fixed physical thresholds (jump, stuck away
+  from terminals, off route, outage against Little's-law scheduled vehicles), evaluated by
+  injecting labelled anomalies into a feed.
+
 ## 11. Viewer
 
 three.js r180 with a post-processing chain (render → bloom → FXAA → output with ACES tone

@@ -42,6 +42,9 @@ jobs:
           if [ -n "$CTA_TRAIN_KEY" ]; then echo "::add-mask::$CTA_TRAIN_KEY"; fi
           python -m simchi.transit.live --polls 3 --interval 60 --out live
 
+      - name: Operations view of the snapshot (holding advice, anomaly flags; no CTA requests)
+        run: python -m simchi.ops.live_ops --snapshot live/latest.json --out live/ops.json || echo "ops view failed; snapshot published without it"
+
       - name: Keep this run's vehicle history (artifact, not git)
         uses: actions/upload-artifact@v7
         with:
@@ -55,7 +58,9 @@ jobs:
       - name: Remember the latest snapshot for pages.yml
         uses: actions/cache/save@v6
         with:
-          path: live/latest.json
+          path: |
+            live/latest.json
+            live/ops.json
           key: live-latest-${{ github.run_id }}
 
       - name: Restore the last built site
@@ -75,6 +80,7 @@ jobs:
         run: |
           mkdir -p viewer/dist/live
           cp live/latest.json viewer/dist/live/latest.json
+          if [ -f live/ops.json ]; then cp live/ops.json viewer/dist/live/ops.json; fi
 
       - name: Scan the site and the snapshot for anything key-like
         if: steps.site.outputs.cache-matched-key != ''

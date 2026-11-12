@@ -34,7 +34,8 @@ from simchi.world import OUTSIDE, build_world
 
 
 def _check(passed, summary, **details):
-    return {"pass": bool(passed), "summary": summary, **details}
+    """passed: True / False against a pre-set criterion, or None for a reported measurement."""
+    return {"pass": None if passed is None else bool(passed), "summary": summary, **details}
 
 
 def data_integrity():
@@ -205,6 +206,31 @@ def ridership(built):
     return out
 
 
+def ops_tools():
+    """WS7 evaluations, criteria pre-registered in the simchi/ops module docstrings."""
+    from simchi.ops import anomalies, crowding, holding
+    c = crowding.run()
+    out = {}
+    for kind, label in (("bus", "bus routes"), ("rail", "'L' stations")):
+        r = c[kind]
+        out[f"crowding_forecast_{kind}"] = _check(
+            r["pass"], f"{label}, one week ahead, Jan-Aug 2026 ({r['forecasts']} forecasts): mean absolute log error "
+                       f"{r['M_med4']['male']:.4f} (median of 4 same-type days) vs {r['B_naive']['male']:.4f} (same day last week)",
+            **{k: r[k] for k in ("forecasts", "units", "B_naive", "M_med4", "by_daytype")})
+    h = holding.evaluate(start="terminal")
+    hc = holding.evaluate(start="spread")
+    w, wc = h["mean_wait_min"], hc["mean_wait_min"]
+    out["holding_simulated"] = _check(
+        h["pass"], f"pre-registered simulated test: mean passenger wait {w['diff']:+.2f} min [{w['ci_low']:+.2f}, {w['ci_high']:+.2f}] "
+                   f"with holding; after correcting the start-up artifact found later {wc['diff']:+.2f} [{wc['ci_low']:+.2f}, {wc['ci_high']:+.2f}] "
+                   f"(not substituted for the pre-registered result)", preregistered=h, corrected_start=hc)
+    a = anomalies.evaluate()["detectors"]
+    out["anomaly_detectors"] = _check(
+        None, "constructed labels on a simulated feed (no pass criterion): " + ", ".join(
+            f"{k} precision {v['precision']:.2f} recall {v['recall']:.2f}" for k, v in a.items()), detectors=a)
+    return out
+
+
 def engine_invariants(built):
     sim = run(built, SimConfig(n_days=3, seed=11, incident_mode="both"))
     S = pd.DataFrame(sim.segments).sort_values(["day", "pid", "t0"], kind="stable")
@@ -243,5 +269,6 @@ def run_all(n: int = 2000, seed: int = 1) -> dict:
         "engine_invariants": engine_invariants(built),
         "gtfs_extract": gtfs_extract(),
         **ridership(built),
+        **ops_tools(),
     }
     return {"n_agents": len(built.persons), "build_seed": seed, "seconds": time.time() - t0, "checks": checks}

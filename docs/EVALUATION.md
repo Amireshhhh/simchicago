@@ -5,8 +5,9 @@ and the experiment runs in `reports/experiments/*/experiment.json`, on the defau
 2,000 requested agents (1,944 drawn, standing for 2,589,487 household residents), seed 1.
 
 Every model check is **out of sample** and compares against a **simple baseline**, with the
-pass criterion fixed before the results were seen. Two checks fail their criterion (commute
-destinations; 'L' station ridership); they are reported as failures, not re-defined. v0.3 workstream 2 replaced the
+pass criterion fixed before the results were seen. Three checks fail their criterion (commute
+destinations; 'L' station ridership; the simulated holding test); they are reported as failures,
+not re-defined. v0.3 workstream 2 replaced the
 distance-based mode choice and travel times by CTA-network ones; the two checks that failed in
 v0.2 (mode choice 8/9 districts, commute time 3.74 vs 3.69 min) were re-run under the same
 criteria and now pass (numbers below).
@@ -176,6 +177,83 @@ community area; all locations and CTA locations separately) is joined to each ro
 length share per area and reported next to the route's reliability with Spearman correlations.
 This is an association between places, not an effect in either direction; it waits for
 observed reliability data.
+
+## Operations tools (WS7)
+
+Designs and pass criteria are in the module docstrings, committed before any evaluation was run
+(d1785df, "WS7 pre-registration").
+
+### Crowding forecast (one week ahead; observed ridership)
+
+`python -m simchi.ops.crowding` (→ `reports/ops/crowding.json`). Forecast of daily rides per bus
+route and 'L' station seven days ahead: M_med4 = median of the last 4 days of the same day type
+(and, on weekdays, the same weekday) known a week before; baseline B_naive = the same weekday last
+week. Test: every day from 1 Jan to 31 Aug 2026. Crowding index = forecast rides per scheduled
+vehicle trip (bus) or train departure (station) of that day type.
+
+| | Forecasts | Units | MALE B_naive | MALE M_med4 | Criterion |
+|---|---|---|---|---|---|
+| Bus routes | 27,946 | 128 | 0.1569 | 0.1339 | **pass** |
+| 'L' stations | 34,992 | 144 | 0.1508 | 0.1280 | **pass** |
+
+Mean absolute error in rides: buses 485 → 413, stations 310 → 262. The median of four is better on
+every day type (weekday, Saturday, Sunday/holiday) for both modes. Ridership data on the portal
+end on 2026-08-31, so the published "next week" is 1-7 Sep 2026, already past; this
+is a daily-total forecast, not a live, trip-level crowding prediction (Bus Tracker passenger-load
+classes would come from the polled history, which does not exist yet).
+
+### Holding recommender (simulated)
+
+`python -m simchi.ops.holding` (→ `reports/ops/holding.json`). Rule: hold a vehicle running
+closer than half the scheduled headway behind its leader by half the difference between its back
+and front headways, at most 2 min. Pre-registered test: 40-stop loop, 10 buses, 30 seeds × 6 h,
+paired with and without holding at 4 control points; criterion: mean passenger wait lower with
+holding, 95% interval below 0.
+
+- **Pre-registered run: fail.** Mean wait 29.58 → 32.15 (Δ +2.58 [+1.57, +3.59]) min; round trip 103.36 → 109.30 (Δ +5.94 [+5.57, +6.32]) min.
+- That run had a start-up artifact found after it failed: all buses left the terminal one headway
+  apart while passengers at every stop had been accumulating since before service, so the first
+  bus met very long dwells and the line started bunched. With the line starting in regular
+  operation (buses spread evenly, `start="spread"`, now the default) the same criterion is met
+  narrowly: mean wait 25.37 → 24.43 (Δ -0.94 [-1.80, -0.09]) min, bunching share 0.72 → 0.68 (Δ -0.03 [-0.04, -0.02]),
+  at a cost of 24.4 min of holding per hour and round trips
+  +3.9 min longer. Because this correction followed the failure, the check is
+  recorded as failed; the corrected result is reported, not substituted.
+- In both versions the simulated line is extremely unstable (bunching share about 0.7 without
+  control), so this is a stress test of the rule, not evidence about CTA operations. The live
+  ops view (`live/ops.json`, Live CTA panel) shows the rule's advice for bunched vehicles as
+  advisory only.
+
+### Live-feed anomaly detection (constructed labels)
+
+`python -m simchi.ops.anomalies` (→ `reports/ops/anomalies.json`). Fixed-threshold detectors
+(jump > 35 m/s; stuck < 10 m in 120 s away from terminals; off route > 300 m from every shape of
+the route; outage: no vehicle on a route-direction with ≥ 3 scheduled) on a **simulated** base
+feed (scheduled vehicles moving along GTFS shapes, GPS noise 15 m, 5% in terminal layovers) with
+injected anomalies, 20 seeds, weekday 8 am:
+
+| Detector | TP | FP | FN | Precision | Recall |
+|---|---|---|---|---|---|
+| jump | 410 | 0 | 17 | 1.000 | 0.960 |
+| stuck | 323 | 0 | 87 | 1.000 | 0.788 |
+| off_route | 337 | 6 | 97 | 0.983 | 0.776 |
+| outage | 80 | 26 | 0 | 0.755 | 1.000 |
+
+- Scoring fix after the first run: vehicles labelled jump, stuck or off-route that an injected
+  outage then removed from the feed were counted as misses although they could not be detected.
+  They are now dropped from the labels. First-run recalls: jump 0.932, stuck 0.764, off_route 0.766 (precisions and the outage row
+  unchanged).
+- Every missed jump was a displacement of 2,002-2,281 m from the true position (33-38 m/s if
+  covered in 60 s, close to the 35 m/s threshold); every missed stuck vehicle was
+  frozen within 276 m of an end of one of its route's shapes (treated as a layover); every missed
+  off-route vehicle ended up within 293 m of another shape of its own route (a branch or the
+  other direction). All 6 off-route false positives are jump-injected vehicles whose median
+  position (per coordinate, over the 3 polls) the jump pulled more than 300 m off the route.
+- Outage false positives are route-directions where the simulated base feed itself drew no
+  vehicle while ≥ 3 were scheduled (a Poisson draw of 0); in real data they would be genuine
+  gaps or feed losses, so the outage precision here is a property of the simulated base.
+- No precision or recall on real data exists yet: the polled history is empty (see Service
+  reliability).
 
 ## Experiments
 

@@ -106,3 +106,21 @@ def test_crime_join_is_descriptive_and_runs():
     assert out["label"] == "descriptive association, not causal"
     assert "crimes_all_by_area vs bunching_share" in out["correlations"]
     assert len(out["routes"]) == 6 and all(r["crimes_all_by_area_per_1000"] > 0 for r in out["routes"])
+
+
+def test_live_ops_advise_holding_for_a_bunched_vehicle(sched):
+    from simchi.data.cds import load_cds
+    from simchi.ops.live_ops import build
+    from simchi.transit.live import build_snapshot
+    start = datetime(2026, 11, 17, 14, 0, tzinfo=timezone.utc)
+    rows = _route9_history(sched, start, spacing_m=3000.0, bunch_gap_m=150.0)
+    polls = {}
+    for r in rows:
+        polls.setdefault(r["poll_utc"], []).append(r)
+    snap = build_snapshot(sorted(polls.items()), load_cds().frame, {}, [])
+    ops = build(snap)
+    adv = ops["holding"]["advice"]
+    assert ops["schema"] == "simchi.ops/1" and adv, "a vehicle 150 m behind its leader should get holding advice"
+    assert all(0 < a["hold_min"] <= 2.0 for a in adv)
+    assert set(ops["anomalies"]) >= {"jump", "stuck", "off_route", "outage", "label"}
+    assert ops["anomalies"]["jump"] == [] and ops["anomalies"]["off_route"] == []

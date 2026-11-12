@@ -69,13 +69,16 @@ jobs:
       - name: Restore the latest live snapshot, if any
         uses: actions/cache/restore@v6
         with:
-          path: live/latest.json
+          path: |
+            live/latest.json
+            live/ops.json
           key: live-latest-none
           restore-keys: live-latest-
 
       - name: Add it to the site
         run: |
           if [ -f live/latest.json ]; then mkdir -p viewer/dist/live && cp live/latest.json viewer/dist/live/; fi
+          if [ -f live/ops.json ]; then cp live/ops.json viewer/dist/live/; fi
 
       - name: Scan the site for anything key-like
         run: python -m pytest -q -p no:cacheprovider tests/test_no_secrets.py
