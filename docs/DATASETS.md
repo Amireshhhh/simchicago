@@ -9,6 +9,8 @@ access is needed to build or run anything.
 | `cds_2021` | `data/raw/mirror/Chicago_2020.geojson` | CMAP Community Data Snapshots: 77 community-area polygons with 216 attributes (ACS 2015-2019 and LEHD per the v0.1 metadata) | area boundaries; population calibration; commute destination, mode and time fits; jobs; viewer lenses and procedural buildings |
 | `carjackings_2020` | `data/raw/mirror/Chi_Carjackings.geojson` | 1,412 CPD vehicular-hijacking records of 2020: IUCR 0325 (481) and 0326 (931), block-level location, community area | replayed incidents; intensity-model fit and out-of-sample test |
 | `sdoh_tracts_2014` | `data/raw/mirror/Chi-SDOH.geojson` | 791 census tracts (2010) with 2014 indicators, including population and the 2015 violent-crime rate | home placement within areas (by tract population); baseline perceived safety (hypothesis) |
+| `gtfs_cta` | not stored; derived extract in `data/transit/` | CTA GTFS static feed (zip, ~51 MB, sha256 `ddbf306e…72b4`, last modified 10 Nov 2026): 132 routes (124 bus, 8 rail), stops, trips, stop times, shapes, calendar | real network for the viewer and (from v0.3 workstream 2) network travel times; scheduled headways |
+| CTA live positions | not stored in git; workflow artifacts | Bus Tracker `getvehicles` and Train Tracker `ttpositions`, 3 polls per scheduled run | live layer; reliability and operations analyses |
 | landmarks | `data/reference/landmarks.json` | 5 tallest buildings: name, height, coordinates | viewer only; copied from the v0.1 export (which cites Wikipedia, 2026-10-14), not re-verified |
 
 ## Checks on the data
@@ -34,3 +36,27 @@ the ATUS transcription was removed.
 
 The v0.1 fetch commands were lost with the backend and are not reimplemented in v0.2;
 mirrors must be replaced by hand and their sha256 updated in `data/sources.toml`.
+
+## CTA GTFS extract
+
+`data/transit/` is derived from the feed pinned in `data/sources.toml` (`meta.json` records its
+sha256). Reference service days: Tuesday 17, Saturday 21 and Sunday 22 November 2026 (the only
+calendar exceptions in the feed are Thanksgiving and Christmas). Patterns: for each route and
+direction, trips are grouped by their first and last stop and every group with at least 10% of
+the route-direction's weekday trips is kept, represented by its most frequent stop sequence;
+on average the kept patterns cover 95.8% of each route-direction's weekday trips. Grouping by
+terminals matters: every Yellow Line trip is coded `direction_id` 1, in both directions.
+Shapes are simplified to 5 m.
+
+**Refresh.** CTA keeps one package online and replaces it every week or two.
+`python scripts/fetch_gtfs.py` downloads it and refuses to rebuild if the hash changed;
+`--refresh` adopts the new feed, rebuilds the extract and updates the pinned hash. Re-run the
+tests and `python -m simchi.cli validate` afterwards.
+
+## Live positions: storage and retention
+
+Each `live.yml` run uploads `history.csv.gz` (one row per vehicle per poll: position, heading,
+route, CTA timestamp, delay flag, trip and pattern ids, passenger-load class for buses) and
+`requests.json` as the artifact `vehicles-<run id>`, retained 14 days. The latest snapshot is
+kept in the Actions cache `live-latest-<run id>` (GitHub evicts old caches) so `pages.yml` can
+include it. Nothing from polling is committed to git.

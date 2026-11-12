@@ -39,6 +39,30 @@ def main():
             cases.append({"segs": segs, "t": float(t), "xy": position(segs, t)})
     with open(VIEWER / "test" / "fixtures" / "positions.json", "w") as f:
         json.dump({"source": "simchi engine segments (n=2000, seed 1 build; run seed 7, 2 days)", "cases": cases}, f)
+    # shape interpolation: JS alongShape/bestShape must match simchi.transit.interp
+    from simchi.transit.gtfs import load_extract
+    from simchi.transit.interp import along_shape, best_shape
+    shapes = load_extract("shapes")
+    pats = [p for p in load_extract("patterns") if p["route"] in ("Red", "9", "Y")]
+    along = []
+    for p in pats:
+        sh = shapes[p["shape"]]
+        n = len(sh)
+        for i, j, f in ((0, n // 3, 0.25), (n // 3, 2 * n // 3, 0.7), (2 * n // 3, n // 3, 0.5)):
+            p0 = [sh[i][0] + 20, sh[i][1] - 15]
+            p1 = [sh[j][0] - 10, sh[j][1] + 30]
+            along.append({"shape": sh, "p0": p0, "p1": p1, "f": f, "xy": list(along_shape(sh, p0, p1, f))})
+    cands = [shapes[p["shape"]] for p in pats if p["route"] == "9"]
+    pick = []
+    for k in (0, 1):
+        sh = cands[k]
+        p0, p1 = sh[len(sh) // 4], sh[len(sh) // 2]
+        b = best_shape(cands, p0, p1)
+        pick.append({"p0": p0, "p1": p1, "index": next(i for i, c in enumerate(cands) if b is not None and c == b.tolist())})
+    with open(VIEWER / "test" / "fixtures" / "along.json", "w") as f:
+        json.dump({"source": "simchi.transit.interp on the GTFS extract", "cases": along,
+                   "best": {"shapes": cands, "cases": pick}}, f)
+    print(len(along), "along-shape cases,", len(pick), "best-shape cases")
     pts = [(-87.6298, 41.8781), (-87.9073, 41.9742), (-87.524, 41.645), (-87.6359, 41.8789), (-87.94, 42.023)]
     with open(VIEWER / "test" / "fixtures" / "utm.json", "w") as f:
         json.dump([[lo, la, *to_utm(lo, la)] for lo, la in pts], f)

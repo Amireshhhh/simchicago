@@ -1,7 +1,7 @@
 {
  "n_agents": 1944,
  "build_seed": 1,
- "seconds": 31.369436979293823,
+ "seconds": 30.801323890686035,
  "checks": {
   "data_integrity": {
    "pass": true,
@@ -354,6 +354,20 @@
    "pass": true,
    "summary": "day plans partition [0, 1440]: True; safety in [0, 1]: True; no response == no incidents: True; deterministic: True",
    "agent_days": 5832
+  },
+  "gtfs_extract": {
+   "pass": true,
+   "summary": "extract built from the pinned feed: True; 132 routes (8 rail), 143 stations, 357 patterns covering on average 95.8% of each route-direction's weekday trips",
+   "counts": {
+    "routes": 132,
+    "rail_routes": 8,
+    "patterns": 357,
+    "stops": 10883,
+    "stations": 143,
+    "shapes": 357,
+    "weekday_trips": 21195
+   },
+   "mean_pattern_coverage": 0.9577281853281854
   }
  }
 }

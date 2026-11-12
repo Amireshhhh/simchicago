@@ -15,12 +15,21 @@ _FWD = Transformer.from_crs("EPSG:4326", "EPSG:32616", always_xy=True)
 _INV = Transformer.from_crs("EPSG:32616", "EPSG:4326", always_xy=True)
 
 
+def _transform(tr, a, b):
+    # pyproj takes a single-point path for one-element arrays that converts them to scalars,
+    # which NumPy deprecates; pass plain floats in that case.
+    if np.ndim(a) > 0 and np.size(a) == 1:
+        x, y = tr.transform(float(np.ravel(a)[0]), float(np.ravel(b)[0]))
+        return np.array([x]), np.array([y])
+    return tr.transform(a, b)
+
+
 def to_utm(lon, lat):
-    return _FWD.transform(lon, lat)
+    return _transform(_FWD, lon, lat)
 
 
 def to_lonlat(e, n):
-    return _INV.transform(e, n)
+    return _transform(_INV, e, n)
 
 
 class LocalFrame:
@@ -34,7 +43,10 @@ class LocalFrame:
         return list(to_lonlat(self.e0, self.n0))
 
     def from_lonlat(self, lon, lat):
-        e, n = to_utm(np.asarray(lon, float), np.asarray(lat, float))
+        scalar = np.ndim(lon) == 0 and np.ndim(lat) == 0
+        e, n = to_utm(np.atleast_1d(np.asarray(lon, float)), np.atleast_1d(np.asarray(lat, float)))
+        if scalar:
+            return float(e[0]) - self.e0, -(float(n[0]) - self.n0)
         return np.asarray(e) - self.e0, -(np.asarray(n) - self.n0)
 
     def to_lonlat(self, x, z):

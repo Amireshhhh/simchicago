@@ -24,3 +24,13 @@ file = "data/raw/mirror/Chi-SDOH.geojson"
 sha256 = "d0dee6295c65dac76efe616c2ec5e62c79037627257069c9654a0e9b10f366bf"
 title = "Chicago census-tract social determinants of health indicators (2014)"
 contents = "791 census-tract (2010 TIGER) MultiPolygons with community area, 2014 population (Pop2014), poverty, vehicle availability (EP_NOVEH, NOCAR/CAR), transit commuting (CTA14P), commute time (CmTm14) and other 2014 indicators."
+
+[gtfs_cta]
+# The raw feed is not stored in the repository; data/transit/ is a derived extract of it.
+source_url = "https://www.transitchicago.com/downloads/sch_data/google_transit.zip"
+sha256 = "ddbf306e6a57e419437fe01c4e865372f031c0a9626b93214b418457c21b72b4"
+last_modified = "Tue, 10 Nov 2026 18:22:24 GMT"
+downloaded = "2026-11-12"
+title = "CTA GTFS static feed (scheduled service)"
+extract = "data/transit/"
+license = "CTA Developer License Agreement and Terms of Use (included in the zip; see docs/CTA_TERMS.md)"

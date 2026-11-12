@@ -164,3 +164,15 @@ code, .mono { font-family: var(--mono); font-size: 12px; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* ---------------------------------------------------------------- live CTA */
+.ghost.live[aria-pressed="true"] { background: rgba(255, 77, 109, 0.16); border-color: rgba(255, 77, 109, 0.6); }
+.ghost.live::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-right: 7px; box-shadow: 0 0 8px var(--red); vertical-align: 1px; }
+.live-panel { position: fixed; right: 14px; bottom: 136px; padding: 12px 14px; font-size: 12.5px; z-index: 4; max-width: 340px; line-height: 1.45; }
+.live-panel.hidden { display: none; }
+.live-panel h3 { margin: 0 0 4px; font-size: 13px; color: var(--text); text-transform: none; letter-spacing: 0; }
+.live-panel .age { font-family: var(--mono); color: var(--cyan); }
+.live-panel .age.stale { color: var(--amber); }
+.live-panel .fine { margin-top: 6px; }
+#attrib { position: fixed; right: 18px; bottom: 2px; font-size: 10.5px; color: rgba(232, 240, 250, .55); z-index: 6; pointer-events: none; text-shadow: 0 1px 3px rgba(0, 0, 0, .9); }
+@media (max-width: 900px) { #attrib { left: 18px; right: auto; } .live-panel { bottom: 150px; } }

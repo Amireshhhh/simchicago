@@ -25,6 +25,7 @@
     <button id="labBtn" class="ghost accent" aria-expanded="false" aria-controls="lab">Experiment Lab</button>
     <button id="timelinesBtn" class="ghost" aria-expanded="false" aria-controls="timelines">Timelines</button>
     <button id="tourBtn" class="ghost" title="Fly over the city">Fly-through</button>
+    <button id="liveBtn" class="ghost live" aria-pressed="false" title="Real CTA routes and near-live vehicle positions">Live CTA</button>
     <label class="select">Lens
       <select id="lens">
         <option value="none">Plain</option>
@@ -44,6 +45,7 @@
         <label><input type="checkbox" id="lyrFlows"> Commute flows</label>
         <label><input type="checkbox" id="lyrLabels" checked> Area names</label>
         <label><input type="checkbox" id="lyrIncidents" checked> Incidents</label>
+        <label><input type="checkbox" id="lyrBusRoutes" checked> CTA bus routes (with Live CTA)</label>
         <label><input type="checkbox" id="lyrRain"> Rain (what-if, no weather data)</label>
         <label class="select">Quality
           <select id="quality">
@@ -95,6 +97,8 @@
   </div>
 </footer>
 
+<div id="livePanel" class="live-panel glass hidden" aria-live="polite"></div>
+<div id="attrib">Transit data provided by Chicago Transit Authority (GTFS, CTA Bus Tracker, CTA Train Tracker). SimChicago is not affiliated with or endorsed by CTA. Agents are synthetic.</div>
 <div id="toasts" aria-live="polite"></div>
 <div id="tip" role="tooltip"></div>
 <div id="boot"><div><span class="star big" aria-hidden="true"></span><h1>SimChicago</h1><p id="bootmsg">Loading the city…</p><div class="bootbar"><i id="bootbar"></i></div></div></div>

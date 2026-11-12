@@ -115,3 +115,64 @@ export function utmForward(lonDeg, latDeg, zone = 16) {
   for (let j = 1; j <= 4; j++) { x += al[j] * Math.cos(2 * j * xi) * Math.sinh(2 * j * eta); y += al[j] * Math.sin(2 * j * xi) * Math.cosh(2 * j * eta); }
   return [500000 + k0 * A * x, k0 * A * y];
 }
+
+// ---- transit: positions along route shapes (same rule as simchi/transit/interp.py) ----------
+
+function cumulative(shape) {
+  const c = [0];
+  for (let i = 1; i < shape.length; i++) c.push(c[i - 1] + Math.hypot(shape[i][0] - shape[i - 1][0], shape[i][1] - shape[i - 1][1]));
+  return c;
+}
+
+/** [distance along the shape of the nearest point, distance from p to the shape]. */
+export function projectOnShape(shape, cum, p) {
+  let best = Infinity, along = 0;
+  for (let k = 0; k < shape.length - 1; k++) {
+    const ax = shape[k][0], az = shape[k][1], bx = shape[k + 1][0] - ax, bz = shape[k + 1][1] - az;
+    const L2 = bx * bx + bz * bz;
+    const t = L2 > 0 ? Math.min(1, Math.max(0, ((p[0] - ax) * bx + (p[1] - az) * bz) / L2)) : 0;
+    const d = Math.hypot(ax + bx * t - p[0], az + bz * t - p[1]);
+    if (d < best) { best = d; along = cum[k] + t * Math.sqrt(L2); }
+  }
+  return [along, best];
+}
+
+export function pointAtDistance(shape, cum, s) {
+  s = Math.min(cum[cum.length - 1], Math.max(0, s));
+  let k = 0;
+  while (k < cum.length - 2 && cum[k + 1] <= s) k++;
+  const seg = cum[k + 1] - cum[k], f = seg > 0 ? (s - cum[k]) / seg : 0;
+  return [shape[k][0] + f * (shape[k + 1][0] - shape[k][0]), shape[k][1] + f * (shape[k + 1][1] - shape[k][1])];
+}
+
+/** Position a fraction f of the way from p0 to p1, following the shape where both points are
+ *  within maxOffset metres of it and the shape runs forward; otherwise a straight line. */
+export function alongShape(shape, p0, p1, f, maxOffset = 150) {
+  f = Math.min(1, Math.max(0, f));
+  const line = [p0[0] + f * (p1[0] - p0[0]), p0[1] + f * (p1[1] - p0[1])];
+  if (!shape || shape.length < 2) return line;
+  const cum = cumulative(shape);
+  const [s0, d0] = projectOnShape(shape, cum, p0), [s1, d1] = projectOnShape(shape, cum, p1);
+  if (d0 > maxOffset || d1 > maxOffset || s1 < s0) return line;
+  return pointAtDistance(shape, cum, s0 + f * (s1 - s0));
+}
+
+/** The route shape both points lie within maxOffset of, running forward, with the smallest
+ *  larger offset; null if none qualifies. */
+export function bestShape(shapes, p0, p1, maxOffset = 150) {
+  let best = null, bestD = Infinity;
+  for (const sh of shapes) {
+    if (!sh || sh.length < 2) continue;
+    const cum = cumulative(sh);
+    const [s0, d0] = projectOnShape(sh, cum, p0), [s1, d1] = projectOnShape(sh, cum, p1);
+    const d = Math.max(d0, d1);
+    if (d <= maxOffset && s1 >= s0 && d < bestD) { best = sh; bestD = d; }
+  }
+  return best;
+}
+
+/** Age of a snapshot in minutes, and whether it counts as stale (older than staleMin). */
+export function snapshotAge(generatedUtc, nowMs, staleMin = 30) {
+  const ageMin = (nowMs - Date.parse(generatedUtc)) / 60000;
+  return { ageMin, stale: !(ageMin <= staleMin) };
+}

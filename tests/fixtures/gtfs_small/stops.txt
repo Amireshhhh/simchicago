@@ -1,0 +1,10 @@
+stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,location_type,parent_station,wheelchair_boarding
+100,100,Ashland & Madison,,41.8815,-87.6668,0,,1
+101,101,Ashland & Chicago,,41.8960,-87.6670,0,,1
+102,102,Ashland & North,,41.9105,-87.6675,0,,1
+40900,,Howard,,42.0190,-87.6728,1,,1
+41680,,Dempster-Skokie,,42.0390,-87.7520,1,,1
+30175,,Howard (Yellow-bound),,42.0190,-87.6728,0,40900,1
+30176,,Howard (arrival),,42.0190,-87.6728,0,40900,1
+30026,,Dempster-Skokie (arrival),,42.0390,-87.7520,0,41680,1
+30027,,Dempster-Skokie (departure),,42.0390,-87.7520,0,41680,1

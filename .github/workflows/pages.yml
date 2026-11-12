@@ -10,9 +10,10 @@ permissions:
   pages: write
   id-token: write
 
+# Shared with live.yml: the two workflows never deploy at the same time.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -20,28 +21,53 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+          cache: pip
 
       - name: Install simchi
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[test]"
 
-      - name: Simulate (default week, comparison runs, experiments)
+      - name: Tests
+        run: python -m pytest -q -p no:cacheprovider
+
+      - name: Simulate (default week, comparison runs, experiments) and export
         run: python -m simchi.cli demo --replicates 5
 
       - uses: actions/setup-node@v7
         with:
           node-version: 22
 
-      - name: Build viewer
+      - name: Build and test viewer
         working-directory: viewer
         run: |
           npm ci --ignore-scripts
           npm run build
+          npm test
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Cache the built site for live.yml (without any live snapshot)
+        uses: actions/cache/save@v6
+        with:
+          path: viewer/dist
+          key: site-${{ github.sha }}
+
+      - name: Restore the latest live snapshot, if any
+        uses: actions/cache/restore@v6
+        with:
+          path: live/latest.json
+          key: live-latest-none
+          restore-keys: live-latest-
+
+      - name: Add it to the site
+        run: |
+          if [ -f live/latest.json ]; then mkdir -p viewer/dist/live && cp live/latest.json viewer/dist/live/; fi
+
+      - name: Scan the site for anything key-like
+        run: python -m pytest -q -p no:cacheprovider tests/test_no_secrets.py
+
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: viewer/dist
 
@@ -53,4 +79,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

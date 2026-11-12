@@ -156,6 +156,23 @@ def incidents():
                   f"daily mean {r['daily_mean_predicted']:.2f} predicted vs {r['daily_mean_observed_test']:.2f} observed", **r)
 
 
+def gtfs_extract():
+    from simchi.transit.gtfs import load_extract
+    meta = load_extract("meta")
+    pinned = source("gtfs_cta")["sha256"]
+    pats = load_extract("patterns")
+    from collections import defaultdict
+    share = defaultdict(float)
+    for p in pats:
+        share[(p["route"], p["direction"])] += p["share_of_trips"]
+    cover = float(np.mean(list(share.values())))
+    ok = meta["source_sha256"] == pinned and meta["counts"]["routes"] > 0
+    return _check(ok, f"extract built from the pinned feed: {meta['source_sha256'] == pinned}; {meta['counts']['routes']} routes "
+                      f"({meta['counts']['rail_routes']} rail), {meta['counts']['stations']} stations, {meta['counts']['patterns']} patterns "
+                      f"covering on average {cover:.1%} of each route-direction's weekday trips",
+                  counts=meta["counts"], mean_pattern_coverage=cover)
+
+
 def engine_invariants(built):
     sim = run(built, SimConfig(n_days=3, seed=11, incident_mode="both"))
     S = pd.DataFrame(sim.segments).sort_values(["day", "pid", "t0"], kind="stable")
@@ -191,5 +208,6 @@ def run_all(n: int = 2000, seed: int = 1) -> dict:
         "commute_time_holdout": commute_time_holdout(world, P_dest, built.mode_model),
         "incident_forecast": incidents(),
         "engine_invariants": engine_invariants(built),
+        "gtfs_extract": gtfs_extract(),
     }
     return {"n_agents": len(built.persons), "build_seed": seed, "seconds": time.time() - t0, "checks": checks}

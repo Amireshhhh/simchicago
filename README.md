@@ -16,6 +16,16 @@ runner for running many scenarios across the whole city, and a 3D viewer.
   night, procedural skyline with lit windows, glowing residents with motion trails, commute
   flows, incident pulses, data lenses and an Experiment Lab.
 
+- **Live CTA layer**: the real CTA network from CTA's GTFS feed (rail lines in their colours,
+  bus routes, stations) and near-live bus and train positions, polled server-side in GitHub
+  Actions within a documented request budget and published as static snapshots.
+
+> **Transit data provided by Chicago Transit Authority** (GTFS, CTA Bus Tracker, CTA Train
+> Tracker). SimChicago is **not affiliated with or endorsed by CTA**. Live positions are
+> near-live snapshots (GitHub runs the workflow at most every 5 minutes, and runs can be
+> delayed or skipped); they may be missing, delayed or wrong. Terms, limits and the request
+> budget: `docs/CTA_TERMS.md`.
+
 Agents are synthetic; no real person is represented. Every agent variable and parameter
 carries a provenance class (observed, estimated, fitted, latent, scenario, hypothesis), and
 incidents are labelled `observed` or `simulated` everywhere.
@@ -42,8 +52,8 @@ cd viewer && npm install && npm run build && cd ..
 python -m simchi.cli demo        # build the city, the default week, comparison runs, 4 experiments, viewer data (< 1 min)
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~1 min)
-python -m pytest tests           # 31 tests
-cd viewer && npm test            # 8 tests
+python -m pytest tests           # 57 tests
+cd viewer && npm test            # 10 tests
 ```
 
 The first command that needs the city builds it (about 25 s) and caches it in
@@ -105,6 +115,25 @@ experiment; **Fly-through** tours the city; **Layers** toggles buildings, trails
 flows, labels, incidents and a what-if rain overlay. Buildings are procedural; **Load real
 buildings here** fetches footprints around the camera from the City of Chicago data portal
 (not testable offline; not exercised in this repository's tests).
+
+## Live CTA layer
+
+- `simchi/transit/gtfs.py` builds `data/transit/` (a derived extract of CTA's GTFS feed:
+  routes, stations, simplified shapes, representative stop patterns, scheduled trips and
+  headways per route, direction, day type and hour) in the simulation's coordinate frame.
+  Refresh: `python scripts/fetch_gtfs.py --refresh` (see `docs/DATASETS.md`).
+- `.github/workflows/live.yml` runs every 5 minutes: `python -m simchi.transit.live` takes
+  3 polls, 60 s apart (Bus Tracker `getvehicles`, 10 routes per request, only routes with
+  scheduled service in the current hour; Train Tracker `ttpositions`), stops at a hard
+  per-run request cap, writes `latest.json` (labelled `observed`) and redeploys the site.
+  Each run's vehicle history is kept for 14 days as the workflow artifact `vehicles-<run id>`;
+  nothing from polling is committed to git.
+- The keys come only from the `CTA_BUS_KEY` and `CTA_TRAIN_KEY` Actions secrets; the browser
+  never calls CTA. `tests/test_no_secrets.py` fails the deploy if anything key-like is in the
+  site or the snapshot.
+- In the viewer, **Live CTA** draws the network and the latest snapshot, replays the observed
+  ~2 minutes along route shapes, and shows the snapshot age (older than 30 minutes: marked
+  stale and not animated).
 
 ## Results in one paragraph
 

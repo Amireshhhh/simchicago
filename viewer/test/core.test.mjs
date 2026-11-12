@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { segmentIndex, positionAt, sunPosition, pointInRing, parseFootprint, clockLabel, utcMs, utmForward, STORY_M } from '../src/core.js';
+import { segmentIndex, positionAt, sunPosition, pointInRing, parseFootprint, clockLabel, utcMs, utmForward, STORY_M, alongShape, bestShape, snapshotAge } from '../src/core.js';
 import { readFileSync } from 'node:fs';
 
 const segs = [[0, 100, 0, 0, 0, 0, 0, 0], [100, 110, 8, 0, 0, 100, 0, 2], [110, 500, 1, 100, 0, 100, 0, 0]];
@@ -63,4 +63,23 @@ test('footprint parser on the verified portal record (bldg_id 729719)', () => {
 test('clock label', () => {
   assert.equal(clockLabel('2020-10-05', 0), 'Mon 5 Oct 2020, 00:00');
   assert.equal(clockLabel('2020-10-05', 1440 * 6 + 23 * 60 + 59), 'Sun 11 Oct 2020, 23:59');
+});
+
+test('alongShape and bestShape equal the Python implementation on GTFS shapes', () => {
+  const fx = JSON.parse(readFileSync(new URL('./fixtures/along.json', import.meta.url)));
+  for (const c of fx.cases) {
+    const p = alongShape(c.shape, c.p0, c.p1, c.f);
+    assert.ok(Math.abs(p[0] - c.xy[0]) < 1e-6 && Math.abs(p[1] - c.xy[1]) < 1e-6, JSON.stringify([p, c.xy]));
+  }
+  for (const c of fx.best.cases) {
+    const b = bestShape(fx.best.shapes, c.p0, c.p1);
+    assert.equal(fx.best.shapes.indexOf(b), c.index);
+  }
+});
+
+test('snapshot age and staleness', () => {
+  const t = Date.parse('2026-11-17T14:00:00Z');
+  assert.deepEqual(snapshotAge('2026-11-17T13:50:00+00:00', t), { ageMin: 10, stale: false });
+  assert.equal(snapshotAge('2026-11-17T13:20:00+00:00', t).stale, true);
+  assert.equal(snapshotAge('not a date', t).stale, true);
 });

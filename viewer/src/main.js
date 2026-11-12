@@ -5,6 +5,7 @@ import { createCity } from './city.js';
 import { createAgents, ACT_COLOR, MODE_COLOR } from './agents.js';
 import { createIncidents, createFlows } from './overlays.js';
 import { renderLab } from './lab.js';
+import { createTransit } from './transit.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -281,6 +282,42 @@ $('#tourBtn').onclick = () => { tourStep = 0; tourTimer = 0; toast('Fly-through:
 addEventListener('keydown', e => { if (e.key === 'Escape') tourStep = -1; });
 $('#gl').addEventListener('pointerdown', () => { tourStep = -1; flight = null; });
 
+// Live CTA: real routes and stations (GTFS) and near-live vehicles from the published snapshot
+let transit = null, transitLoading = false, lastPanel = 0;
+async function toggleLive() {
+  const btn = $('#liveBtn'), on = btn.getAttribute('aria-pressed') !== 'true';
+  btn.setAttribute('aria-pressed', String(on));
+  $('#livePanel').classList.toggle('hidden', !on);
+  if (on && !transit && !transitLoading) {
+    transitLoading = true;
+    $('#livePanel').innerHTML = '<h3>Live CTA</h3>Loading the CTA network…';
+    try {
+      const r = await fetch('data/transit.json');
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      transit = createTransit(scene, await r.json());
+      transit.setBusVisible($('#lyrBusRoutes').checked);
+    } catch (e) { $('#livePanel').innerHTML = `<h3>Live CTA</h3>Could not load the CTA network: ${esc(e.message)}`; }
+    transitLoading = false;
+  }
+  if (transit) transit.group.visible = on;
+}
+$('#liveBtn').onclick = toggleLive;
+$('#lyrBusRoutes').onchange = e => { if (transit) transit.setBusVisible(e.target.checked); };
+function renderLivePanel(st) {
+  const el = $('#livePanel');
+  if (!st || st.state === 'loading') { el.innerHTML = '<h3>Live CTA</h3>Loading the latest snapshot…'; return; }
+  if (st.state === 'none') {
+    el.innerHTML = '<h3>Live CTA</h3>No live snapshot is published yet. Routes and stations are from CTA GTFS.<div class="fine">Snapshots are taken server-side by a scheduled workflow; the browser never calls CTA.</div>';
+    return;
+  }
+  const age = st.ageMin < 1 ? 'under a minute' : `${Math.round(st.ageMin)} min`;
+  el.innerHTML = `<h3>Live CTA <span class="tag observed">observed</span></h3>
+    ${fmtInt(st.bus)} buses and ${fmtInt(st.train)} trains, snapshot
+    <span class="age ${st.stale ? 'stale' : ''}">${age} old${st.stale ? ' (stale: not animated)' : ''}</span>.
+    ${st.replaying ? '<div>Replaying the last ~2 minutes of observed positions along route shapes (×10).</div>' : ''}
+    <div class="fine">"Live" means near-live: GitHub runs the snapshot workflow at most every 5 minutes, and runs can be delayed or skipped. Positions may be missing, delayed or wrong. Data provided by Chicago Transit Authority; SimChicago is not affiliated with or endorsed by CTA.</div>`;
+}
+
 // real building footprints around the camera target (City of Chicago Building Footprints, syp8-uezg)
 $('#footprintsBtn').onclick = async () => {
   const [x0, y0] = D.meta.origin_utm16n;
@@ -344,6 +381,10 @@ function frame(now) {
   const live = incidents.update(simT, camDist, radius);
   flows.update(now / 1000);
   S.updateRain(dt);
+  if (transit && transit.group.visible) {
+    const st = transit.update(Date.now());
+    if (now - lastPanel > 1000) { lastPanel = now; renderLivePanel(st); }
+  }
   if (selected >= 0) { agents.select(selected, camDist); if (Math.abs(simT - lastInspect) > 5) { lastInspect = simT; renderAgent(selected); } }
   if (lens === 'safety' && Math.floor(simT / 1440) !== lensDay) { lensDay = Math.floor(simT / 1440); applyLens(); }
   $('#clock').textContent = clockLabel(D.meta.start_date, simT);

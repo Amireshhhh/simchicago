@@ -81,6 +81,8 @@ def cmd_demo(args):
             experiments.append({k: res[k] for k in ("name", "description", "baseline", "scenarios", "metrics", "summary", "effects", "seeds")})
     out = export_viewer(b, main, compare=compare, experiments=experiments)
     print("viewer data:", out)
+    from simchi.export.transit_layer import export_layer
+    print("transit layer:", export_layer())
 
 
 def cmd_serve(args):
@@ -109,6 +111,8 @@ def cmd_export(args):
     b = _build(args)
     sim = run(b, make_config({"incident_mode": args.incidents, "n_days": args.days}, {}, args.seed))
     print("viewer data:", export_viewer(b, sim))
+    from simchi.export.transit_layer import export_layer
+    print("transit layer:", export_layer())
 
 
 def main(argv=None):
