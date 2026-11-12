@@ -1,17 +1,19 @@
 {
  "n_agents": 1944,
  "build_seed": 1,
- "seconds": 357.25932693481445,
+ "seconds": 399.4697229862213,
  "checks": {
   "data_integrity": {
    "pass": true,
-   "summary": "5/5 mirrors match their pinned sha256",
+   "summary": "7/7 mirrors match their pinned sha256",
    "files": {
     "cds_2021": true,
     "carjackings_2020": true,
     "sdoh_tracts_2014": true,
     "cta_l_station_daily": true,
-    "cta_bus_route_daily": true
+    "cta_bus_route_daily": true,
+    "crimes_cta_by_area": true,
+    "crimes_all_by_area": true
    }
   },
   "cds_identities": {
@@ -707,6 +709,184 @@
    "observed_train_total": 304848.51171875,
    "observed_test_total": 334779.6611764706,
    "model_total_unscaled": 423647.37271022913
+  },
+  "crowding_forecast_bus": {
+   "pass": true,
+   "summary": "bus routes, one week ahead, Jan-Aug 2026 (27946 forecasts): mean absolute log error 0.1339 (median of 4 same-type days) vs 0.1569 (same day last week)",
+   "forecasts": 27946,
+   "units": 128,
+   "B_naive": {
+    "male": 0.15690018581130036,
+    "mae_rides": 484.6613826665712
+   },
+   "M_med4": {
+    "male": 0.13389489106255054,
+    "mae_rides": 413.37932083303514
+   },
+   "by_daytype": {
+    "A": {
+     "B_naive": 0.1693526560418331,
+     "M_med4": 0.1420906473744193
+    },
+    "U": {
+     "B_naive": 0.18372087732894263,
+     "M_med4": 0.15826234694784266
+    },
+    "W": {
+     "B_naive": 0.1507537201385739,
+     "M_med4": 0.12879387054842006
+    }
+   }
+  },
+  "crowding_forecast_rail": {
+   "pass": true,
+   "summary": "'L' stations, one week ahead, Jan-Aug 2026 (34992 forecasts): mean absolute log error 0.1280 (median of 4 same-type days) vs 0.1508 (same day last week)",
+   "forecasts": 34992,
+   "units": 144,
+   "B_naive": {
+    "male": 0.15079577784027273,
+    "mae_rides": 310.3979481024234
+   },
+   "M_med4": {
+    "male": 0.12802503245234953,
+    "mae_rides": 261.5192043895748
+   },
+   "by_daytype": {
+    "A": {
+     "B_naive": 0.23282006704340158,
+     "M_med4": 0.20114671481262344
+    },
+    "U": {
+     "B_naive": 0.24542713987532738,
+     "M_med4": 0.20961744746581784
+    },
+    "W": {
+     "B_naive": 0.11275553149061633,
+     "M_med4": 0.09473226390457667
+    }
+   }
+  },
+  "holding_simulated": {
+   "pass": false,
+   "summary": "pre-registered simulated test: mean passenger wait +2.58 min [+1.57, +3.59] with holding; after correcting the start-up artifact found later -0.94 [-1.80, -0.09] (not substituted for the pre-registered result)",
+   "preregistered": {
+    "label": "simulated",
+    "seeds": 30,
+    "start": "terminal",
+    "criterion": "mean passenger wait lower with holding (paired 95% interval below 0)",
+    "mean_wait_min": {
+     "no_control": 29.57557205437538,
+     "holding": 32.154693333746614,
+     "diff": 2.5791212793712313,
+     "ci_low": 1.5700249606124872,
+     "ci_high": 3.588217598129975
+    },
+    "bunching_share": {
+     "no_control": 0.6913354405415865,
+     "holding": 0.677766871850108,
+     "diff": -0.013568568691478718,
+     "ci_low": -0.022544051075904157,
+     "ci_high": -0.004593086307053278
+    },
+    "headway_cv": {
+     "no_control": 2.4351870926371193,
+     "holding": 2.49191882499368,
+     "diff": 0.056731732356560226,
+     "ci_low": -0.0023774127665337486,
+     "ci_high": 0.1158408774796542
+    },
+    "round_trip_min": {
+     "no_control": 103.36027101999505,
+     "holding": 109.30159169924453,
+     "diff": 5.941320679249486,
+     "ci_low": 5.566717708383067,
+     "ci_high": 6.315923650115906
+    },
+    "hold_min_per_hour": {
+     "no_control": 0.0,
+     "holding": 22.702885814233323,
+     "diff": 22.702885814233323,
+     "ci_low": 22.186159082418076,
+     "ci_high": 23.21961254604857
+    },
+    "pass": false
+   },
+   "corrected_start": {
+    "label": "simulated",
+    "seeds": 30,
+    "start": "spread",
+    "criterion": "mean passenger wait lower with holding (paired 95% interval below 0)",
+    "mean_wait_min": {
+     "no_control": 25.370229012653834,
+     "holding": 24.426671749675815,
+     "diff": -0.9435572629780148,
+     "ci_low": -1.7998728698314936,
+     "ci_high": -0.08724165612453605
+    },
+    "bunching_share": {
+     "no_control": 0.7158387718355697,
+     "holding": 0.6844502062023127,
+     "diff": -0.031388565633257016,
+     "ci_low": -0.03811282259729552,
+     "ci_high": -0.02466430866921851
+    },
+    "headway_cv": {
+     "no_control": 2.2405104975602472,
+     "holding": 2.112430063117563,
+     "diff": -0.12808043444268497,
+     "ci_low": -0.1787273452139419,
+     "ci_high": -0.07743352367142803
+    },
+    "round_trip_min": {
+     "no_control": 84.32720691156621,
+     "holding": 88.27324419331545,
+     "diff": 3.946037281749258,
+     "ci_low": 3.363267144151889,
+     "ci_high": 4.528807419346627
+    },
+    "hold_min_per_hour": {
+     "no_control": 0.0,
+     "holding": 24.390714095570683,
+     "diff": 24.390714095570683,
+     "ci_low": 23.78058610029583,
+     "ci_high": 25.000842090845534
+    },
+    "pass": true
+   }
+  },
+  "anomaly_detectors": {
+   "pass": null,
+   "summary": "constructed labels on a simulated feed (no pass criterion): jump precision 1.00 recall 0.96, stuck precision 1.00 recall 0.79, off_route precision 0.98 recall 0.78, outage precision 0.75 recall 1.00",
+   "detectors": {
+    "jump": {
+     "tp": 410,
+     "fp": 0,
+     "fn": 17,
+     "precision": 1.0,
+     "recall": 0.9601873536299765
+    },
+    "stuck": {
+     "tp": 323,
+     "fp": 0,
+     "fn": 87,
+     "precision": 1.0,
+     "recall": 0.7878048780487805
+    },
+    "off_route": {
+     "tp": 337,
+     "fp": 6,
+     "fn": 97,
+     "precision": 0.9825072886297376,
+     "recall": 0.7764976958525346
+    },
+    "outage": {
+     "tp": 80,
+     "fp": 26,
+     "fn": 0,
+     "precision": 0.7547169811320755,
+     "recall": 1.0
+    }
+   }
   }
  }
 }

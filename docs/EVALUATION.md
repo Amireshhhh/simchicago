@@ -16,7 +16,7 @@ criteria and now pass (numbers below).
 
 | Check | Result | Criterion | Outcome |
 |---|---|---|---|
-| Data integrity | 5/5 mirrors match their pinned sha256 | all match | **pass** |
+| Data integrity | 7/7 mirrors match their pinned sha256 | all match | **pass** |
 | CDS count identities | 12 identities hold within 1.22% in every area; LEHD orientation bounds hold | < 1.5% and bounds hold | **pass** |
 | Calibration | 77/77 areas, max relative deviation 1.9 × 10⁻⁹; household weights / TOT_HH = 1.000000; person weights / POP_HH = 0.9773 | < 10⁻⁶; exact; within 3% | **pass** |
 | Commute destinations (gravity), leave one district out | held-out log-likelihood better than jobs-proportional destinations in 8 of 9 districts (worse in the Far Southwest Side); in-sample correlation of the 385 listed top-5 shares 0.919, mean absolute error 3.0 share points | better in every district | **fail** |
@@ -26,6 +26,10 @@ criteria and now pass (numbers below).
 | Incident forecast (train Jan-Sep 2020, test Oct-Dec) | weekly area counts (13 weeks, 508 incidents): log score −1976.1 (model) vs −2203.1 (population-proportional) and −2206.7 (uniform) | beat both baselines | **pass** |
 | Ridership, bus routes (held-out routes and period; criteria pre-registered) | mean absolute log error 0.447 (simulation + scheduled service) vs 0.476 (scheduled service) and 1.000 (constant), 123 routes | below both baselines | **pass** |
 | Ridership, 'L' stations (same design) | 0.500 vs 0.496 (scheduled service) and 0.682 (constant), 121 stations | below both baselines | **fail** |
+| Crowding forecast, bus routes (one week ahead, Jan-Aug 2026) | log error 0.1339 vs 0.1569 (same day last week), 27,946 forecasts | below the baseline | **pass** |
+| Crowding forecast, 'L' stations | 0.1280 vs 0.1508, 34,992 forecasts | below the baseline | **pass** |
+| Holding rule (simulated, pre-registered) | mean passenger wait +2.58 min [+1.57, +3.59]; after a later start-up fix −0.94 [−1.80, −0.09] | 95% interval below 0 | **fail** |
+| Anomaly detectors (simulated feed, constructed labels) | precision / recall: jump 1.00 / 0.96, stuck 1.00 / 0.79, off route 0.98 / 0.78, outage 0.75 / 1.00 | none (reported) | info |
 | Engine invariants (3-day run, 5,832 agent-days; 2-day CRN and repeat runs) | every day plan partitions [0, 1440]; safety stays in [0, 1]; no behavioural response ≡ no incidents; runs are deterministic | all hold | **pass** |
 
 ### What the results mean
