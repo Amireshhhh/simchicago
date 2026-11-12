@@ -79,6 +79,7 @@ class NetworkScenario:
     takes precedence over its mode)."""
     headway_multiplier: dict = field(default_factory=dict)
     ivt_multiplier: dict = field(default_factory=dict)
+    wait_multiplier: dict = field(default_factory=dict)      # e.g. more regular service (hypothesis)
     fare_bus: float = FARE_BUS
     fare_rail: float = FARE_RAIL
     day: str = "weekday"
@@ -90,8 +91,10 @@ class NetworkScenario:
         return float(which.get("rail" if rail else "bus", 1.0))
 
     def key(self):
-        return (tuple(sorted(self.headway_multiplier.items())), tuple(sorted(self.ivt_multiplier.items())),
-                self.fare_bus, self.fare_rail, self.day, self.band)
+        nz = lambda d: tuple(sorted((k, float(v)) for k, v in d.items() if float(v) != 1.0))  # noqa: E731
+        key = (nz(self.headway_multiplier), nz(self.ivt_multiplier), self.fare_bus, self.fare_rail, self.day, self.band)
+        w = nz(self.wait_multiplier)
+        return key + (w,) if w else key
 
 
 @dataclass
@@ -218,13 +221,14 @@ class Graph:
             rail = bool(self.pat_rail[i])
             hm = sc.factor(sc.headway_multiplier, p["route"], rail)
             im = sc.factor(sc.ivt_multiplier, p["route"], rail)
+            wm = sc.factor(sc.wait_multiplier, p["route"], rail)
             base = int(self.pat_off[i])
             st = p["stops"]
             for k in range(len(st)):
                 node = base + k
                 if k < len(st) - 1:
                     trips = seg_trips[(p["route"], p["direction"], st[k], st[k + 1])]
-                    wt = min(0.5 * band_min / trips * hm, WAIT_CAP_MIN)
+                    wt = min(0.5 * band_min / trips * hm, WAIT_CAP_MIN) * wm
                     wait[node] = wt
                     rows.append(self.pnode_stop[node])                       # board
                     cols.append(self.P0 + node)

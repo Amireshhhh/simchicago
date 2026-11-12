@@ -101,6 +101,16 @@ def _incidents(sim) -> list:
     return out
 
 
+def _interventions():
+    """The committed intervention ranking (reports/interventions/interventions.json), if any."""
+    from simchi.paths import REPORTS
+    p = REPORTS / "interventions" / "interventions.json"
+    if not p.exists():
+        return None
+    r = json.loads(p.read_text())
+    return {k: r[k] for k in ("label", "replicates", "agents_requested", "top_bus_routes", "low_income_population_share", "ranking", "interventions")}
+
+
 def build_payload(built, sim, compare: dict | None = None, experiments: list | None = None) -> dict:
     world = built.world
     frame = world.cds.frame
@@ -131,6 +141,7 @@ def build_payload(built, sim, compare: dict | None = None, experiments: list | N
         "daily": sim.daily,
         "compare": compare or {},
         "experiments": experiments or [],
+        "interventions": _interventions(),
         "external_targets": {n: [round(float(x), 1), round(float(z), 1)] for n, (x, z) in zip(world.gateway_names, world.gateway_xy, strict=True)},
         "landmarks": landmarks,
     }

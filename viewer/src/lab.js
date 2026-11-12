@@ -30,8 +30,65 @@ function chart(rows, baseline) {
   return s;
 }
 
+function ivRanking(I) {
+  const ranked = I.ranking.filter(r => Number.isFinite(r.value));
+  const W = 400, rowH = 30, padL = 170, padR = 50;
+  const byGroup = {};
+  for (const r of ranked) (byGroup[r.ranked_by] ||= []).push(r);
+  let s = '';
+  for (const [g, rows] of Object.entries(byGroup)) {
+    const H = rows.length * rowH + 26;
+    const hi = Math.max(...rows.map(r => Number.isFinite(r.ci_high) ? r.ci_high : r.value), 1e-9);
+    const lo = Math.min(0, ...rows.map(r => Number.isFinite(r.ci_low) ? r.ci_low : r.value));
+    const x = v => padL + (v - lo) / (hi - lo || 1) * (W - padL - padR);
+    s += `<h3>${esc(g)}</h3><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(g)} with 95% intervals">`;
+    s += `<line x1="${x(0)}" x2="${x(0)}" y1="4" y2="${H - 18}" stroke="rgba(140,190,255,.25)"/>`;
+    rows.forEach((r, i) => {
+      const y = 14 + i * rowH, name = r.intervention.length > 30 ? r.intervention.slice(0, 29) + '…' : r.intervention;
+      s += `<text x="0" y="${y + 4}">${esc(name)}</text><rect x="${Math.min(x(0), x(r.value))}" y="${y - 7}" width="${Math.abs(x(r.value) - x(0))}" height="14" rx="3" fill="#5fd4ff" opacity=".55"/>`;
+      if (Number.isFinite(r.ci_low)) s += `<line x1="${x(r.ci_low)}" x2="${x(r.ci_high)}" y1="${y}" y2="${y}" stroke="#fff" stroke-width="1.5"/>`;
+      s += `<text class="val" x="${W - padR + 6}" y="${y + 4}">${fmt(r.value)}</text>`;
+    });
+    s += '</svg>';
+  }
+  const pct = v => Number.isFinite(v) ? (v * 100).toFixed(0) + '%' : '–';
+  s += `<h3>All interventions</h3><table class="effects"><thead><tr><th>Intervention</th><th style="text-align:right">Δ veh-h/day</th><th style="text-align:right">Δ transit trips/day [95% CI]</th><th style="text-align:right">Δ jobs reachable (low-income / other areas)</th><th style="text-align:right">Time savings to low-income areas</th></tr></thead><tbody>
+    ${I.ranking.map(r => `<tr><td>${esc(r.intervention)}<div class="fine">${esc(r.ranked_by)}</div></td><td class="num">${fmt(r.vehicle_hours_per_weekday)}</td>
+      <td class="num">${r.transit_trips === null || r.transit_trips === undefined ? '–' : `${fmt(r.transit_trips)} [${fmt(r.transit_trips_ci[0])}, ${fmt(r.transit_trips_ci[1])}]`}</td>
+      <td class="num">${fmt(r.access_jobs)} (${fmt(r.access_gain_low)} / ${fmt(r.access_gain_other)})</td><td class="num">${pct(r.low_income_share_of_savings)}</td></tr>`).join('')}
+    </tbody></table>
+    <p class="fine">Behaviour (trips, time savings) is simulated on ${I.replicates} synthetic populations (paired 95% t-intervals); vehicle-hours come from the GTFS schedule; jobs reachable within 45 min by transit (60 min at night). Low-income areas: lowest median income, ${pct(I.low_income_population_share)} of residents. Bus and train vehicle-hours are not equally costly; fare and service changes are ranked separately. Effect sizes for bus priority and reliability are assumptions.</p>
+    <p class="fine"><code>python -m simchi.interventions --replicates 10</code> · brief: docs/BRIEF.md</p>`;
+  return s;
+}
+
 export function renderLab(el, D) {
   const exps = D.experiments || [];
+  const I = D.interventions;
+  if (I && I.ranking) {
+    // the intervention ranking is its own tab, shown first
+    const host = el;
+    let showIv = true;
+    const drawTabs = () => {
+      if (showIv) {
+        host.innerHTML = `<h2>Experiment Lab</h2><div class="lab-tabs"><button class="ghost small on" data-iv="1">intervention ranking</button>${exps.length ? '<button class="ghost small" data-iv="0">scenario experiments</button>' : ''}</div>${ivRanking(I)}`;
+        host.querySelectorAll('[data-iv]').forEach(b => b.onclick = () => { showIv = b.dataset.iv === '1'; drawTabs(); });
+      } else {
+        renderExperiments(host, exps);
+        const tabs = host.querySelector('.lab-tabs');
+        if (tabs) {
+          const b = document.createElement('button'); b.className = 'ghost small'; b.textContent = 'intervention ranking';
+          b.onclick = () => { showIv = true; drawTabs(); }; tabs.prepend(b);
+        }
+      }
+    };
+    drawTabs();
+    return;
+  }
+  renderExperiments(el, exps);
+}
+
+function renderExperiments(el, exps) {
   if (!exps.length) {
     el.innerHTML = `<h2>Experiment Lab</h2><p>No experiments in this export. Run</p><p><code>python -m simchi.cli demo</code></p>
       <p>or <code>python -m simchi.cli experiment configs/experiments/remote_work.toml</code>.</p>`;

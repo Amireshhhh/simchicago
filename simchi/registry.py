@@ -57,6 +57,10 @@ def registry(built: Built) -> list[dict]:
             rng = ", ".join(f"[{min(c[i] for c in C):.3f}, {max(c[i] for c in C):.3f}]" for i in range(3))
             add("ridership calibration", f"{label}: log rides = a + b log(1 + model) + c log(scheduled trips)", f"a, b, c ranges over 5 folds: {rng}",
                 Prov.FITTED, "least squares on 2024 weekday means of the training folds (CTA ridership, City of Chicago data portal)")
+    add("interventions", "bus priority in-vehicle multiplier", 0.85, Prov.HYPOTHESIS, "assumed effect of bus lanes / signal priority (simchi/interventions.py)")
+    add("interventions", "bus headway CV before / after reliability measure", "0.6 / 0.4", Prov.HYPOTHESIS, "assumed; wait multiplier (1 + 0.4^2) / (1 + 0.6^2)")
+    add("interventions", "accessibility limits", "45 min (AM peak), 60 min (night)", Prov.SCENARIO, "definition")
+    add("interventions", "low-income areas", "lowest median income, 25% of residents", Prov.SCENARIO, "definition (ACS MEDINC, TOT_POP)")
     im = built.intensity
     add("incidents", "level_per_day", round(im.level_per_day, 4), Prov.FITTED, f"CPD records {INTENSITY_TRAIN[0]} to {INTENSITY_TRAIN[1]}")
     add("incidents", "alpha (Dirichlet-multinomial)", round(im.alpha, 2), Prov.FITTED, "max. likelihood, weekly area counts")

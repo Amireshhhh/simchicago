@@ -143,7 +143,7 @@ def set_path(cfg: SimConfig, dotted: str, value):
         obj = obj[p] if isinstance(obj, dict) else getattr(obj, p)
     last = parts[-1]
     if isinstance(obj, dict):
-        if last not in obj and parts[:-1] not in (["network", "headway_multiplier"], ["network", "ivt_multiplier"]):
+        if last not in obj and parts[:-1] not in (["network", "headway_multiplier"], ["network", "ivt_multiplier"], ["network", "wait_multiplier"]):
             raise KeyError(f"unknown setting {dotted!r}")
         obj[last] = value
     else:

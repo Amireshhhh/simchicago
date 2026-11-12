@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 76 tests
+python -m pytest tests           # 79 tests
 cd viewer && npm test            # 11 tests
 ```
 
@@ -103,7 +103,8 @@ Results go to `reports/experiments/<name>/` (`runs.csv` per run, `summary.csv`, 
 `safety.gamma_cancel`, `mode_shift.transit`, `time_multiplier.transit`,
 `simulated_incident_multiplier`, `schedule.discretionary_multiplier`, `incident_mode`,
 `n_days`, `start_date`, and the CTA network: `network.ivt_multiplier.bus` / `.rail` / `.<route
-id>` (in-vehicle time), `network.headway_multiplier.…` (frequency), `network.fare_bus`,
+id>` (in-vehicle time), `network.headway_multiplier.…` (frequency), `network.wait_multiplier.…`
+(waits, e.g. reliability), `network.fare_bus`,
 `network.fare_rail`. Network settings change the transit skim, hence mode choice and transit
 trip times (each new network scenario adds about 17 s, cached on disk). On 4 cores a week-long run of the default 2,000-agent city takes
 about 0.6 s, so an experiment of 50 runs takes about 8 s; with `--agents 20000` the build
@@ -152,6 +153,14 @@ reliability** colours bus routes by one of them once data are published. A simul
 quantifies what 5-minute polling can recover (gaps undercounted, bunching slightly overcounted;
 `docs/EVALUATION.md`). No observed reliability numbers exist yet: the polling workflow had not
 run when this was written.
+
+## Interventions
+
+`python -m simchi.interventions --replicates 10` ranks eight CTA interventions (frequency,
+bus priority, reliability, late-night service, fares) by simulated transit trips gained per
+added scheduled vehicle-hour (or per $1,000 of fare revenue), with paired 95% intervals,
+equity splits and job accessibility; results in `reports/interventions/`, summary in
+`docs/BRIEF.md`, chart in the viewer's Experiment Lab.
 
 ## Operations tools
 

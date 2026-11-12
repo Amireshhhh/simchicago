@@ -65,6 +65,7 @@ class SimConfig:
     # multipliers keyed by "bus", "rail" or a route id; fares in dollars
     network: dict = field(default_factory=lambda: {"headway_multiplier": {"bus": 1.0, "rail": 1.0},
                                                    "ivt_multiplier": {"bus": 1.0, "rail": 1.0},
+                                                   "wait_multiplier": {"bus": 1.0, "rail": 1.0},
                                                    "fare_bus": FARE_BUS, "fare_rail": FARE_RAIL})
     simulated_incident_multiplier: float = 1.0        # scales the fitted daily incident level
     local_trip_share: float = 0.45                    # discretionary trips within 1 km of home
@@ -120,6 +121,7 @@ def network_scenario(cfg: SimConfig) -> NetworkScenario:
     n = cfg.network
     return NetworkScenario(headway_multiplier=dict(n.get("headway_multiplier", {})),
                            ivt_multiplier=dict(n.get("ivt_multiplier", {})),
+                           wait_multiplier=dict(n.get("wait_multiplier", {})),
                            fare_bus=float(n.get("fare_bus", FARE_BUS)), fare_rail=float(n.get("fare_rail", FARE_RAIL)))
 
 

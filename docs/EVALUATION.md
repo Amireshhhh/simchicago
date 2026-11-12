@@ -255,6 +255,31 @@ injected anomalies, 20 seeds, weekday 8 am:
 - No precision or recall on real data exists yet: the polled history is empty (see Service
   reliability).
 
+## Interventions (ranking)
+
+`python -m simchi.interventions --replicates 10` (→ `reports/interventions/`; brief:
+`docs/BRIEF.md`). Eight network interventions, each on 10 synthetic populations (build seeds
+1-10) against the scheduled network, paired 95% t-intervals; cost proxy = scheduled weekday
+vehicle-hours (GTFS); definitions in the module docstring. Ranking (Experiment Lab →
+intervention ranking):
+
+| Intervention | Δ vehicle-hours / weekday | Δ transit trips / weekday [95%] | Trips per 1,000 vehicle-hours or per $1,000 [95%] |
+|---|---|---|---|
+| All 'L' lines: headways ×0.8 | +435 | +21,700 [17,000, 26,300] | 49,800 [39,000, 60,500] |
+| All buses: headways ×0.8 | +3,928 | +51,400 [40,200, 62,700] | 13,100 [10,200, 16,000] |
+| Frequent network: top-10 bus routes ×0.75 | +1,185 | +11,700 [8,800, 14,600] | 9,900 [7,400, 12,300] |
+| Bus priority, top-10 routes (in-vehicle ×0.85, hypothesis) | −533 | +26,900 [20,900, 33,000] | saves vehicle-hours |
+| Bus reliability (waits ×0.853, hypothesis) | 0 | +36,100 [27,300, 44,900] | no operating cost modelled |
+| Fares −$0.50 | 0 | +83,600 [76,000, 91,200] | 165 [150, 180] per $1,000 |
+| Fare-free | 0 | +380,300 [355,200, 405,400] | 120 [112, 128] per $1,000 |
+| Late-night service (night headways ×0.5) | +258 | not modelled (AM-peak choice model) | night job access +69,600 (+31%) |
+
+Equity (lowest-income areas, 24.8% of residents): their share of commuter time savings is
+15.3% [13.8, 16.9] (top-10 frequency) to 21.0% [19.7, 22.3] (all buses); system-wide frequency
+and reliability raise their 45-minute job access more than other areas' (e.g. all 'L' lines
++23,200 vs +10,500 jobs). Caveats (cross-sectional time sensitivity, assumed value of time and
+effect sizes, model-scale revenue, train-hours not comparable to bus-hours) are in the brief.
+
 ## Experiments
 
 Effects are paired differences against the baseline scenario over the same seeds, with

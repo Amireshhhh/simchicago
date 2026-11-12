@@ -1,0 +1,1188 @@
+{
+ "label": "simulated (behaviour) and scheduled (cost)",
+ "replicates": 10,
+ "agents_requested": 2000,
+ "top_bus_routes": [
+  "66",
+  "8",
+  "9",
+  "79",
+  "53",
+  "77",
+  "3",
+  "49",
+  "82",
+  "22"
+ ],
+ "low_income_population_share": 0.2483175189219125,
+ "low_income_areas": [
+  25,
+  26,
+  27,
+  29,
+  30,
+  34,
+  35,
+  36,
+  37,
+  38,
+  40,
+  42,
+  43,
+  44,
+  46,
+  47,
+  54,
+  61,
+  66,
+  67,
+  68,
+  69,
+  71
+ ],
+ "interventions": [
+  {
+   "name": "Frequent network: top-10 bus routes, headways x0.75",
+   "kind": "service",
+   "provenance": "scenario (routes chosen by 2024 ridership)",
+   "vehicle_hours": 1185.0543888889006,
+   "access_band": "am_peak",
+   "access_limit_min": 45.0,
+   "access_jobs": 7938.024547166318,
+   "access_gain_low": 7008.803605071237,
+   "access_gain_other": 8244.991710403108,
+   "access_base": 360752.5801803992,
+   "replicates": 10,
+   "transit_trips": {
+    "mean": 11710.799575073737,
+    "ci_low": 8818.054662055456,
+    "ci_high": 14603.544488092019
+   },
+   "car_trips": {
+    "mean": -9598.010076780012,
+    "ci_low": -12920.690493980725,
+    "ci_high": -6275.329659579299
+   },
+   "car_pkm": {
+    "mean": -106542.53691700436,
+    "ci_low": -148862.5757874066,
+    "ci_high": -64222.49804660211
+   },
+   "time_saved_min": {
+    "mean": 261847.54181870376,
+    "ci_low": 248064.39324515374,
+    "ci_high": 275630.69039225375
+   },
+   "low_income_share_of_savings": {
+    "mean": 0.15304483169695335,
+    "ci_low": 0.13755042124271316,
+    "ci_high": 0.16853924215119354
+   },
+   "trips_per_1000_vehicle_hours": {
+    "mean": 9882.077721389403,
+    "ci_low": 7441.054811267529,
+    "ci_high": 12323.100631511275
+   }
+  },
+  {
+   "name": "All buses: headways x0.8",
+   "kind": "service",
+   "provenance": "scenario",
+   "vehicle_hours": 3927.681333333341,
+   "access_band": "am_peak",
+   "access_limit_min": 45.0,
+   "access_jobs": 26965.339672440678,
+   "access_gain_low": 34679.32925022701,
+   "access_gain_other": 24417.03130931627,
+   "access_base": 360752.5801803992,
+   "replicates": 10,
+   "transit_trips": {
+    "mean": 51423.29235325109,
+    "ci_low": 40182.04042325998,
+    "ci_high": 62664.5442832422
+   },
+   "car_trips": {
+    "mean": -42067.0395353463,
+    "ci_low": -52982.79897338275,
+    "ci_high": -31151.280097309857
+   },
+   "car_pkm": {
+    "mean": -515195.52942999825,
+    "ci_low": -624403.9362000541,
+    "ci_high": -405987.12265994237
+   },
+   "time_saved_min": {
+    "mean": 909789.8748105146,
+    "ci_low": 882190.3048039225,
+    "ci_high": 937389.4448171067
+   },
+   "low_income_share_of_savings": {
+    "mean": 0.21023001080613984,
+    "ci_low": 0.19747222328742087,
+    "ci_high": 0.22298779832485882
+   },
+   "trips_per_1000_vehicle_hours": {
+    "mean": 13092.531697221275,
+    "ci_low": 10230.473659419391,
+    "ci_high": 15954.589735023159
+   }
+  },
+  {
+   "name": "All 'L' lines: headways x0.8",
+   "kind": "service",
+   "provenance": "scenario",
+   "vehicle_hours": 435.18958333336195,
+   "access_band": "am_peak",
+   "access_limit_min": 45.0,
+   "access_jobs": 13621.329641888697,
+   "access_gain_low": 23158.568702140336,
+   "access_gain_other": 10470.712725274921,
+   "access_base": 360752.5801803992,
+   "replicates": 10,
+   "transit_trips": {
+    "mean": 21662.86556095588,
+    "ci_low": 16981.537152576344,
+    "ci_high": 26344.193969335418
+   },
+   "car_trips": {
+    "mean": -20606.544526621932,
+    "ci_low": -25487.035656045326,
+    "ci_high": -15726.053397198539
+   },
+   "car_pkm": {
+    "mean": -289597.31654640025,
+    "ci_low": -365953.4378640001,
+    "ci_high": -213241.1952288004
+   },
+   "time_saved_min": {
+    "mean": 550921.3127529151,
+    "ci_low": 505375.37701310386,
+    "ci_high": 596467.2484927264
+   },
+   "low_income_share_of_savings": {
+    "mean": 0.19953283332660837,
+    "ci_low": 0.18054965450724833,
+    "ci_high": 0.2185160121459684
+   },
+   "trips_per_1000_vehicle_hours": {
+    "mean": 49777.996511377416,
+    "ci_low": 39021.010159538266,
+    "ci_high": 60534.98286321655
+   }
+  },
+  {
+   "name": "Bus priority on the top-10 routes: in-vehicle time x0.85",
+   "kind": "priority",
+   "provenance": "hypothesis (15% faster from lanes / signal priority; not estimated)",
+   "vehicle_hours": -533.2744749999947,
+   "access_band": "am_peak",
+   "access_limit_min": 45.0,
+   "access_jobs": 15236.014593512205,
+   "access_gain_low": 14391.382913904441,
+   "access_gain_other": 15515.037782641524,
+   "access_base": 360752.5801803992,
+   "replicates": 10,
+   "transit_trips": {
+    "mean": 26912.793375118985,
+    "ci_low": 20853.832382292025,
+    "ci_high": 32971.75436794595
+   },
+   "car_trips": {
+    "mean": -23619.6595504378,
+    "ci_low": -28465.372453836328,
+    "ci_high": -18773.94664703927
+   },
+   "car_pkm": {
+    "mean": -262741.2587805569,
+    "ci_low": -334828.19591102493,
+    "ci_high": -190654.32165008885
+   },
+   "time_saved_min": {
+    "mean": 520707.4852565996,
+    "ci_low": 486804.3190514037,
+    "ci_high": 554610.6514617956
+   },
+   "low_income_share_of_savings": {
+    "mean": 0.17305692621830504,
+    "ci_low": 0.1428163356205118,
+    "ci_high": 0.20329751681609828
+   }
+  },
+  {
+   "name": "Bus reliability: waits x0.853 (headway CV 0.6 -> 0.4)",
+   "kind": "reliability",
+   "provenance": "hypothesis (random arrivals: mean wait = H (1 + CV^2) / 2; CVs assumed, not observed yet)",
+   "vehicle_hours": 0.0,
+   "access_band": "am_peak",
+   "access_limit_min": 45.0,
+   "access_jobs": 19825.96745759235,
+   "access_gain_low": 25996.229497446933,
+   "access_gain_other": 17787.627866868832,
+   "access_base": 360752.5801803992,
+   "replicates": 10,
+   "transit_trips": {
+    "mean": 36145.06498489196,
+    "ci_low": 27345.521953626056,
+    "ci_high": 44944.60801615786
+   },
+   "car_trips": {
+    "mean": -29199.983927910354,
+    "ci_low": -36610.891436443846,
+    "ci_high": -21789.076419376863
+   },
+   "car_pkm": {
+    "mean": -368512.7854132291,
+    "ci_low": -459294.8467411365,
+    "ci_high": -277730.72408532165
+   },
+   "time_saved_min": {
+    "mean": 667899.6694624893,
+    "ci_low": 650091.7257512372,
+    "ci_high": 685707.6131737414
+   },
+   "low_income_share_of_savings": {
+    "mean": 0.20686662571576941,
+    "ci_low": 0.1948366604575667,
+    "ci_high": 0.21889659097397213
+   }
+  },
+  {
+   "name": "Late-night service: night headways x0.5 (11 pm - 4 am)",
+   "kind": "service",
+   "provenance": "scenario; the mode-choice model is an AM-peak commute model, so only night accessibility and cost are computed",
+   "vehicle_hours": 258.15983333333327,
+   "access_band": "night",
+   "access_limit_min": 60.0,
+   "access_jobs": 69635.28128293644,
+   "access_gain_low": 58816.07914490929,
+   "access_gain_other": 73209.39335719464,
+   "access_base": 226898.7948664185,
+   "replicates": 10
+  },
+  {
+   "name": "Fares -$0.50",
+   "kind": "fare",
+   "provenance": "scenario; response from an assumed value of time ($15/h)",
+   "vehicle_hours": 0.0,
+   "access_band": "am_peak",
+   "access_limit_min": 45.0,
+   "access_jobs": 0.0,
+   "access_gain_low": 0.0,
+   "access_gain_other": 0.0,
+   "access_base": 360752.5801803992,
+   "replicates": 10,
+   "transit_trips": {
+    "mean": 83608.87482771216,
+    "ci_low": 76027.13782132247,
+    "ci_high": 91190.61183410186
+   },
+   "car_trips": {
+    "mean": -66823.40715820827,
+    "ci_low": -73839.05995746193,
+    "ci_high": -59807.754358954604
+   },
+   "car_pkm": {
+    "mean": -809598.0077174169,
+    "ci_low": -890375.7876606976,
+    "ci_high": -728820.2277741361
+   },
+   "time_saved_min": {
+    "mean": 0.0,
+    "ci_low": 0.0,
+    "ci_high": 0.0
+   },
+   "revenue": {
+    "mean": -507223.6327294026,
+    "ci_low": -529613.8913199247,
+    "ci_high": -484833.3741388805
+   },
+   "trips_per_1000_dollars": {
+    "mean": 164.83631564603465,
+    "ci_low": 149.888792468552,
+    "ci_high": 179.7838388235173
+   }
+  },
+  {
+   "name": "Fare-free CTA",
+   "kind": "fare",
+   "provenance": "scenario; response from an assumed value of time ($15/h), linear in fare",
+   "vehicle_hours": 0.0,
+   "access_band": "am_peak",
+   "access_limit_min": 45.0,
+   "access_jobs": 0.0,
+   "access_gain_low": 0.0,
+   "access_gain_other": 0.0,
+   "access_base": 360752.5801803992,
+   "replicates": 10,
+   "transit_trips": {
+    "mean": 380278.7213174406,
+    "ci_low": 355161.16781310533,
+    "ci_high": 405396.2748217759
+   },
+   "car_trips": {
+    "mean": -312762.9609538104,
+    "ci_low": -337367.6757978797,
+    "ci_high": -288158.24610974116
+   },
+   "car_pkm": {
+    "mean": -3952230.4538302147,
+    "ci_low": -4230290.035680846,
+    "ci_high": -3674170.8719795826
+   },
+   "time_saved_min": {
+    "mean": 0.0,
+    "ci_low": 0.0,
+    "ci_high": 0.0
+   },
+   "revenue": {
+    "mean": -3176526.550041131,
+    "ci_low": -3298258.893442355,
+    "ci_high": -3054794.2066399073
+   },
+   "trips_per_1000_dollars": {
+    "mean": 119.71526613322862,
+    "ci_low": 111.80802748477154,
+    "ci_high": 127.62250478168572
+   }
+  }
+ ],
+ "per_replicate": [
+  {
+   "seed": 1,
+   "intervention": 0,
+   "transit_trips": 18621.462864721427,
+   "car_trips": -17249.099228357896,
+   "car_pkm": -223795.02799598128,
+   "time_saved_min": 264984.92320286774,
+   "low_income_share_of_savings": 0.1391329320203733
+  },
+  {
+   "seed": 1,
+   "intervention": 1,
+   "transit_trips": 49205.20721905655,
+   "car_trips": -33058.92361377319,
+   "car_pkm": -473773.7936900109,
+   "time_saved_min": 894803.3711488859,
+   "low_income_share_of_savings": 0.22046495625394813
+  },
+  {
+   "seed": 1,
+   "intervention": 2,
+   "transit_trips": 17260.48753420473,
+   "car_trips": -17260.48753420543,
+   "car_pkm": -250346.62639127672,
+   "time_saved_min": 558964.6411030224,
+   "low_income_share_of_savings": 0.1718370122785486
+  },
+  {
+   "seed": 1,
+   "intervention": 3,
+   "transit_trips": 34512.93698275671,
+   "car_trips": -30486.56856170483,
+   "car_pkm": -432129.1071403846,
+   "time_saved_min": 488285.45649988815,
+   "low_income_share_of_savings": 0.20008199023019924
+  },
+  {
+   "seed": 1,
+   "intervention": 4,
+   "transit_trips": 41417.97085541999,
+   "car_trips": -27872.959977409337,
+   "car_pkm": -372445.234889511,
+   "time_saved_min": 656691.0342330585,
+   "low_income_share_of_savings": 0.22235499885993004
+  },
+  {
+   "seed": 1,
+   "intervention": 5
+  },
+  {
+   "seed": 1,
+   "intervention": 6,
+   "transit_trips": 71652.54833201319,
+   "car_trips": -43553.06647091592,
+   "car_pkm": -600861.7252997644,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -513405.10748532834
+  },
+  {
+   "seed": 1,
+   "intervention": 7,
+   "transit_trips": 313426.97782505676,
+   "car_trips": -243695.64934578212,
+   "car_pkm": -3398039.685351841,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3106317.4056966426
+  },
+  {
+   "seed": 2,
+   "intervention": 0,
+   "transit_trips": 11995.995450191433,
+   "car_trips": -9322.995450191665,
+   "car_pkm": -72929.8948762007,
+   "time_saved_min": 290850.0454529417,
+   "low_income_share_of_savings": 0.13600038197797792
+  },
+  {
+   "seed": 2,
+   "intervention": 1,
+   "transit_trips": 81776.02625731938,
+   "car_trips": -73565.06666135974,
+   "car_pkm": -772877.2885957062,
+   "time_saved_min": 987976.6826497854,
+   "low_income_share_of_savings": 0.22167881936612158
+  },
+  {
+   "seed": 2,
+   "intervention": 2,
+   "transit_trips": 20007.57762605045,
+   "car_trips": -18716.291911764536,
+   "car_pkm": -219724.75730741024,
+   "time_saved_min": 497783.9070414547,
+   "low_income_share_of_savings": 0.22834167377043527
+  },
+  {
+   "seed": 2,
+   "intervention": 3,
+   "transit_trips": 23914.222582839895,
+   "car_trips": -22588.761044378392,
+   "car_pkm": -195465.17449441552,
+   "time_saved_min": 595907.4696450678,
+   "low_income_share_of_savings": 0.09301489025381794
+  },
+  {
+   "seed": 2,
+   "intervention": 4,
+   "transit_trips": 52417.85369326314,
+   "car_trips": -44245.12001092499,
+   "car_pkm": -485687.9880379215,
+   "time_saved_min": 713829.4781094982,
+   "low_income_share_of_savings": 0.21197237448004552
+  },
+  {
+   "seed": 2,
+   "intervention": 5
+  },
+  {
+   "seed": 2,
+   "intervention": 6,
+   "transit_trips": 89283.45927167358,
+   "car_trips": -75834.97575226938,
+   "car_pkm": -857357.216757942,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -521150.5078932233
+  },
+  {
+   "seed": 2,
+   "intervention": 7,
+   "transit_trips": 396478.5781162572,
+   "car_trips": -317638.0321452366,
+   "car_pkm": -4142015.912153594,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3282727.943910507
+  },
+  {
+   "seed": 3,
+   "intervention": 0,
+   "transit_trips": 7896.9785431958735,
+   "car_trips": -2661.3636363632977,
+   "car_pkm": -46045.990414682776,
+   "time_saved_min": 257198.6760853461,
+   "low_income_share_of_savings": 0.13536437256316702
+  },
+  {
+   "seed": 3,
+   "intervention": 1,
+   "transit_trips": 27628.170663478784,
+   "car_trips": -22392.55575664621,
+   "car_pkm": -358596.64247956127,
+   "time_saved_min": 885466.1304535877,
+   "low_income_share_of_savings": 0.20660246931280393
+  },
+  {
+   "seed": 3,
+   "intervention": 2,
+   "transit_trips": 26154.405422895215,
+   "car_trips": -20918.790516063105,
+   "car_pkm": -330305.39901554957,
+   "time_saved_min": 524035.7070330089,
+   "low_income_share_of_savings": 0.20737709781937522
+  },
+  {
+   "seed": 3,
+   "intervention": 3,
+   "transit_trips": 17211.092470647767,
+   "car_trips": -11975.477563815657,
+   "car_pkm": -174293.6860773191,
+   "time_saved_min": 488708.319242834,
+   "low_income_share_of_savings": 0.14818445175173403
+  },
+  {
+   "seed": 3,
+   "intervention": 4,
+   "transit_trips": 16925.858941867016,
+   "car_trips": -11690.244035034906,
+   "car_pkm": -210585.94010950997,
+   "time_saved_min": 653975.4428000057,
+   "low_income_share_of_savings": 0.20472336530628416
+  },
+  {
+   "seed": 3,
+   "intervention": 5
+  },
+  {
+   "seed": 3,
+   "intervention": 6,
+   "transit_trips": 87526.80761327012,
+   "car_trips": -74205.89270643797,
+   "car_pkm": -962010.1243322715,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -483454.0503884093
+  },
+  {
+   "seed": 3,
+   "intervention": 7,
+   "transit_trips": 376992.2198013116,
+   "car_trips": -334485.30489447946,
+   "car_pkm": -4197955.5216920525,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3098243.0481173606
+  },
+  {
+   "seed": 4,
+   "intervention": 0,
+   "transit_trips": 14476.504077540245,
+   "car_trips": -9121.227941176388,
+   "car_pkm": -142494.30710807815,
+   "time_saved_min": 236584.08930927448,
+   "low_income_share_of_savings": 0.17110533012531673
+  },
+  {
+   "seed": 4,
+   "intervention": 1,
+   "transit_trips": 57645.335725789424,
+   "car_trips": -41473.769636323676,
+   "car_pkm": -521066.38011904433,
+   "time_saved_min": 911488.5411033267,
+   "low_income_share_of_savings": 0.219009559152569
+  },
+  {
+   "seed": 4,
+   "intervention": 2,
+   "transit_trips": 21008.109920634888,
+   "car_trips": -18416.509920634795,
+   "car_pkm": -285743.9095232971,
+   "time_saved_min": 587893.9865408625,
+   "low_income_share_of_savings": 0.1420365670487465
+  },
+  {
+   "seed": 4,
+   "intervention": 3,
+   "transit_trips": 33343.59802207351,
+   "car_trips": -26693.134385710116,
+   "car_pkm": -319150.2122257352,
+   "time_saved_min": 523692.5367916528,
+   "low_income_share_of_savings": 0.18289741722914435
+  },
+  {
+   "seed": 4,
+   "intervention": 4,
+   "transit_trips": 45641.88335112925,
+   "car_trips": -36078.15924671292,
+   "car_pkm": -474690.837245103,
+   "time_saved_min": 665498.7233842105,
+   "low_income_share_of_savings": 0.21894900970098966
+  },
+  {
+   "seed": 4,
+   "intervention": 5
+  },
+  {
+   "seed": 4,
+   "intervention": 6,
+   "transit_trips": 79718.16744856443,
+   "car_trips": -64896.653307150584,
+   "car_pkm": -762973.1137178913,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -510512.26139920903
+  },
+  {
+   "seed": 4,
+   "intervention": 7,
+   "transit_trips": 403911.20855572633,
+   "car_trips": -329267.71366360085,
+   "car_pkm": -4064159.3083487116,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3142984.452948189
+  },
+  {
+   "seed": 5,
+   "intervention": 0,
+   "transit_trips": 11617.010376033373,
+   "car_trips": -14330.439787798561,
+   "car_pkm": -140429.44321087375,
+   "time_saved_min": 276534.24682123517,
+   "low_income_share_of_savings": 0.1564355299344981
+  },
+  {
+   "seed": 5,
+   "intervention": 1,
+   "transit_trips": 39576.31525624124,
+   "car_trips": -39835.20414512977,
+   "car_pkm": -468446.47708653286,
+   "time_saved_min": 963963.0494287114,
+   "low_income_share_of_savings": 0.201775563264143
+  },
+  {
+   "seed": 5,
+   "intervention": 2,
+   "transit_trips": 22248.436295360327,
+   "car_trips": -23641.3362953607,
+   "car_pkm": -353060.4767715931,
+   "time_saved_min": 578523.8615671906,
+   "low_income_share_of_savings": 0.20870631504726797
+  },
+  {
+   "seed": 5,
+   "intervention": 3,
+   "transit_trips": 8722.466200466035,
+   "car_trips": -11560.688422688283,
+   "car_pkm": -94247.03187977523,
+   "time_saved_min": 524389.8178815222,
+   "low_income_share_of_savings": 0.19388829191030713
+  },
+  {
+   "seed": 5,
+   "intervention": 4,
+   "transit_trips": 23903.706585081294,
+   "car_trips": -25296.606585081667,
+   "car_pkm": -291039.94899986684,
+   "time_saved_min": 705315.2572737448,
+   "low_income_share_of_savings": 0.19981616293643523
+  },
+  {
+   "seed": 5,
+   "intervention": 5
+  },
+  {
+   "seed": 5,
+   "intervention": 6,
+   "transit_trips": 80681.20492443698,
+   "car_trips": -67599.9196680272,
+   "car_pkm": -763340.1962960549,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -569974.2969551799
+  },
+  {
+   "seed": 5,
+   "intervention": 7,
+   "transit_trips": 388864.96032849886,
+   "car_trips": -328073.30742649944,
+   "car_pkm": -3796457.1082790606,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3460241.355638341
+  },
+  {
+   "seed": 6,
+   "intervention": 0,
+   "transit_trips": 15793.686956521822,
+   "car_trips": -10487.600000000093,
+   "car_pkm": -102398.55127833411,
+   "time_saved_min": 284445.2144436128,
+   "low_income_share_of_savings": 0.16994141781325842
+  },
+  {
+   "seed": 6,
+   "intervention": 1,
+   "transit_trips": 50760.571785103064,
+   "car_trips": -34474.11974921683,
+   "car_pkm": -349150.2865120098,
+   "time_saved_min": 919687.1208714684,
+   "low_income_share_of_savings": 0.22712536213405563
+  },
+  {
+   "seed": 6,
+   "intervention": 2,
+   "transit_trips": 33076.12270488124,
+   "car_trips": -33076.12270488124,
+   "car_pkm": -436680.5755648166,
+   "time_saved_min": 648973.397272338,
+   "low_income_share_of_savings": 0.20693654301394812
+  },
+  {
+   "seed": 6,
+   "intervention": 3,
+   "transit_trips": 35491.17746840883,
+   "car_trips": -27554.823645320255,
+   "car_pkm": -308535.83775574714,
+   "time_saved_min": 600590.5227697464,
+   "low_income_share_of_savings": 0.23778428161428913
+  },
+  {
+   "seed": 6,
+   "intervention": 4,
+   "transit_trips": 27732.22979419399,
+   "car_trips": -21079.66457680287,
+   "car_pkm": -237459.27000952512,
+   "time_saved_min": 675938.9902336402,
+   "low_income_share_of_savings": 0.22228235249170766
+  },
+  {
+   "seed": 6,
+   "intervention": 5
+  },
+  {
+   "seed": 6,
+   "intervention": 6,
+   "transit_trips": 98739.01133522857,
+   "car_trips": -69305.33986360533,
+   "car_pkm": -875537.7165612131,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -533301.501414869
+  },
+  {
+   "seed": 6,
+   "intervention": 7,
+   "transit_trips": 377366.6323717097,
+   "car_trips": -300794.1803869116,
+   "car_pkm": -4028785.445126731,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3437310.6375106014
+  },
+  {
+   "seed": 7,
+   "intervention": 0,
+   "transit_trips": 10522.850292397663,
+   "car_trips": -10522.850292397663,
+   "car_pkm": -109006.42680057883,
+   "time_saved_min": 268988.65267200547,
+   "low_income_share_of_savings": 0.1456338192673591
+  },
+  {
+   "seed": 7,
+   "intervention": 1,
+   "transit_trips": 58160.83179757791,
+   "car_trips": -46337.32191385701,
+   "car_pkm": -599460.2985314243,
+   "time_saved_min": 906017.8158546244,
+   "low_income_share_of_savings": 0.21919950208423214
+  },
+  {
+   "seed": 7,
+   "intervention": 2,
+   "transit_trips": 22399.092139439657,
+   "car_trips": -22399.092139439657,
+   "car_pkm": -347892.3854463771,
+   "time_saved_min": 647170.3344537038,
+   "low_income_share_of_savings": 0.22836996144038
+  },
+  {
+   "seed": 7,
+   "intervention": 3,
+   "transit_trips": 27770.794403458945,
+   "car_trips": -25147.194403459318,
+   "car_pkm": -286154.6029008366,
+   "time_saved_min": 536406.1136828334,
+   "low_income_share_of_savings": 0.17726711224659114
+  },
+  {
+   "seed": 7,
+   "intervention": 4,
+   "transit_trips": 46082.18811941706,
+   "car_trips": -34258.67823569616,
+   "car_pkm": -438920.91449441016,
+   "time_saved_min": 670770.6748716815,
+   "low_income_share_of_savings": 0.20995706701738198
+  },
+  {
+   "seed": 7,
+   "intervention": 5
+  },
+  {
+   "seed": 7,
+   "intervention": 6,
+   "transit_trips": 95126.30567701673,
+   "car_trips": -72820.02656252636,
+   "car_pkm": -928712.3209801577,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -493868.9738350101
+  },
+  {
+   "seed": 7,
+   "intervention": 7,
+   "transit_trips": 410833.3878213051,
+   "car_trips": -330058.5160103645,
+   "car_pkm": -4296875.493048102,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3216875.578498361
+  },
+  {
+   "seed": 8,
+   "intervention": 0,
+   "transit_trips": 13086.649999999907,
+   "car_trips": -13086.649999999907,
+   "car_pkm": -144255.02490467206,
+   "time_saved_min": 260489.24809419378,
+   "low_income_share_of_savings": 0.1643435283870061
+  },
+  {
+   "seed": 8,
+   "intervention": 1,
+   "transit_trips": 57401.94699467486,
+   "car_trips": -46664.0598842334,
+   "car_pkm": -579754.2859597132,
+   "time_saved_min": 875898.0911433891,
+   "low_income_share_of_savings": 0.21257499695892293
+  },
+  {
+   "seed": 8,
+   "intervention": 2,
+   "transit_trips": 19934.73033581255,
+   "car_trips": -18392.30811359035,
+   "car_pkm": -206502.95170532912,
+   "time_saved_min": 483393.22146597225,
+   "low_income_share_of_savings": 0.20106116563073853
+  },
+  {
+   "seed": 8,
+   "intervention": 3,
+   "transit_trips": 30475.68959276029,
+   "car_trips": -26433.074208144564,
+   "car_pkm": -299617.31238275766,
+   "time_saved_min": 453935.3532342846,
+   "low_income_share_of_savings": 0.17099912399542375
+  },
+  {
+   "seed": 8,
+   "intervention": 4,
+   "transit_trips": 45363.497825239785,
+   "car_trips": -38614.14559851913,
+   "car_pkm": -476880.60322518274,
+   "time_saved_min": 644962.2106805737,
+   "low_income_share_of_savings": 0.21249895505966815
+  },
+  {
+   "seed": 8,
+   "intervention": 5
+  },
+  {
+   "seed": 8,
+   "intervention": 6,
+   "transit_trips": 92349.23741167504,
+   "car_trips": -73455.08156738337,
+   "car_pkm": -817157.9604658112,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -452550.55418707104
+  },
+  {
+   "seed": 8,
+   "intervention": 7,
+   "transit_trips": 395136.72078795265,
+   "car_trips": -327038.9628093345,
+   "car_pkm": -3838907.4014815837,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -2991262.258750169
+  },
+  {
+   "seed": 9,
+   "intervention": 0,
+   "transit_trips": 7936.457190135727,
+   "car_trips": -5310.47443151474,
+   "car_pkm": -61425.71582753584,
+   "time_saved_min": 235644.25441535105,
+   "low_income_share_of_savings": 0.19229673178205803
+  },
+  {
+   "seed": 9,
+   "intervention": 1,
+   "transit_trips": 60381.26907425979,
+   "car_trips": -57745.30805476941,
+   "car_pkm": -709420.0724944063,
+   "time_saved_min": 872716.864836398,
+   "low_income_share_of_savings": 0.20938657822789028
+  },
+  {
+   "seed": 9,
+   "intervention": 2,
+   "transit_trips": 26488.475827249466,
+   "car_trips": -26488.475827249233,
+   "car_pkm": -394165.879237663,
+   "time_saved_min": 481725.7727739181,
+   "low_income_share_of_savings": 0.21445947409503285
+  },
+  {
+   "seed": 9,
+   "intervention": 3,
+   "transit_trips": 25838.475182791706,
+   "car_trips": -23182.39242417086,
+   "car_pkm": -173048.55241180584,
+   "time_saved_min": 509958.4832071494,
+   "low_income_share_of_savings": 0.20440832972292824
+  },
+  {
+   "seed": 9,
+   "intervention": 4,
+   "transit_trips": 39700.11346851289,
+   "car_trips": -35737.63070989167,
+   "car_pkm": -513512.0845746957,
+   "time_saved_min": 636389.4596397706,
+   "low_income_share_of_savings": 0.20130654054756175
+  },
+  {
+   "seed": 9,
+   "intervention": 5
+  },
+  {
+   "seed": 9,
+   "intervention": 6,
+   "transit_trips": 73281.84514923533,
+   "car_trips": -69319.36239061458,
+   "car_pkm": -860486.246738825,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -494265.50399183435
+  },
+  {
+   "seed": 9,
+   "intervention": 7,
+   "transit_trips": 416483.6509498195,
+   "car_trips": -354050.2947248984,
+   "car_pkm": -4500612.257617693,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3026874.696200883
+  },
+  {
+   "seed": 10,
+   "intervention": 0,
+   "transit_trips": 5160.399999999907,
+   "car_trips": -3887.399999999907,
+   "car_pkm": -22644.986753106117,
+   "time_saved_min": 242756.0676902093,
+   "low_income_share_of_savings": 0.12019427309851886
+  },
+  {
+   "seed": 10,
+   "intervention": 1,
+   "transit_trips": 31697.248759009875,
+   "car_trips": -25124.06593815377,
+   "car_pkm": -319409.7688315734,
+   "time_saved_min": 879881.0806149695,
+   "low_income_share_of_savings": 0.1644823013067121
+  },
+  {
+   "seed": 10,
+   "intervention": 2,
+   "transit_trips": 8051.217803030275,
+   "car_trips": -6756.030303030275,
+   "car_pkm": -71550.2045006901,
+   "time_saved_min": 500748.2982776807,
+   "low_income_share_of_savings": 0.18620252312161065
+  },
+  {
+   "seed": 10,
+   "intervention": 3,
+   "transit_trips": 31847.48084498616,
+   "car_trips": -30574.480844985694,
+   "car_pkm": -344771.0705367923,
+   "time_saved_min": 485200.77961101773,
+   "low_income_share_of_savings": 0.12204337322861551
+  },
+  {
+   "seed": 10,
+   "intervention": 4,
+   "transit_trips": 22265.347214795183,
+   "car_trips": -17126.630303029902,
+   "car_pkm": -183905.03254656494,
+   "time_saved_min": 655625.4233987085,
+   "low_income_share_of_savings": 0.16480543075768966
+  },
+  {
+   "seed": 10,
+   "intervention": 5
+  },
+  {
+   "seed": 10,
+   "intervention": 6,
+   "transit_trips": 67730.1611140077,
+   "car_trips": -57243.75329315197,
+   "car_pkm": -667543.456024237,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -499753.5697438922
+  },
+  {
+   "seed": 10,
+   "intervention": 7,
+   "transit_trips": 323292.87661676854,
+   "car_trips": -262527.6481309971,
+   "car_pkm": -3258496.405202776,
+   "time_saved_min": 0.0,
+   "low_income_share_of_savings": null,
+   "revenue": -3002428.123140258
+  }
+ ],
+ "definitions": "transit_trips, car_trips      population-weighted trips on a simulated weekday (simulated)\n  car_pkm                       car person-km per weekday (simulated; a vehicle-km proxy)\n  time_saved_min                person-minutes per weekday saved by residents who commute by\n                                transit in the baseline (2 trips x change in the AM-peak skim's\n                                walk + wait + in-vehicle minutes between home and work areas)\n  low_income_share_of_savings   share of time_saved_min going to residents of the\n                                lowest-income areas (areas with the lowest ACS median household\n                                income holding 25% of the population); compare with 0.25\n  access_jobs_45                population-weighted mean of jobs reachable within 45 min by\n                                transit (AM peak; night band and 60 min for late-night service),\n                                share of zone-point pairs within the limit x destination jobs\n  access_gain_low / _other      the same change for the low-income areas / the other areas\nCost proxy (scheduled, deterministic)\n  vehicle_hours                 change in scheduled weekday vehicle-hours: for every pattern and\n                                time band, trips x run time, with trips / headway multiplier and run\n                                time x in-vehicle multiplier, in the bands the intervention touches\n  revenue                       change in weekday fare revenue (fare interventions): mean fare x\n                                transit trips (passes, transfers and reduced fares ignored; rough)\nRanking\n  service changes that add vehicle-hours: transit trips gained per 1,000 added weekday\n  vehicle-hours (with the interval of the trips effect; the cost is deterministic)\n  changes that save vehicle-hours (bus priority) are listed as such: their capital cost is not\n  modelled; fare changes: transit trips gained per $1,000 of weekday revenue forgone.\nEffect sizes that are assumptions are labelled hypothesis in INTERVENTIONS.",
+ "ranking": [
+  {
+   "intervention": "All 'L' lines: headways x0.8",
+   "kind": "service",
+   "vehicle_hours_per_weekday": 435.18958333336195,
+   "transit_trips": 21662.86556095588,
+   "transit_trips_ci": [
+    16981.537152576344,
+    26344.193969335418
+   ],
+   "access_jobs": 13621.329641888697,
+   "access_gain_low": 23158.568702140336,
+   "access_gain_other": 10470.712725274921,
+   "low_income_share_of_savings": 0.19953283332660837,
+   "ranked_by": "transit trips per 1,000 added vehicle-hours",
+   "value": 49777.996511377416,
+   "ci_low": 39021.010159538266,
+   "ci_high": 60534.98286321655
+  },
+  {
+   "intervention": "All buses: headways x0.8",
+   "kind": "service",
+   "vehicle_hours_per_weekday": 3927.681333333341,
+   "transit_trips": 51423.29235325109,
+   "transit_trips_ci": [
+    40182.04042325998,
+    62664.5442832422
+   ],
+   "access_jobs": 26965.339672440678,
+   "access_gain_low": 34679.32925022701,
+   "access_gain_other": 24417.03130931627,
+   "low_income_share_of_savings": 0.21023001080613984,
+   "ranked_by": "transit trips per 1,000 added vehicle-hours",
+   "value": 13092.531697221275,
+   "ci_low": 10230.473659419391,
+   "ci_high": 15954.589735023159
+  },
+  {
+   "intervention": "Frequent network: top-10 bus routes, headways x0.75",
+   "kind": "service",
+   "vehicle_hours_per_weekday": 1185.0543888889006,
+   "transit_trips": 11710.799575073737,
+   "transit_trips_ci": [
+    8818.054662055456,
+    14603.544488092019
+   ],
+   "access_jobs": 7938.024547166318,
+   "access_gain_low": 7008.803605071237,
+   "access_gain_other": 8244.991710403108,
+   "low_income_share_of_savings": 0.15304483169695335,
+   "ranked_by": "transit trips per 1,000 added vehicle-hours",
+   "value": 9882.077721389403,
+   "ci_low": 7441.054811267529,
+   "ci_high": 12323.100631511275
+  },
+  {
+   "intervention": "Bus priority on the top-10 routes: in-vehicle time x0.85",
+   "kind": "priority",
+   "vehicle_hours_per_weekday": -533.2744749999947,
+   "transit_trips": 26912.793375118985,
+   "transit_trips_ci": [
+    20853.832382292025,
+    32971.75436794595
+   ],
+   "access_jobs": 15236.014593512205,
+   "access_gain_low": 14391.382913904441,
+   "access_gain_other": 15515.037782641524,
+   "low_income_share_of_savings": 0.17305692621830504,
+   "ranked_by": "saves vehicle-hours (capital cost not modelled)",
+   "value": null,
+   "ci_low": null,
+   "ci_high": null
+  },
+  {
+   "intervention": "Bus reliability: waits x0.853 (headway CV 0.6 -> 0.4)",
+   "kind": "reliability",
+   "vehicle_hours_per_weekday": 0.0,
+   "transit_trips": 36145.06498489196,
+   "transit_trips_ci": [
+    27345.521953626056,
+    44944.60801615786
+   ],
+   "access_jobs": 19825.96745759235,
+   "access_gain_low": 25996.229497446933,
+   "access_gain_other": 17787.627866868832,
+   "low_income_share_of_savings": 0.20686662571576941,
+   "ranked_by": "no operating cost",
+   "value": null,
+   "ci_low": null,
+   "ci_high": null
+  },
+  {
+   "intervention": "Fares -$0.50",
+   "kind": "fare",
+   "vehicle_hours_per_weekday": 0.0,
+   "transit_trips": 83608.87482771216,
+   "transit_trips_ci": [
+    76027.13782132247,
+    91190.61183410186
+   ],
+   "access_jobs": 0.0,
+   "access_gain_low": 0.0,
+   "access_gain_other": 0.0,
+   "low_income_share_of_savings": null,
+   "ranked_by": "transit trips per $1,000 weekday revenue forgone",
+   "value": 164.83631564603465,
+   "ci_low": 149.888792468552,
+   "ci_high": 179.7838388235173
+  },
+  {
+   "intervention": "Fare-free CTA",
+   "kind": "fare",
+   "vehicle_hours_per_weekday": 0.0,
+   "transit_trips": 380278.7213174406,
+   "transit_trips_ci": [
+    355161.16781310533,
+    405396.2748217759
+   ],
+   "access_jobs": 0.0,
+   "access_gain_low": 0.0,
+   "access_gain_other": 0.0,
+   "low_income_share_of_savings": null,
+   "ranked_by": "transit trips per $1,000 weekday revenue forgone",
+   "value": 119.71526613322862,
+   "ci_low": 111.80802748477154,
+   "ci_high": 127.62250478168572
+  },
+  {
+   "intervention": "Late-night service: night headways x0.5 (11 pm - 4 am)",
+   "kind": "service",
+   "vehicle_hours_per_weekday": 258.15983333333327,
+   "transit_trips": null,
+   "transit_trips_ci": [
+    null,
+    null
+   ],
+   "access_jobs": 69635.28128293644,
+   "access_gain_low": 58816.07914490929,
+   "access_gain_other": 73209.39335719464,
+   "low_income_share_of_savings": null,
+   "ranked_by": "no ridership response modelled",
+   "value": null,
+   "ci_low": null,
+   "ci_high": null
+  }
+ ]
+}

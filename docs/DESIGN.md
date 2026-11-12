@@ -242,6 +242,24 @@ work-from-home share); `mode_shift.{transit,walk,other}` (utility shifts); `time
 (travel-time multipliers per mode); `simulated_incident_multiplier`; schedule parameters
 (e.g. `schedule.discretionary_multiplier`); `local_trip_share`; `n_days`, `start_date`.
 
+## 10a. Interventions and their ranking
+
+`simchi/interventions.py` runs each intervention (a network scenario: headway, in-vehicle-time
+and wait multipliers by mode or route, fares) on R synthetic populations (build seeds 1..R)
+against the scheduled network, one simulated weekday each, with the same simulation seed for
+both arms. Effects are paired differences with 95% t-intervals over the R populations, so they
+include sampling of the synthetic population as well as daily schedule noise. Costs are
+deterministic: scheduled weekday vehicle-hours Σ_patterns Σ_bands trips × run time, with trips
+divided by the headway multiplier and run time scaled by the in-vehicle multiplier in the bands
+the intervention touches. Ranking: transit trips per 1,000 added vehicle-hours (the interval is
+the trips interval divided by the fixed cost); fare changes per $1,000 of weekday revenue
+forgone; changes that save vehicle-hours are listed separately because their capital cost is not
+modelled. Accessibility: jobs reachable within 45 min by transit (AM peak; 60 min in the night
+band), share of zone-point pairs within the limit × destination jobs, population-weighted;
+equity splits it between the lowest-income areas holding 25% of residents and the rest. Waits
+under the reliability intervention use the random-arrival result E[W] = E[H](1 + CV²)/2, so
+changing the headway CV from c₀ to c₁ multiplies waits by (1 + c₁²)/(1 + c₀²).
+
 ## 10b. Operations tools
 
 - **Holding** (`simchi/ops/holding.py`): two-way headway rule, hold = min(2, max(0, (h_back −
