@@ -15,8 +15,13 @@ def test_gravity_rows_are_distributions(built):
 
 
 def test_mode_shares_are_distributions(built):
-    m = built.mode_model.utilities(np.array([0.0, 1.0]), np.array([0.5, 0.5]), np.array([3.0, 10.0]), np.array([0.0, 1.0]))
+    from simchi.behavior.mode_choice import area_los
+    tr = built.travel
+    los = area_los(built.world, built.skim, tr.v_car, tr.tau_car, tr.v_other)
+    m = built.mode_model.probs(np.array([0.0, 1.0])[:, None, None], 0.0, los)
     np.testing.assert_allclose(m.sum(-1), 1)
+    sh = built.mode_model.area_shares(built.world, built.gravity.probs(built.world), los)
+    np.testing.assert_allclose(sh.sum(1), 1)
 
 
 def test_dirichlet_multinomial_loglik_against_direct_formula():

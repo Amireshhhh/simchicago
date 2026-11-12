@@ -80,7 +80,7 @@ def _travel(params, travel, a, b, mode_default, has_car):
         mode = 3
     else:
         mode = mode_default
-    return travel.minutes_scalar(d_km, mode), mode
+    return travel.trip_minutes(a, b, d_km, mode), mode
 
 
 def plan_day(p: PersonDay, params: ScheduleParams, travel, u: np.ndarray):

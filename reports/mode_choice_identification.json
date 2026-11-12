@@ -1,0 +1,79 @@
+{
+ "constrained": {
+  "a_t": 5.323394181514915,
+  "b_t(no veh)": 4.863928626337295,
+  "e_t(outside)": -3.0331280469176916,
+  "a_w": 6.79963268868418,
+  "b_w(no veh)": 8.0,
+  "a_o": 0.4993125473542783,
+  "b_o(no veh)": 3.558145679303697,
+  "b_ivt(per min)": -0.1430818645720768,
+  "b_wait(per min)": -0.14735027557278393,
+  "b_walk(per min)": -0.15744065092976775,
+  "b_xfer(per transfer)": 0.0,
+  "b_fare(per dollar, from VOT)": -0.5723274582883072
+ },
+ "loglik_constrained": -1113203.2151858006,
+ "car_speed_kmh": 50.718839350665114,
+ "fit_iterations": 9,
+ "at_bounds": [
+  "b_w(no veh)",
+  "b_xfer(per transfer)"
+ ],
+ "unconstrained": {
+  "a_t": 5.580741460349572,
+  "b_t(no veh)": 11.902138407558214,
+  "e_t(outside)": -8.807635384024326,
+  "a_w": 5.466483496165235,
+  "b_w(no veh)": 15.0,
+  "a_o": 0.9784999639610156,
+  "b_o(no veh)": 4.640581944054529,
+  "b_ivt(per min)": -0.17572915997831937,
+  "b_wait(per min)": -0.3279465105860632,
+  "b_walk(per min)": -0.14411592345462038,
+  "b_xfer(per transfer)": 1.8529856480600315,
+  "b_fare(per dollar, from VOT)": -0.7029166399132775
+ },
+ "loglik_unconstrained": -1111892.9947879855,
+ "hessian_free_params": [
+  "a_t",
+  "b_t(no veh)",
+  "e_t(outside)",
+  "a_w",
+  "a_o",
+  "b_o(no veh)",
+  "b_ivt(per min)",
+  "b_wait(per min)",
+  "b_walk(per min)"
+ ],
+ "hessian_eigenvalues": [
+  0.00013009734805241203,
+  0.00015916453687705447,
+  0.00022376665475813464,
+  0.0007501395177696322,
+  0.0012768253363365462,
+  0.00725714304123571,
+  0.8486493981064588,
+  17.303779149298215,
+  38.837928751487446
+ ],
+ "hessian_condition_number": 298529.74970589636,
+ "correlations_above_0.9": [
+  [
+   "a_w",
+   "b_walk(per min)",
+   -0.9723890240220101
+  ]
+ ],
+ "city_transit_share_model": 0.29872428481683955,
+ "city_transit_share_acs": 0.297634190379549,
+ "arc_elasticity_transit_share": {
+  "in-vehicle time +10%": -1.598793900099387,
+  "wait +10%": -0.4192580648500455
+ },
+ "arc_elasticity_transit_share_fare_+10pct": {
+  "VOT $10/h": -0.7965573604479734,
+  "VOT $15/h": -0.48744038497117964,
+  "VOT $25/h": -0.2640285253109728
+ }
+}

@@ -1,7 +1,7 @@
 name = "transit_disruption"
-description = "What-if: transit trips take 50% longer, with and without commuters shifting away from transit."
+description = "What-if on the CTA network: slower vehicles, sparser service and higher fares. Riders respond through the network-based mode choice; no manual mode shift."
 replicates = 10
-baseline = "normal service"
+baseline = "scheduled service"
 
 [build]
 n = 2000
@@ -12,12 +12,16 @@ n_days = 7
 incident_mode = "both"
 
 [[scenario]]
-name = "normal service"
+name = "scheduled service"
 
 [[scenario]]
-name = "transit 1.5x slower"
-set = { "time_multiplier.transit" = 1.5 }
+name = "bus and rail 1.5x slower"
+set = { "network.ivt_multiplier.bus" = 1.5, "network.ivt_multiplier.rail" = 1.5 }
 
 [[scenario]]
-name = "transit 1.5x slower, riders shift"
-set = { "time_multiplier.transit" = 1.5, "mode_shift.transit" = -1.0 }
+name = "half the frequency"
+set = { "network.headway_multiplier.bus" = 2.0, "network.headway_multiplier.rail" = 2.0 }
+
+[[scenario]]
+name = "fares +$1"
+set = { "network.fare_bus" = 3.25, "network.fare_rail" = 3.50 }

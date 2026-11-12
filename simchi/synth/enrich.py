@@ -7,7 +7,7 @@ probability (work from home, mode preferences) re-decides with the same draws.
   work_area                   work destination drawn from the gravity model (0 if not employed)
   work_x, work_z              uniform point in the work area, or 5 km past the city gateway
   u_wfh, p_wfh                work-from-home draw and the area's ACS share WORK_HOME / T_WRKR16OV
-  u_mode, noveh, ta, dist_km  inputs of the commute-mode choice
+  u_mode, noveh, dist_km      inputs of the commute-mode choice
   school_x, school_z          a point in the home area for ages 5-17 (no school data: assumption)
   sbar                        baseline perceived safety in [0.4, 0.95], decreasing in the home
                               tract's 2015 violent-crime rate (hypothesis)
@@ -19,7 +19,6 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from simchi.behavior.mode_choice import transit_access
 from simchi.world import OUTSIDE, World
 
 
@@ -62,7 +61,6 @@ def enrich(pop, world: World, P_dest: np.ndarray, rng: np.random.Generator) -> p
     P["work_x"], P["work_z"] = work[:, 0], work[:, 1]
 
     P["noveh"] = (P["vehicles"] == 0).astype(float)
-    P["ta"] = transit_access(world)[area_idx]
     d = np.hypot(P["work_x"] - P["home_x"], P["work_z"] - P["home_z"]) / 1000.0
     P["dist_km"] = np.where(employed, d, 0.0)
     P["outside"] = (work_area == OUTSIDE + 1).astype(float)

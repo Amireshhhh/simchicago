@@ -14,8 +14,8 @@ import pandas as pd
 
 from simchi import __version__
 from simchi.behavior.destination import GravityModel, fit_gravity
-from simchi.behavior.mode_choice import ModeModel, fit_mode_choice
-from simchi.behavior.travel import TravelModel, fit_travel
+from simchi.behavior.mode_choice import ModeModel
+from simchi.behavior.travel import AreaGrid, TravelModel, area_grid, fit_mode_and_travel
 from simchi.data.cds import load_cds
 from simchi.incidents.data import load_carjackings_2020
 from simchi.incidents.intensity import IntensityModel, fit_intensity
@@ -47,6 +47,9 @@ class Built:
     observed_incidents: pd.DataFrame
     disc_cum: np.ndarray
     disc_points: list
+    skim: object = None                 # AM-peak CTA transit skim (simchi.transit.network.Skim)
+    area_grid: AreaGrid | None = None
+    fit_iterations: int = 0
 
     def fitted(self) -> dict:
         return {"gravity": self.gravity.as_dict(), "mode_choice": self.mode_model.as_dict(),
@@ -58,6 +61,8 @@ def _code_hash() -> str:
     for p in sorted((ROOT / "simchi").rglob("*.py")):
         h.update(p.read_bytes())
     h.update((DATA / "sources.toml").read_bytes())
+    for name in ("meta.json", "patterns.json", "stops.json"):
+        h.update((DATA / "transit" / name).read_bytes())
     return h.hexdigest()[:16]
 
 
@@ -80,8 +85,9 @@ def build(n: int = 2000, seed: int = 1, cache: bool = True) -> Built:
     pop = synthesize(load_cds(), n, seed=seed)
     gravity = fit_gravity(world)
     P_dest = gravity.probs(world)
-    mode_model = fit_mode_choice(world, P_dest)
-    travel = fit_travel(world, P_dest, mode_model)
+    from simchi.transit.network import skim as transit_skim
+    sk = transit_skim()
+    mode_model, travel, iters = fit_mode_and_travel(world, P_dest, sk)
     incidents = load_carjackings_2020()
     intensity = fit_intensity(incidents, *INTENSITY_TRAIN)
     persons = enrich(pop, world, P_dest, rng)
@@ -89,7 +95,8 @@ def build(n: int = 2000, seed: int = 1, cache: bool = True) -> Built:
     disc_points = [world.sample_points(a, 300, rng) for a in world.areas.index]
     built = Built(n=n, seed=seed, world=world, population=pop, persons=persons, gravity=gravity,
                   mode_model=mode_model, travel=travel, intensity=intensity, network=network,
-                  observed_incidents=incidents, disc_cum=_discretionary(world), disc_points=disc_points)
+                  observed_incidents=incidents, disc_cum=_discretionary(world), disc_points=disc_points,
+                  skim=sk, area_grid=area_grid(world), fit_iterations=iters)
     if cache:
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "wb") as f:

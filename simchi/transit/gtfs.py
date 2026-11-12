@@ -24,7 +24,7 @@ import io
 import json
 import zipfile
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -151,6 +151,20 @@ def build_extract(feed_path, out_dir: Path = TRANSIT, source_sha256: str | None 
             used_stops.update(seq)
             used_shapes.add(shape_id)
 
+    # trips per pattern group (route, direction, first stop, last stop), day type and band of first
+    # departure: the frequency a rider waiting for that pattern sees (used for network waits)
+    for day_type, t in by_day.items():
+        t = t.assign(first=t["stops"].str[0], last=t["stops"].str[-1], h=t["t0"] / 3600.0,
+                     d=t["direction_id"].astype(int))
+        cnt = {}
+        for band, (h0, h1) in BANDS.items():
+            m = (t["h"] >= h0) & (t["h"] < h1)
+            for key, n in t[m].groupby(["route_id", "d", "first", "last"]).size().items():
+                cnt.setdefault(key, {})[band] = int(n)
+        for p in patterns:
+            key = (p["route"], p["direction"], p["stops"][0], p["stops"][-1])
+            p.setdefault("trips_band", {})[day_type] = cnt.get(key, {})
+
     # scheduled service: trips and headway per route, direction, day type and hour of first departure
     service = []
     for day_type, t in by_day.items():
@@ -189,7 +203,7 @@ def build_extract(feed_path, out_dir: Path = TRANSIT, source_sha256: str | None 
 
     meta = {
         "source": "CTA GTFS google_transit.zip", "source_url": "https://www.transitchicago.com/downloads/sch_data/google_transit.zip",
-        "source_sha256": source_sha256, "built_utc": datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+        "source_sha256": source_sha256, "built_utc": datetime.now(timezone.utc).replace(microsecond=0, tzinfo=None).isoformat() + "Z",
         "reference_dates": {k: d.isoformat() for k, d in DAY_TYPES.items()}, "bands": BANDS,
         "counts": {"routes": len(route_rows), "rail_routes": len(rail_routes), "patterns": len(patterns),
                    "stops": len(stop_rows), "stations": len(station_rows), "shapes": len(shape_rows),

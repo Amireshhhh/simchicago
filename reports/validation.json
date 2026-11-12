@@ -1,7 +1,7 @@
 {
  "n_agents": 1944,
  "build_seed": 1,
- "seconds": 30.801323890686035,
+ "seconds": 374.34287762641907,
  "checks": {
   "data_integrity": {
    "pass": true,
@@ -233,98 +233,217 @@
    "in_sample_mae_share": 0.03004982604491432
   },
   "mode_choice_holdout": {
-   "pass": false,
-   "summary": "held-out log-likelihood better than city-wide shares in 8/9 districts; in-sample area correlations car 0.87, transit 0.80, walk 0.84",
+   "pass": true,
+   "summary": "held-out log-likelihood better than city-wide shares in 9/9 districts; in-sample area correlations car 0.88, transit 0.81, walk 0.85",
    "per_district": [
     {
      "district": "Central",
      "areas": 3,
-     "loglik_model": -119702.00757594027,
+     "loglik_model": -122090.36011093791,
      "loglik_baseline": -155699.66233489057
     },
     {
      "district": "Far North",
      "areas": 12,
-     "loglik_model": -204650.57159324543,
+     "loglik_model": -203867.85070325737,
      "loglik_baseline": -216851.50338357425
     },
     {
      "district": "Far South Side",
      "areas": 12,
-     "loglik_model": -57285.01054633282,
+     "loglik_model": -57540.03121504787,
      "loglik_baseline": -61170.21607162598
     },
     {
      "district": "Far Southwest Side",
      "areas": 6,
-     "loglik_model": -42564.324458530915,
+     "loglik_model": -42798.84611797656,
      "loglik_baseline": -51038.91008925074
     },
     {
      "district": "North Side",
      "areas": 5,
-     "loglik_model": -196285.2288896217,
+     "loglik_model": -194888.24203417002,
      "loglik_baseline": -209455.5132030688
     },
     {
      "district": "Northwest Side",
      "areas": 6,
-     "loglik_model": -93799.14417742228,
+     "loglik_model": -92808.95197777184,
      "loglik_baseline": -106481.90928925888
     },
     {
      "district": "South Side",
      "areas": 12,
-     "loglik_model": -108232.1963112124,
+     "loglik_model": -106470.2295631317,
      "loglik_baseline": -106926.14181511955
     },
     {
      "district": "Southwest Side",
      "areas": 12,
-     "loglik_model": -99543.97991082745,
+     "loglik_model": -99126.6579054162,
      "loglik_baseline": -109198.88522846793
     },
     {
      "district": "West Side",
      "areas": 9,
-     "loglik_model": -202500.88998072583,
+     "loglik_model": -200490.8293256698,
      "loglik_baseline": -210500.74532573132
     }
    ],
    "fitted": {
-    "a_t": 2.0289944761940633,
-    "b_t(no veh)": 7.998857427613471,
-    "c_t(transit access)": 0.0,
-    "d_t(dist km)": -0.3791620475620892,
-    "e_t(outside)": -1.6133689765346897,
-    "a_w": 6.877633379371894,
+    "a_t": 5.323394181514915,
+    "b_t(no veh)": 4.863928626337295,
+    "e_t(outside)": -3.0331280469176916,
+    "a_w": 6.79963268868418,
     "b_w(no veh)": 8.0,
-    "d_w(dist km)": -1.898007781854846,
-    "a_o": -4.347855022671829,
-    "b_o(no veh)": 3.9661487147870833
+    "a_o": 0.4993125473542783,
+    "b_o(no veh)": 3.558145679303697,
+    "b_ivt(per min)": -0.1430818645720768,
+    "b_wait(per min)": -0.14735027557278393,
+    "b_walk(per min)": -0.15744065092976775,
+    "b_xfer(per transfer)": 0.0,
+    "b_fare(per dollar, from VOT)": -0.5723274582883072
    },
+   "loglik": -1113203.2151858006,
    "in_sample_corr": {
-    "car": 0.8691908439830003,
-    "transit": 0.7964825652349132,
-    "walk": 0.8361669275411582,
-    "other": 0.21094047530860494
-   }
+    "car": 0.8837146444551843,
+    "transit": 0.8082305984711812,
+    "walk": 0.8482360968242333,
+    "other": 0.32236051731960924
+   },
+   "leave_one_out_coefficient_range": {
+    "a_t": [
+     4.144439721057724,
+     6.0399148414199555
+    ],
+    "b_t(no veh)": [
+     3.932031819393949,
+     5.18059434878549
+    ],
+    "e_t(outside)": [
+     -3.6671238216199358,
+     -2.383840167203193
+    ],
+    "a_w": [
+     5.233103759067728,
+     8.122798603136859
+    ],
+    "b_w(no veh)": [
+     8.0,
+     8.0
+    ],
+    "a_o": [
+     -0.005405158890879499,
+     0.7116081428401718
+    ],
+    "b_o(no veh)": [
+     2.7010172202039144,
+     4.911554591249776
+    ],
+    "b_ivt(per min)": [
+     -0.15459415275091692,
+     -0.12467351745930197
+    ],
+    "b_wait(per min)": [
+     -0.19149686656213047,
+     -0.10948565884106688
+    ],
+    "b_walk(per min)": [
+     -0.18736109282556587,
+     -0.12695260451180745
+    ],
+    "b_xfer(per transfer)": [
+     0.0,
+     0.0
+    ]
+   },
+   "at_bounds": [
+    "b_w(no veh)",
+    "b_xfer(per transfer)"
+   ]
   },
   "commute_time_holdout": {
-   "pass": false,
-   "summary": "held-out mean absolute error 3.74 min vs 3.69 min for the city mean; in-sample correlation 0.49",
-   "holdout_mae_model": 3.737831486988832,
+   "pass": true,
+   "summary": "held-out mean absolute error 3.51 min vs 3.69 min for the city mean (better in 2/9 districts); in-sample correlation 0.47",
+   "holdout_mae_model": 3.5063210487245766,
    "holdout_mae_baseline": 3.694559715020759,
-   "in_sample_corr": 0.4910711366271722,
+   "per_district": [
+    {
+     "district": "Central",
+     "areas": 3,
+     "commute_mae_model": 8.092367162559155,
+     "commute_mae_baseline": 7.538786088822067,
+     "v_car_kmh": 49.523274167408395
+    },
+    {
+     "district": "Far North",
+     "areas": 12,
+     "commute_mae_model": 2.0661409792268763,
+     "commute_mae_baseline": 2.0628336946508274,
+     "v_car_kmh": 50.95811780366465
+    },
+    {
+     "district": "Far South Side",
+     "areas": 12,
+     "commute_mae_model": 2.701068156110933,
+     "commute_mae_baseline": 7.254123482355015,
+     "v_car_kmh": 49.89355502601893
+    },
+    {
+     "district": "Far Southwest Side",
+     "areas": 6,
+     "commute_mae_model": 3.9231550373606665,
+     "commute_mae_baseline": 3.763373258595473,
+     "v_car_kmh": 51.82609819394152
+    },
+    {
+     "district": "North Side",
+     "areas": 5,
+     "commute_mae_model": 2.312934433812655,
+     "commute_mae_baseline": 1.2095936902195141,
+     "v_car_kmh": 50.25174916947612
+    },
+    {
+     "district": "Northwest Side",
+     "areas": 6,
+     "commute_mae_model": 6.2557184652478135,
+     "commute_mae_baseline": 2.8172641646770225,
+     "v_car_kmh": 54.20127839452968
+    },
+    {
+     "district": "South Side",
+     "areas": 12,
+     "commute_mae_model": 5.10580530306682,
+     "commute_mae_baseline": 4.213603557529853,
+     "v_car_kmh": 48.897818139443636
+    },
+    {
+     "district": "Southwest Side",
+     "areas": 12,
+     "commute_mae_model": 1.9658477481939833,
+     "commute_mae_baseline": 2.025384317387259,
+     "v_car_kmh": 52.18390001427167
+    },
+    {
+     "district": "West Side",
+     "areas": 9,
+     "commute_mae_model": 3.4450399822463758,
+     "commute_mae_baseline": 3.2957340195915807,
+     "v_car_kmh": 49.80298459425007
+    }
+   ],
+   "in_sample_corr": 0.47118013895026023,
    "fitted": {
-    "v_car_kmh": 39.36022041070072,
-    "v_transit_kmh": 33.1446018898725,
+    "v_car_kmh": 50.718839350665114,
     "v_other_kmh": 15.0,
     "tau_car_min": 5.0,
-    "tau_transit_min": 10.0,
+    "transit_fallback_v_kmh": 29.63486065802377,
+    "transit_fallback_tau_min": 32.069607255508835,
     "walk_kmh": 4.8,
     "circuity": 1.3
-   }
+   },
+   "fit_iterations": 9
   },
   "incident_forecast": {
    "pass": true,

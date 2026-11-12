@@ -21,7 +21,9 @@ An experiment file (TOML) has a [build] table, an optional [base] config, a list
     values = [0.0, 0.5, 1.0]
 
 Keys in `set` and `param` are dotted paths into SimConfig (e.g. "safety.a",
-"mode_shift.transit", "time_multiplier.transit", "schedule.discretionary_multiplier").
+"mode_shift.transit", "time_multiplier.transit", "schedule.discretionary_multiplier",
+"network.headway_multiplier.bus", "network.ivt_multiplier.rail", "network.headway_multiplier.9"
+(a route id), "network.fare_bus").
 
 Every scenario runs with the same replicate seeds, so scenario s and the baseline share all
 random numbers on a given seed (common random numbers). Effects are estimated from the
@@ -141,7 +143,7 @@ def set_path(cfg: SimConfig, dotted: str, value):
         obj = obj[p] if isinstance(obj, dict) else getattr(obj, p)
     last = parts[-1]
     if isinstance(obj, dict):
-        if last not in obj:
+        if last not in obj and parts[:-1] not in (["network", "headway_multiplier"], ["network", "ivt_multiplier"]):
             raise KeyError(f"unknown setting {dotted!r}")
         obj[last] = value
     else:
@@ -190,8 +192,9 @@ def run_experiment(exp: Experiment, workers: int | None = None, outdir: Path | N
                    built: Built | None = None, progress=print) -> dict:
     global _BUILT
     _BUILT = built or build(exp.build_n, exp.build_seed)
-    for s in exp.scenarios:                    # fail fast on bad settings
-        make_config(exp.base, s.overrides, exp.seeds[0])
+    from simchi.sim.engine import scenario_skim
+    for s in exp.scenarios:                    # fail fast on bad settings; build network skims once
+        scenario_skim(_BUILT, make_config(exp.base, s.overrides, exp.seeds[0]))
     jobs = [(exp.base, s.overrides, seed, s.name) for s in exp.scenarios for seed in exp.seeds]
     workers = workers or max(1, min(len(jobs), (os.cpu_count() or 2)))
     t0 = time.time()

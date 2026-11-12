@@ -9,7 +9,7 @@ access is needed to build or run anything.
 | `cds_2021` | `data/raw/mirror/Chicago_2020.geojson` | CMAP Community Data Snapshots: 77 community-area polygons with 216 attributes (ACS 2015-2019 and LEHD per the v0.1 metadata) | area boundaries; population calibration; commute destination, mode and time fits; jobs; viewer lenses and procedural buildings |
 | `carjackings_2020` | `data/raw/mirror/Chi_Carjackings.geojson` | 1,412 CPD vehicular-hijacking records of 2020: IUCR 0325 (481) and 0326 (931), block-level location, community area | replayed incidents; intensity-model fit and out-of-sample test |
 | `sdoh_tracts_2014` | `data/raw/mirror/Chi-SDOH.geojson` | 791 census tracts (2010) with 2014 indicators, including population and the 2015 violent-crime rate | home placement within areas (by tract population); baseline perceived safety (hypothesis) |
-| `gtfs_cta` | not stored; derived extract in `data/transit/` | CTA GTFS static feed (zip, ~51 MB, sha256 `ddbf306e…72b4`, last modified 10 Nov 2026): 132 routes (124 bus, 8 rail), stops, trips, stop times, shapes, calendar | real network for the viewer and (from v0.3 workstream 2) network travel times; scheduled headways |
+| `gtfs_cta` | not stored; derived extract in `data/transit/` | CTA GTFS static feed (zip, ~51 MB, sha256 `ddbf306e…72b4`, last modified 10 Nov 2026): 132 routes (124 bus, 8 rail), stops, trips, stop times, shapes, calendar | real network for the viewer; network transit times for mode choice and trip durations; scheduled headways |
 | CTA live positions | not stored in git; workflow artifacts | Bus Tracker `getvehicles` and Train Tracker `ttpositions`, 3 polls per scheduled run | live layer; reliability and operations analyses |
 | landmarks | `data/reference/landmarks.json` | 5 tallest buildings: name, height, coordinates | viewer only; copied from the v0.1 export (which cites Wikipedia, 2026-10-14), not re-verified |
 
@@ -46,7 +46,9 @@ direction, trips are grouped by their first and last stop and every group with a
 the route-direction's weekday trips is kept, represented by its most frequent stop sequence;
 on average the kept patterns cover 95.8% of each route-direction's weekday trips. Grouping by
 terminals matters: every Yellow Line trip is coded `direction_id` 1, in both directions.
-Shapes are simplified to 5 m.
+Each pattern also records its trips per time band and day type (`trips_band`), counted over
+all trips with the same route, direction and terminals; the network model derives headways from
+them. Shapes are simplified to 5 m.
 
 **Refresh.** CTA keeps one package online and replaces it every week or two.
 `python scripts/fetch_gtfs.py` downloads it and refuses to rebuild if the hash changed;

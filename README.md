@@ -5,7 +5,9 @@ runner for running many scenarios across the whole city, and a 3D viewer.
 
 - **2,000 synthetic residents** (configurable) calibrated exactly to every community area's
   ACS household and person statistics, placed in census tracts by population.
-- **Commute destinations, modes and speeds** fitted to LEHD and ACS data; daily activity
+- **Commute destinations, modes and speeds** fitted to LEHD and ACS data; mode choice uses
+  the real CTA network (walk, wait, in-vehicle time, transfers and fare of each area pair's
+  AM-peak path from CTA's GTFS schedule), so service changes move riders; daily activity
   plans with work, school, aftercare and discretionary trips.
 - **Real recorded carjackings** (CPD, 2020) replayed at their time and place, and/or drawn
   from an intensity model fitted to earlier months, with an explicitly *hypothesised*
@@ -52,7 +54,7 @@ cd viewer && npm install && npm run build && cd ..
 python -m simchi.cli demo        # build the city, the default week, comparison runs, 4 experiments, viewer data (< 1 min)
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~1 min)
-python -m pytest tests           # 57 tests
+python -m pytest tests           # 63 tests
 cd viewer && npm test            # 10 tests
 ```
 
@@ -97,7 +99,10 @@ Results go to `reports/experiments/<name>/` (`runs.csv` per run, `summary.csv`, 
 `experiment.json`). Settings are dotted paths into the simulation config, e.g.
 `safety.gamma_cancel`, `mode_shift.transit`, `time_multiplier.transit`,
 `simulated_incident_multiplier`, `schedule.discretionary_multiplier`, `incident_mode`,
-`n_days`, `start_date`. On 4 cores a week-long run of the default 2,000-agent city takes
+`n_days`, `start_date`, and the CTA network: `network.ivt_multiplier.bus` / `.rail` / `.<route
+id>` (in-vehicle time), `network.headway_multiplier.…` (frequency), `network.fare_bus`,
+`network.fare_rail`. Network settings change the transit skim, hence mode choice and transit
+trip times (each new network scenario adds about 17 s, cached on disk). On 4 cores a week-long run of the default 2,000-agent city takes
 about 0.6 s, so an experiment of 50 runs takes about 8 s; with `--agents 20000` the build
 takes about 25 s and a week-long run about 7 s.
 
@@ -137,10 +142,13 @@ buildings here** fetches footprints around the camera from the City of Chicago d
 
 ## Results in one paragraph
 
-Calibration is exact (largest deviation 1.9 × 10⁻⁹ over 77 areas); destination and mode
-models beat simple baselines on held-out districts in 8 of 9 districts each; the incident
-model's spatial forecast beats population and uniform baselines on held-out months; the
-commute-time model has no skill beyond the city mean on held-out districts. Engine
+Calibration is exact (largest deviation 1.9 × 10⁻⁹ over 77 areas); the destination model
+beats its baseline in 8 of 9 held-out districts (a failure of its every-district criterion);
+the network-based mode model beats city-wide shares in 9 of 9; held-out commute-time error is
+3.51 min against 3.69 min for the city mean (lower overall, but in only 2 of 9 districts); the
+incident model's spatial forecast beats population and uniform baselines on held-out months.
+Slowing CTA buses and trains 1.5× cuts simulated transit trips by 21% with no manual mode shift
+(the time sensitivity is estimated cross-sectionally and probably overstated; see EVALUATION). Engine
 invariants (day plans partition the day, safety stays in [0, 1], no response ≡ no incidents,
 determinism) hold. Full numbers and limitations: `docs/EVALUATION.md`.
 
@@ -157,6 +165,7 @@ simchi/
   data/        CDS loader and identity checks, tracts, projection
   synth/       raking, IPU, population synthesis, person attributes
   behavior/    destinations (gravity), mode choice, travel time, daily schedules
+  transit/     CTA GTFS extract, network skim, live polling, shape interpolation
   incidents/   CPD records, intensity model
   social/      network
   sim/         engine (exposure, safety dynamics, daily summaries)

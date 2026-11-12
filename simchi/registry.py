@@ -26,15 +26,25 @@ def registry(built: Built) -> list[dict]:
     for k, v in g.as_dict().items():
         add("commute destination (gravity)", k, round(v, 5), Prov.FITTED, "max. likelihood, LEHD top-5 destinations (CDS RESCITY1..5) + EMP")
     for k, v in built.mode_model.as_dict().items():
-        add("commute mode (MNL)", k, round(v, 4), Prov.FITTED, "max. likelihood, ACS commute-mode counts by area (CDS); sign-constrained")
+        if k.startswith("b_fare"):
+            add("commute mode (MNL)", k, round(v, 4), Prov.HYPOTHESIS, f"60 x b_ivt / value of time ${built.mode_model.vot_per_hour:.0f}/h (assumed; not estimable: fares are flat)")
+        else:
+            add("commute mode (MNL)", k, round(v, 4), Prov.FITTED, "max. likelihood, ACS commute-mode counts by area (CDS) on CTA network level of service; sign-constrained")
+    add("commute mode (MNL)", "value_of_time_per_hour", built.mode_model.vot_per_hour, Prov.HYPOTHESIS, "assumption; only used for fare scenarios")
     tr = built.travel
-    add("travel time", "v_car_kmh", round(tr.v_car, 2), Prov.FITTED, "least squares, ACS mean commute time AGG_TT / TOT_COMM")
-    add("travel time", "v_transit_kmh", round(tr.v_transit, 2), Prov.FITTED, "least squares, ACS mean commute time AGG_TT / TOT_COMM")
+    add("travel time", "v_car_kmh", round(tr.v_car, 2), Prov.FITTED, "least squares, ACS mean commute time AGG_TT / TOT_COMM (alternating with the mode-choice fit)")
     add("travel time", "v_other_kmh", tr.v_other, Prov.HYPOTHESIS, "assumption")
     add("travel time", "tau_car_min", tr.tau_car, Prov.HYPOTHESIS, "assumption (parking)")
-    add("travel time", "tau_transit_min", tr.tau_transit, Prov.HYPOTHESIS, "assumption (access and waiting)")
     add("travel time", "walk_kmh", WALK_KMH, Prov.HYPOTHESIS, "assumption")
     add("travel time", "circuity", CIRCUITY, Prov.HYPOTHESIS, "assumption")
+    add("travel time", "transit fallback tau / v", f"{tr.tau_transit:.1f} min / {tr.v_transit:.1f} km/h", Prov.FITTED,
+        "least-squares line through the area-to-area network skim; used only for trips not placed in an area")
+    from simchi.transit import network as N
+    for k in ("ACCESS_M", "ACCESS_MIN_STOPS", "TRANSFER_M", "WAIT_CAP_MIN", "PATH_W_WALK", "PATH_W_WAIT",
+              "TRANSFER_PENALTY_MIN", "REGIONAL_RADIUS_KM", "REGIONAL_MIN_STOPS", "REGIONAL_TERMINAL_MIN", "REGIONAL_KMH", "ZONE_POINTS"):
+        add("transit network", k, getattr(N, k), Prov.HYPOTHESIS, "assumption (path building; see simchi/transit/network.py)")
+    add("transit network", "scheduled headways and in-vehicle times", "GTFS weekday 6-9 am", Prov.OBSERVED, "CTA GTFS feed (data/transit/), scheduled service")
+    add("transit network", "fares (bus / 'L')", f"${N.FARE_BUS:.2f} / ${N.FARE_RAIL:.2f}", Prov.OBSERVED, "transitchicago.com/fares, read 2026-11-12")
     add("world", "outside_extra_km", OUTSIDE_EXTRA_KM, Prov.HYPOTHESIS, "assumption: jobs outside Chicago lie this far past the nearest gateway")
     im = built.intensity
     add("incidents", "level_per_day", round(im.level_per_day, 4), Prov.FITTED, f"CPD records {INTENSITY_TRAIN[0]} to {INTENSITY_TRAIN[1]}")
@@ -48,7 +58,7 @@ def registry(built: Built) -> list[dict]:
     for k, v in asdict(sp).items():
         add("schedule (default)", k, v, Prov.SCENARIO, "SimChicago v0.1 exported configuration")
     cfg = SimConfig()
-    for k in ("wfh_multiplier", "mode_shift", "time_multiplier", "simulated_incident_multiplier", "local_trip_share"):
+    for k in ("wfh_multiplier", "mode_shift", "time_multiplier", "network", "simulated_incident_multiplier", "local_trip_share"):
         add("scenario knobs (default)", k, getattr(cfg, k), Prov.SCENARIO, "what-if setting")
     add("agents", "household and person attributes", "calibrated weights", Prov.ESTIMATED, "CMAP CDS (ACS 2015-19) marginals by community area")
     add("agents", "home point", "sampled", Prov.LATENT, "tract chosen by 2014 population, uniform within")

@@ -62,3 +62,15 @@ def test_scalar_travel_time_matches_vectorised(built):
     for mode in (1, 2, 3, 4):
         for d in (0.0, 0.7, 3.2, 18.5):
             assert abs(tm.minutes_scalar(d, mode) - float(tm.minutes(d, mode))) < 1e-9
+
+
+def test_transit_trips_use_the_network_skim(built):
+    from simchi.sim.engine import SimConfig, scenario_skim
+    sk = scenario_skim(built, SimConfig())
+    w = built.world
+    a, b = w.areas.loc[1, ["x", "z"]], w.areas.loc[32, ["x", "z"]]       # Rogers Park -> Loop centroids
+    g = built.area_grid
+    assert g.area_at(*a) == 1 and g.area_at(*b) == 32
+    from simchi.behavior.travel import TravelModel
+    tm = TravelModel(transit_total=sk.total, grid=g)
+    assert tm.trip_minutes(tuple(a), tuple(b), 15.0, 3) == float(sk.total[0, 31])

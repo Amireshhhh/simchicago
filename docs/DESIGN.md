@@ -77,31 +77,57 @@ uses every employed resident without inventing unlisted flows. Fitted by L-BFGS-
 
 ## 4. Commute mode
 
-A multinomial logit over car (reference), transit, walk/bike, other:
+A multinomial logit over car, transit, walk/bike and other, on the level of service of the
+trip from area i to destination j (77 areas and "outside Chicago"):
 
-  V_transit = a_t + b_t·noveh + c_t·ta + d_t·dist + e_t·outside,
-  V_walk = a_w + b_w·noveh + d_w·dist,  V_other = a_o + b_o·noveh,
+  V_car = b_ivt·T_car,
+  V_transit = a_t + b_t·noveh + e_t·outside + b_ivt·IVT + b_wait·WAIT + b_walk·WALK + b_xfer·XFERS + b_fare·FARE,
+  V_walk = a_w + b_w·noveh + b_walk·T_walk,  V_other = a_o + b_o·noveh + b_ivt·T_other.
 
-where ta is the share of the home area's residents with high plus half the share with
-moderate transit availability (CDS). Area shares are averaged over the area's vehicle-
-ownership mix and over destinations with P(j | i), and fitted by grouped maximum likelihood
-to ACS commuter counts. Sign constraints keep the no-vehicle and transit-access effects
-non-negative (capped at 8) and the distance effects non-positive. Unconstrained, the fit
-gives transit access a negative sign and runs the walk no-vehicle effect to ±15; constrained,
-transit access goes to 0 and both no-vehicle effects sit at or near the cap of 8, so those
-two are not precisely identified (log-likelihood cost about 0.2%).
+IVT, WAIT, WALK, XFERS and FARE come from the CTA network skim (§5a); T_car, T_walk and
+T_other from §5. Area shares are averaged over the area's vehicle-ownership mix and over
+destinations with P(j | i), and fitted by grouped maximum likelihood to ACS commuter counts.
+Sign constraints: time, wait, walk and transfer coefficients ≤ 0 (more time cannot attract);
+no-vehicle effects in [0, 8]. b_fare is not estimable (fares are flat) and is set to
+60·b_ivt / VOT with an assumed value of time VOT = $15/h. Estimates, the binding constraints
+and identification diagnostics are in `docs/EVALUATION.md`.
 
-Each person's mode is chosen once (a habit) from a stored uniform u_mode, so a scenario
-that shifts utilities (`mode_shift.*`) re-decides with the same draw.
+Each person's mode is chosen once (a habit) from a stored uniform u_mode by inverse CDF in the
+order car, transit, walk, other. **Monotonicity.** If a scenario lowers V_transit for a person
+and leaves the other utilities unchanged, P_car rises and P_car + P_transit = 1 − P_walk − P_other
+falls, so the interval (P_car, P_car + P_transit] that selects transit shrinks at both ends:
+nobody switches *to* transit, and the transit riders under the scenario are a subset of the
+baseline's (tested in `tests/test_network.py`).
 
 ## 5. Travel time
 
-  T_m(d) = τ_m + 60 · 1.3 · d / v_m
+Car, walk and other: T_m(d) = τ_m + 60 · 1.3 · d / v_m, with circuity 1.3, walking 4.8 km/h
+(τ = 0), "other" 15 km/h (τ = 2 min) and car parking τ = 5 min assumed. v_car is fitted by
+weighted least squares to each area's ACS mean commute time AGG_TT / TOT_COMM; because the
+mode shares depend on T_car, the car speed and the mode-choice model are fitted alternately
+until v_car changes by less than 0.01 km/h. Transit trips take the skim's walk + wait +
+in-vehicle minutes between the areas of the trip's ends (looked up on a 250 m area grid); trips
+not placed in an area use a least-squares line through the skim.
 
-with circuity 1.3, walking 4.8 km/h, "other" 15 km/h and terminal times τ = 5 (car),
-10 (transit), 2 min (others) assumed, and v_car, v_transit fitted by weighted least squares
-to each area's ACS mean commute time AGG_TT / TOT_COMM. Fitting the terminal times as well
-is not identified from 77 area means (the car speed runs to its bound).
+## 5a. Transit network (CTA GTFS)
+
+`simchi/transit/network.py` builds a graph from the GTFS extract: each used stop appears twice
+(departure side, arrival side) so that every path boards at least one vehicle; each pattern
+position is a node. Edges: walk access/egress between zone points and stops within 800 m (the
+3 nearest if none), walk transfers between stops within 250 m (1.3 × straight line at 4.8 km/h);
+boarding with wait = half the scheduled headway of all trips of the same route and direction
+serving that stop and the pattern's next stop in the band (weekday 6-9 am), capped at 20 min;
+riding with the median scheduled in-vehicle time between consecutive stops in the band.
+Paths minimise ivt + 2·wait + 2·walk + 5 min per boarding (assumed weights); a path's
+components are reported unweighted. Dijkstra (scipy) gives the shortest-path tree from each of
+462 zone points (6 per area, by tract population, fixed seed); components are summed along the
+tree by pointer doubling (round r adds the values of the 2^r-th ancestor's path segment;
+⌈log₂ depth⌉ rounds), checked against explicit path tracing in the tests. Area-to-area values
+are means over point pairs (a point is not paired with itself). Jobs outside Chicago are reached
+by an assumed regional leg from stops near the area's nearest gateway. Fares: $2.50 if the path
+uses the 'L', else $2.25 (CTA fares page, 2026-11-12). Scenario knobs scale headways and
+in-vehicle times by mode or route and set fares; each scenario's skim takes about 17 s and is
+cached on disk.
 
 ## 6. Daily plans
 

@@ -26,7 +26,9 @@ import numpy as np
 import pandas as pd
 
 from simchi.behavior.schedule import DISCRETIONARY, KINDS, N_UNIFORMS, PersonDay, ScheduleParams, plan_day
+from simchi.behavior.mode_choice import level_of_service
 from simchi.behavior.travel import CHOICE_TO_CODE, CIRCUITY, TravelModel
+from simchi.transit.network import FARE_BUS, FARE_RAIL, NetworkScenario
 
 INCIDENT_MODES = ("none", "replay", "simulated", "both")
 MODE_NAMES = ["", "walk", "car", "transit", "other"]
@@ -59,6 +61,11 @@ class SimConfig:
     wfh_multiplier: float = 1.0                       # scales each area's work-from-home share
     mode_shift: dict = field(default_factory=lambda: {"transit": 0.0, "walk": 0.0, "other": 0.0})
     time_multiplier: dict = field(default_factory=lambda: {"walk": 1.0, "car": 1.0, "transit": 1.0, "other": 1.0})
+    # scheduled CTA service (acts on the network skim, hence on mode choice and transit trip times):
+    # multipliers keyed by "bus", "rail" or a route id; fares in dollars
+    network: dict = field(default_factory=lambda: {"headway_multiplier": {"bus": 1.0, "rail": 1.0},
+                                                   "ivt_multiplier": {"bus": 1.0, "rail": 1.0},
+                                                   "fare_bus": FARE_BUS, "fare_rail": FARE_RAIL})
     simulated_incident_multiplier: float = 1.0        # scales the fitted daily incident level
     local_trip_share: float = 0.45                    # discretionary trips within 1 km of home
 
@@ -109,9 +116,36 @@ def safety_equilibrium(sbar, W, p: SafetyParams, tol: float = 1e-14, max_iter: i
     return s
 
 
-def _choose_modes(built, cfg: SimConfig) -> np.ndarray:
+def network_scenario(cfg: SimConfig) -> NetworkScenario:
+    n = cfg.network
+    return NetworkScenario(headway_multiplier=dict(n.get("headway_multiplier", {})),
+                           ivt_multiplier=dict(n.get("ivt_multiplier", {})),
+                           fare_bus=float(n.get("fare_bus", FARE_BUS)), fare_rail=float(n.get("fare_rail", FARE_RAIL)))
+
+
+def scenario_skim(built, cfg: SimConfig):
+    """The AM-peak transit skim under the scenario's network settings."""
+    sc = network_scenario(cfg)
+    if sc.key() == built.skim.scenario.key():
+        return built.skim
+    from simchi.transit.network import skim
+    return skim(sc)
+
+
+def person_los(built, cfg: SimConfig, sk) -> dict:
+    """Level of service of each person's commute (home area -> work area or outside)."""
     P = built.persons
-    V = built.mode_model._V(P["noveh"].to_numpy(), P["ta"].to_numpy(), P["dist_km"].to_numpy(), P["outside"].to_numpy())
+    i = P["area"].to_numpy() - 1
+    j = np.clip(P["work_area"].to_numpy() - 1, 0, None)
+    sk_ij = {"ivt": sk.ivt[i, j], "wait": sk.wait[i, j], "walk": sk.walk[i, j],
+             "boardings": sk.boardings[i, j], "fare": sk.fare[i, j]}
+    tr = built.travel
+    return level_of_service(P["dist_km"].to_numpy(), sk_ij, tr.v_car, tr.tau_car, tr.v_other, cfg.time_multiplier)
+
+
+def _choose_modes(built, cfg: SimConfig, sk) -> np.ndarray:
+    P = built.persons
+    V = built.mode_model._V(P["noveh"].to_numpy(), P["outside"].to_numpy(), person_los(built, cfg, sk))
     for k, name in ((1, "transit"), (2, "walk"), (3, "other")):
         V[:, k] += cfg.mode_shift.get(name, 0.0)
     pr = np.exp(V - V.max(1, keepdims=True))
@@ -148,15 +182,18 @@ def run_sim(built, cfg: SimConfig) -> SimResult:
     n = len(P)
     sp = cfg.safety
     params = cfg.schedule
+    sk = scenario_skim(built, cfg)
+    mt = cfg.time_multiplier.get("transit", 1.0)
     travel = TravelModel(v_car=built.travel.v_car, v_transit=built.travel.v_transit,
                          v_other=built.travel.v_other, tau_car=built.travel.tau_car,
                          tau_transit=built.travel.tau_transit,
-                         time_multiplier=tuple(cfg.time_multiplier[m] for m in ("walk", "car", "transit", "other")))
+                         time_multiplier=tuple(cfg.time_multiplier[m] for m in ("walk", "car", "transit", "other")),
+                         transit_total=sk.walk + sk.wait + mt * sk.ivt, grid=built.area_grid)
 
     employed = (P["labor"] == 0).to_numpy()
     wfh = employed & (P["u_wfh"].to_numpy() < np.clip(P["p_wfh"].to_numpy() * cfg.wfh_multiplier, 0, 1))
     commuter = employed & ~wfh & np.isfinite(P["work_x"].to_numpy())
-    modes = _choose_modes(built, cfg)
+    modes = _choose_modes(built, cfg, sk)
     modes[~commuter] = np.where(P["has_car"].to_numpy()[~commuter], 2, 3)
 
     # Aftercare: a child aged 5..young_child_age whose household adults all commute that day.
