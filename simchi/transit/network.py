@@ -59,6 +59,7 @@ REGIONAL_TERMINAL_MIN = 10.0
 REGIONAL_MIN_STOPS = 20
 REGIONAL_KMH = 25.0
 ZONE_POINTS = 6
+ASSIGN_POINTS = 20           # zone points per area for loading trips onto paths (ridership)
 ZONE_SEED = 2026
 # CTA fares read 2026-11-12 (transitchicago.com/fares): 'L' $2.50, bus $2.25, up to two further
 # rides within 2 hours free. A path that uses the 'L' is charged $2.50, otherwise $2.25.
@@ -113,21 +114,23 @@ class Skim:
         return self.walk + self.wait + self.ivt
 
 
-def zone_points(world) -> np.ndarray:
-    """(77, ZONE_POINTS, 2) points per community area, by tract population, fixed seed."""
+def zone_points(world, k: int = ZONE_POINTS) -> np.ndarray:
+    """(77, k, 2) points per community area, by tract population, fixed seed."""
     rng = np.random.default_rng(ZONE_SEED)
-    return np.stack([world.sample_points(a, ZONE_POINTS, rng) for a in world.areas.index])
+    return np.stack([world.sample_points(a, k, rng) for a in world.areas.index])
 
 
 class Graph:
     """The static part of the network graph (everything except scenario-dependent weights)."""
 
-    def __init__(self, world):
+    def __init__(self, world, k: int = ZONE_POINTS):
+        self.K = k
         self.world = world
         stops = load_extract("stops")
         pats = load_extract("patterns")
         routes = {r["id"]: r for r in load_extract("routes")}
         self.stop_ids = [s["id"] for s in stops]
+        self.stop_parent = [s.get("parent") or s["id"] for s in stops]
         sidx = {s: i for i, s in enumerate(self.stop_ids)}
         self.stop_xy = np.array([[s["x"], s["z"]] for s in stops], float)
         ns = len(stops)
@@ -139,7 +142,7 @@ class Graph:
         self.pat_off = np.cumsum([0] + [len(p["stops"]) for p in pats])
         n_pat_nodes = int(self.pat_off[-1])
         self.P0 = 2 * ns
-        Z = zone_points(world)
+        Z = zone_points(world, k)
         self.zone_xy = Z.reshape(-1, 2)
         nz = len(self.zone_xy)
         self.O0 = self.P0 + n_pat_nodes
@@ -309,9 +312,72 @@ class Graph:
             raise RuntimeError("some zone points cannot reach some destinations by transit")
         return self._aggregate(out, sc)
 
+    def assign(self, sc: NetworkScenario, demand: np.ndarray, chunk: int = 48) -> dict:
+        """Load trips onto the shortest paths (all-or-nothing assignment).
+
+        demand: (n_zone_points, n_dest) trips from each zone point to each destination point
+        and gateway (columns as dest_nodes()). Returns boardings per pattern and 'L' entries
+        per rail stop. Flows are summed over each shortest-path tree by doubling: with M the
+        child-to-parent map, total flow through every node is sum_j M^j q = prod_k (I + M^(2^k)) q,
+        and M^(2^k) is the 2^k-th-ancestor map. An 'L' entry is a boarding of a rail pattern
+        whose path reached the platform on foot from the origin or from a bus (not from
+        another 'L' line: transfers between lines are assumed to stay inside the paid area)."""
+        G, wait_node, ivt_node = self.matrix(sc)
+        kind = self.node_kind
+        dests = self.dest_nodes()
+        nz = len(self.zone_xy)
+        n = self.n_nodes
+        rail_p = np.zeros(n, bool)
+        rail_p[self.P0:self.O0] = self.pat_rail[self.pnode_pat]
+        board_total = np.zeros(n)
+        entry_total = np.zeros(n)
+        for s0 in range(0, nz, chunk):
+            src = np.arange(s0, min(nz, s0 + chunk))
+            m = len(src)
+            dist, pred = dijkstra(G, indices=self.O0 + src, return_predecessors=True)
+            f = np.zeros((m, n))
+            f[:, dests] = demand[src]
+            P = np.where(pred >= 0, pred, -1)
+            offs = (np.arange(m) * n)[:, None]
+            while (P >= 0).any():
+                ok = P >= 0
+                add = np.bincount((P + offs)[ok], weights=f[ok], minlength=m * n).reshape(m, n)
+                f = f + add
+                Pc = np.where(ok, P, 0)
+                P = np.where(ok, np.take_along_axis(P, Pc, 1), -1)
+            pr = np.where(pred >= 0, pred, 0)
+            board = (pred >= 0) & (kind[None, :] == 2) & (kind[pr] == 0)
+            # how the departure stop was reached: on foot from the origin, or via an arrival stop
+            pp = np.take_along_axis(pr, pr, 1)                         # pred of the departure stop
+            ppp = np.take_along_axis(pr, pp, 1)                        # pred of that arrival stop
+            from_origin = kind[pp] == 3
+            from_bus = (kind[pp] == 1) & (kind[ppp] == 2) & ~rail_p[ppp]
+            entry = board & rail_p[None, :] & (from_origin | from_bus)
+            board_total += np.where(board, f, 0.0).sum(0)
+            entry_total += np.where(entry, f, 0.0).sum(0)
+        pat_board = np.bincount(self.pnode_pat, weights=board_total[self.P0:self.O0], minlength=len(self.pats))
+        stop_entry = np.bincount(self.pnode_stop, weights=entry_total[self.P0:self.O0], minlength=self.n_stop)
+        return {"pattern_boardings": pat_board, "stop_entries": stop_entry}
+
+    def area_demand_to_points(self, T: np.ndarray) -> np.ndarray:
+        """Spread an area-level trip matrix (77, 78; last column outside Chicago) evenly over the
+        zone-point pairs (a point is not paired with itself) and the nearest gateway."""
+        nA = self.world.n_areas
+        K = self.K
+        D = np.zeros((nA * K, len(self.dest_nodes())))
+        inner = np.repeat(np.repeat(T[:, :nA], K, 0), K, 1)
+        cnt = np.full((nA, nA), K * K, float)
+        cnt[np.diag_indices(nA)] = K * (K - 1)
+        inner = inner / np.repeat(np.repeat(cnt, K, 0), K, 1)
+        np.fill_diagonal(inner, 0.0)
+        D[:, :nA * K] = inner
+        for i in range(nA):
+            D[i * K:(i + 1) * K, nA * K + self.world.nearest_gateway[i]] = T[i, nA] / K
+        return D
+
     def _aggregate(self, out, sc):
         nA = self.world.n_areas
-        K = ZONE_POINTS
+        K = self.K
         nz = nA * K
         comp = {k: out[i] for i, k in enumerate(COMPONENTS)}
         fare = np.where(comp["rail_boardings"] > 0, sc.fare_rail, sc.fare_bus)
@@ -332,10 +398,10 @@ class Graph:
                     fare=res["fare"], scenario=sc)
 
 
-@lru_cache(maxsize=1)
-def _graph():
+@lru_cache(maxsize=2)
+def _graph(k: int = ZONE_POINTS):
     from simchi.world import build_world
-    return Graph(build_world())
+    return Graph(build_world(), k)
 
 
 _SKIMS: dict = {}

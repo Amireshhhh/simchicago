@@ -34,3 +34,23 @@ downloaded = "2026-11-12"
 title = "CTA GTFS static feed (scheduled service)"
 extract = "data/transit/"
 license = "CTA Developer License Agreement and Terms of Use (included in the zip; see docs/CTA_TERMS.md)"
+
+[cta_l_station_daily]
+file = "data/raw/mirror/l_station_daily.csv.gz"
+sha256 = "e284018e083b8a5d7a52d1c2dd48432d39539e9f8f6d99c0874286cec0e6d43a"
+title = "CTA - Ridership - 'L' Station Entries - Daily Totals (City of Chicago data portal 5neh-572f)"
+source_url = "https://data.cityofchicago.org/resource/5neh-572f.csv"
+query = "date >= 2024-01-01 AND date <= 2026-08-31, columns station_id, stationname, date, daytype, rides, ordered by date, station_id"
+downloaded = "2026-11-12"
+contents = "140,074 rows: daily turnstile entries per 'L' station (aggregated counts), 2024-01-01 to 2026-08-31; daytype W weekday, A Saturday, U Sunday/holiday."
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md); data owner Chicago Transit Authority"
+
+[cta_bus_route_daily]
+file = "data/raw/mirror/bus_route_daily.csv.gz"
+sha256 = "164323906e4a64cd3e4456c7caf811b28a77f43ff13412fb5273b8b578ad40ed"
+title = "CTA - Ridership - Bus Routes - Daily Totals by Route (City of Chicago data portal jyb9-n7fm)"
+source_url = "https://data.cityofchicago.org/resource/jyb9-n7fm.csv"
+query = "date >= 2024-01-01 AND date <= 2026-08-31, columns route, date, daytype, rides, ordered by date, route"
+downloaded = "2026-11-12"
+contents = "111,918 rows: daily boardings per bus route (aggregated counts), 2024-01-01 to 2026-08-31."
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md); data owner Chicago Transit Authority"
