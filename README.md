@@ -28,6 +28,8 @@ runner for running many scenarios across the whole city, and a 3D viewer.
 > delayed or skipped); they may be missing, delayed or wrong. Terms, limits and the request
 > budget: `docs/CTA_TERMS.md`.
 
+> **City of Chicago data portal** (community areas, CPD incident records, CTA ridership): “This site provides applications using data that has been modified for use from its original source, www.cityofchicago.org, the official website of the City of Chicago.  The City of Chicago makes no claims as to the content, accuracy, timeliness, or completeness of any of the data provided at this site.  The data provided at this site is subject to change at any time.  It is understood that the data provided at this site is being used at one’s own risk.”
+
 Agents are synthetic; no real person is represented. Every agent variable and parameter
 carries a provenance class (observed, estimated, fitted, latent, scenario, hypothesis), and
 incidents are labelled `observed` or `simulated` everywhere.
@@ -53,8 +55,9 @@ cd viewer && npm install && npm run build && cd ..
 ```bash
 python -m simchi.cli demo        # build the city, the default week, comparison runs, 4 experiments, viewer data (< 1 min)
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
-python -m simchi.cli validate    # all validation checks -> reports/validation.json (~1 min)
-python -m pytest tests           # 63 tests
+python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
+python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
+python -m pytest tests           # 65 tests
 cd viewer && npm test            # 10 tests
 ```
 
@@ -147,6 +150,9 @@ beats its baseline in 8 of 9 held-out districts (a failure of its every-district
 the network-based mode model beats city-wide shares in 9 of 9; held-out commute-time error is
 3.51 min against 3.69 min for the city mean (lower overall, but in only 2 of 9 districts); the
 incident model's spatial forecast beats population and uniform baselines on held-out months.
+Calibrated with scheduled service, the simulation's assigned boardings improve held-out bus-route
+ridership predictions (mean absolute log error 0.447 vs 0.476 for scheduled service alone) but
+not 'L' station entries (0.500 vs 0.496: fails its criterion).
 Slowing CTA buses and trains 1.5× cuts simulated transit trips by 21% with no manual mode shift
 (the time sensitivity is estimated cross-sectionally and probably overstated; see EVALUATION). Engine
 invariants (day plans partition the day, safety stays in [0, 1], no response ≡ no incidents,
@@ -156,7 +162,8 @@ determinism) hold. Full numbers and limitations: `docs/EVALUATION.md`.
 
 Pinned mirrors in `data/raw/mirror/` (sha256 in `data/sources.toml`) let everything run
 offline: CMAP Community Data Snapshots by community area, CPD vehicular-hijacking records of
-2020, and 2014 tract indicators. Details in `docs/DATASETS.md`.
+2020, 2014 tract indicators, and CTA daily ridership by bus route and 'L' station (2024 to
+August 2026, City of Chicago data portal). Details in `docs/DATASETS.md`.
 
 ## Layout
 

@@ -129,6 +129,18 @@ uses the 'L', else $2.25 (CTA fares page, 2026-11-12). Scenario knobs scale head
 in-vehicle times by mode or route and set fares; each scenario's skim takes about 17 s and is
 cached on disk.
 
+## 5b. Ridership assignment
+
+Expected weekday commute trips by transit T_ij = 2 · C_i · P(j | i) · P_transit(i, j) are spread
+evenly over the zone-point pairs of the two areas (20 points per area for assignment) and loaded
+all-or-nothing onto the AM-peak shortest paths. The flow through every node of a shortest-path
+tree is Σ_j M^j q, with q the destination demands and M the child-to-parent map; since
+Σ_{j<2^K} M^j = Π_{k<K} (I + M^{2^k}) and M^{2^k} is the 2^k-th-ancestor map, it is computed in
+⌈log₂ depth⌉ vectorised rounds. Boardings of a pattern are the flows on its boarding edges; an
+'L' entry is a rail boarding reached on foot from the origin or from a bus (rail-to-rail
+transfers are assumed to stay in the paid area). The tests check that total assigned boardings
+equal Σ trips × path boardings. The level is calibrated (`docs/EVALUATION.md`, Ridership).
+
 ## 6. Daily plans
 
 Each person starts and ends every day at home. Work (start N(510, 50) min, duration

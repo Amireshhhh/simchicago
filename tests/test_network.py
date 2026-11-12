@@ -80,3 +80,28 @@ def test_fare_increase_reduces_area_transit_shares(built, base):
     s0 = built.mode_model.area_shares(built.world, P, area_los(built.world, base, tr.v_car, tr.tau_car, tr.v_other))
     s1 = built.mode_model.area_shares(built.world, P, area_los(built.world, pricey, tr.v_car, tr.tau_car, tr.v_other))
     assert (s1[:, 1] < s0[:, 1]).all()
+
+
+def test_assignment_conserves_trips_and_boardings():
+    """sum over patterns of assigned boardings = sum over OD pairs of trips x path boardings."""
+    g = N._graph()
+    sc = N.NetworkScenario()
+    rng = np.random.default_rng(3)
+    nz, nd = len(g.zone_xy), len(g.dest_nodes())
+    D = np.zeros((nz, nd))
+    src = np.array([5, 77, 200, 401])
+    D[src] = rng.uniform(0, 3, (len(src), nd)) * (rng.uniform(size=(len(src), nd)) < 0.2)
+    res = g.assign(sc, D)
+    comp, _ = g.point_components(sc, src)
+    boardings = (D[src] * comp[3]).sum()
+    rail_boardings = (D[src] * comp[4]).sum()
+    assert res["pattern_boardings"].sum() == pytest.approx(boardings, rel=1e-9)
+    assert res["pattern_boardings"][g.pat_rail].sum() == pytest.approx(rail_boardings, rel=1e-9)
+    assert 0 < res["stop_entries"].sum() <= rail_boardings + 1e-9
+
+
+def test_area_demand_spreads_without_loss(built):
+    g = N._graph()
+    T = np.random.default_rng(1).uniform(0, 10, (77, 78))
+    D = g.area_demand_to_points(T)
+    assert D.sum() == pytest.approx(T.sum(), rel=1e-12)

@@ -10,6 +10,8 @@ criterion fixed in advance ("beats the baseline on held-out data"):
   commute time leave-one-district-out area mean commute (ACS), network transit times and a
                fitted car speed; baseline: city mean
   incidents    train Jan-Sep 2020, score Oct-Dec weekly area counts (see incident_forecast)
+  ridership    bus routes and 'L' stations, held-out units and period; baselines: constant and
+               scheduled service (see simchi/eval/ridership.py, criteria pre-registered)
 
 plus data integrity, calibration and engine invariants.
 """
@@ -188,6 +190,21 @@ def gtfs_extract():
                   counts=meta["counts"], mean_pattern_coverage=cover)
 
 
+def ridership(built):
+    """Pre-registered held-out ridership validation (see simchi/eval/ridership.py)."""
+    from simchi.eval import ridership as RV
+    r = RV.run(built)
+    out = {}
+    for kind, label in (("bus", "bus routes"), ("rail", "'L' stations")):
+        x = r[kind]
+        m = x["male_heldout_units_and_period"]
+        out[f"ridership_{kind}"] = _check(
+            x["pass"], f"{x['units']} {label}, held-out units and period (train 2024, test 2025-01..2026-08): mean absolute log error "
+                       f"{m['M_cal']:.3f} (simulation + scheduled service) vs {m['B_service']:.3f} (scheduled service) and "
+                       f"{m['B_mean']:.3f} (constant); simulation alone {m['M_sim']:.3f}", **x)
+    return out
+
+
 def engine_invariants(built):
     sim = run(built, SimConfig(n_days=3, seed=11, incident_mode="both"))
     S = pd.DataFrame(sim.segments).sort_values(["day", "pid", "t0"], kind="stable")
@@ -225,5 +242,6 @@ def run_all(n: int = 2000, seed: int = 1) -> dict:
         "incident_forecast": incidents(),
         "engine_invariants": engine_invariants(built),
         "gtfs_extract": gtfs_extract(),
+        **ridership(built),
     }
     return {"n_agents": len(built.persons), "build_seed": seed, "seconds": time.time() - t0, "checks": checks}

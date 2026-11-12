@@ -175,4 +175,6 @@ code, .mono { font-family: var(--mono); font-size: 12px; }
 .live-panel .age.stale { color: var(--amber); }
 .live-panel .fine { margin-top: 6px; }
 #attrib { position: fixed; right: 18px; bottom: 2px; font-size: 10.5px; color: rgba(232, 240, 250, .55); z-index: 6; pointer-events: none; text-shadow: 0 1px 3px rgba(0, 0, 0, .9); }
+#attrib details { display: inline; pointer-events: auto; cursor: pointer; }
+#attrib details[open] { display: block; max-width: 560px; margin-top: 4px; padding: 6px 8px; border-radius: 6px; background: rgba(8, 12, 20, .78); color: rgba(232, 240, 250, .85); }
 @media (max-width: 900px) { #attrib { left: 18px; right: auto; } .live-panel { bottom: 150px; } }

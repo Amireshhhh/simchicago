@@ -5,8 +5,8 @@ and the experiment runs in `reports/experiments/*/experiment.json`, on the defau
 2,000 requested agents (1,944 drawn, standing for 2,589,487 household residents), seed 1.
 
 Every model check is **out of sample** and compares against a **simple baseline**, with the
-pass criterion fixed before the results were seen. One check (commute destinations) fails
-that criterion; it is reported as a failure, not re-defined. v0.3 workstream 2 replaced the
+pass criterion fixed before the results were seen. Two checks fail their criterion (commute
+destinations; 'L' station ridership); they are reported as failures, not re-defined. v0.3 workstream 2 replaced the
 distance-based mode choice and travel times by CTA-network ones; the two checks that failed in
 v0.2 (mode choice 8/9 districts, commute time 3.74 vs 3.69 min) were re-run under the same
 criteria and now pass (numbers below).
@@ -15,7 +15,7 @@ criteria and now pass (numbers below).
 
 | Check | Result | Criterion | Outcome |
 |---|---|---|---|
-| Data integrity | 3/3 mirrors match their pinned sha256 | all match | **pass** |
+| Data integrity | 5/5 mirrors match their pinned sha256 | all match | **pass** |
 | CDS count identities | 12 identities hold within 1.22% in every area; LEHD orientation bounds hold | < 1.5% and bounds hold | **pass** |
 | Calibration | 77/77 areas, max relative deviation 1.9 × 10⁻⁹; household weights / TOT_HH = 1.000000; person weights / POP_HH = 0.9773 | < 10⁻⁶; exact; within 3% | **pass** |
 | Commute destinations (gravity), leave one district out | held-out log-likelihood better than jobs-proportional destinations in 8 of 9 districts (worse in the Far Southwest Side); in-sample correlation of the 385 listed top-5 shares 0.919, mean absolute error 3.0 share points | better in every district | **fail** |
@@ -23,6 +23,8 @@ criteria and now pass (numbers below).
 | Commute time (network transit times), leave one district out | mean absolute error 3.51 min against 3.69 min for predicting the city mean; lower in only 2 of 9 districts; in-sample correlation 0.47 | lower error than the city mean | **pass** (v0.2: 3.74 min, fail) |
 | CTA GTFS extract | built from the pinned feed; 132 routes (8 rail), 143 stations, 357 patterns covering on average 95.8% of each route-direction's weekday trips | matches pinned sha256 | **pass** |
 | Incident forecast (train Jan-Sep 2020, test Oct-Dec) | weekly area counts (13 weeks, 508 incidents): log score −1976.1 (model) vs −2203.1 (population-proportional) and −2206.7 (uniform) | beat both baselines | **pass** |
+| Ridership, bus routes (held-out routes and period; criteria pre-registered) | mean absolute log error 0.447 (simulation + scheduled service) vs 0.476 (scheduled service) and 1.000 (constant), 123 routes | below both baselines | **pass** |
+| Ridership, 'L' stations (same design) | 0.500 vs 0.496 (scheduled service) and 0.682 (constant), 121 stations | below both baselines | **fail** |
 | Engine invariants (3-day run, 5,832 agent-days; 2-day CRN and repeat runs) | every day plan partitions [0, 1440]; safety stays in [0, 1]; no behavioural response ≡ no incidents; runs are deterministic | all hold | **pass** |
 
 ### What the results mean
@@ -79,6 +81,53 @@ From `reports/validation.json` and `python scripts/mode_identification.py`
   probably an upper bound on the causal response; scenario effects on ridership should be
   read with that in mind.
 - Model city transit share 29.87% vs ACS 29.76%.
+
+## Ridership (CTA bus routes and 'L' stations)
+
+From `python -m simchi.eval.ridership --replicates` (→ `reports/ridership_validation.json`).
+The design and pass criteria are in the docstring of `simchi/eval/ridership.py`, committed
+(3c66780, "WS3 pre-registration") before any 2025-2026 ridership was examined. The 2024 data
+of all units had been looked at during development, so the training period is not out of
+sample.
+
+**What is predicted.** Expected weekday commute trips by transit between areas (ACS commuters ×
+gravity destinations × network mode choice, ×2 for the return trip; 752,452
+trips) are loaded onto AM-peak shortest paths of the CTA network from 20 points per area,
+giving boardings per bus route and 'L' entries per station. The model has no non-commute
+demand, so its level is calibrated. **Units**: 123 bus routes and 121 'L' stations inside the
+city with positive ridership in both periods. **Training**: 2024 weekday means; **test**: weekday
+means 2025-01-01 to 2026-08-31 (observed totals over the units: buses 559,900 → 621,096
+rides per weekday, 'L' 304,849 → 334,780 entries).
+**Primary test**: 5 folds of units; each predictor is fitted on the other folds' 2024 means and
+predicts the held-out fold's 2025-26 means. Metric: mean absolute log error (MALE; 0.45 means a
+typical factor of e^0.45 ≈ 1.57).
+
+| Predictor of log rides | Bus routes | 'L' stations |
+|---|---|---|
+| B_mean: constant | 1.000 | 0.682 |
+| B_service: scheduled weekday trips (log-linear) | 0.476 | 0.496 |
+| M_sim: simulation, one scale factor | 0.997 | 0.964 |
+| **M_cal: simulation + scheduled trips (log-linear)** | **0.447** | **0.500** |
+| Criterion: M_cal below both baselines | **pass** | **fail** |
+
+- **Buses**: calibrated together with scheduled service, the simulation's assigned boardings
+  reduce the held-out error from 0.476 to 0.447 (6%). On its own (one scale factor) the
+  simulation is no better than a constant (0.997 vs 1.000).
+- **'L' stations**: the simulation adds nothing measurable to scheduled service (0.500 vs
+  0.496); on its own it is worse than a constant (0.964 vs 0.682). Station entries
+  depend on walk-up catchments, airport, event and non-commute travel that a commute model on
+  6-20 points per area does not resolve; 2 stations get no predicted entries at all.
+- **Period-only holdout** (fit on all units' 2024 means, test on their 2025-26 means): MALE
+  M_cal 0.437 / 0.482 (bus / 'L'), B_service 0.461 / 0.489. The **persistence reference** (each
+  unit's own 2024 mean) is far better: 0.126 / 0.104. For a route or station with ridership
+  history, its history predicts next year much better than the model; the model's use is for
+  units or scenarios without history.
+- **Replicate variance** (agent-based commute OD of 5 synthetic populations, build seeds 1-5,
+  2,000 requested agents): median coefficient of variation of a unit's prediction
+  0.27 (bus) and 0.36 ('L'), 90th percentile 0.71 and 0.73; M_cal held-out MALE
+  ranges over seeds 0.441-0.458 (bus; all below B_service 0.476) and
+  0.496-0.506 ('L'; B_service 0.496). With 2,000 agents, route-level predictions
+  from the agents themselves are noisy; the expected (analytic) OD above has no sampling noise.
 
 ## Experiments
 

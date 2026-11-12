@@ -41,11 +41,22 @@ def registry(built: Built) -> list[dict]:
         "least-squares line through the area-to-area network skim; used only for trips not placed in an area")
     from simchi.transit import network as N
     for k in ("ACCESS_M", "ACCESS_MIN_STOPS", "TRANSFER_M", "WAIT_CAP_MIN", "PATH_W_WALK", "PATH_W_WAIT",
-              "TRANSFER_PENALTY_MIN", "REGIONAL_RADIUS_KM", "REGIONAL_MIN_STOPS", "REGIONAL_TERMINAL_MIN", "REGIONAL_KMH", "ZONE_POINTS"):
+              "TRANSFER_PENALTY_MIN", "REGIONAL_RADIUS_KM", "REGIONAL_MIN_STOPS", "REGIONAL_TERMINAL_MIN", "REGIONAL_KMH", "ZONE_POINTS", "ASSIGN_POINTS"):
         add("transit network", k, getattr(N, k), Prov.HYPOTHESIS, "assumption (path building; see simchi/transit/network.py)")
     add("transit network", "scheduled headways and in-vehicle times", "GTFS weekday 6-9 am", Prov.OBSERVED, "CTA GTFS feed (data/transit/), scheduled service")
     add("transit network", "fares (bus / 'L')", f"${N.FARE_BUS:.2f} / ${N.FARE_RAIL:.2f}", Prov.OBSERVED, "transitchicago.com/fares, read 2026-11-12")
     add("world", "outside_extra_km", OUTSIDE_EXTRA_KM, Prov.HYPOTHESIS, "assumption: jobs outside Chicago lie this far past the nearest gateway")
+    import json
+
+    from simchi.paths import REPORTS
+    rv = REPORTS / "ridership_validation.json"
+    if rv.exists():
+        r = json.loads(rv.read_text())
+        for kind, label in (("bus", "bus routes"), ("rail", "'L' stations")):
+            C = r[kind]["fold_coefficients"]["M_cal"]
+            rng = ", ".join(f"[{min(c[i] for c in C):.3f}, {max(c[i] for c in C):.3f}]" for i in range(3))
+            add("ridership calibration", f"{label}: log rides = a + b log(1 + model) + c log(scheduled trips)", f"a, b, c ranges over 5 folds: {rng}",
+                Prov.FITTED, "least squares on 2024 weekday means of the training folds (CTA ridership, City of Chicago data portal)")
     im = built.intensity
     add("incidents", "level_per_day", round(im.level_per_day, 4), Prov.FITTED, f"CPD records {INTENSITY_TRAIN[0]} to {INTENSITY_TRAIN[1]}")
     add("incidents", "alpha (Dirichlet-multinomial)", round(im.alpha, 2), Prov.FITTED, "max. likelihood, weekly area counts")

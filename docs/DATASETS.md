@@ -11,6 +11,8 @@ access is needed to build or run anything.
 | `sdoh_tracts_2014` | `data/raw/mirror/Chi-SDOH.geojson` | 791 census tracts (2010) with 2014 indicators, including population and the 2015 violent-crime rate | home placement within areas (by tract population); baseline perceived safety (hypothesis) |
 | `gtfs_cta` | not stored; derived extract in `data/transit/` | CTA GTFS static feed (zip, ~51 MB, sha256 `ddbf306e…72b4`, last modified 10 Nov 2026): 132 routes (124 bus, 8 rail), stops, trips, stop times, shapes, calendar | real network for the viewer; network transit times for mode choice and trip durations; scheduled headways |
 | CTA live positions | not stored in git; workflow artifacts | Bus Tracker `getvehicles` and Train Tracker `ttpositions`, 3 polls per scheduled run | live layer; reliability and operations analyses |
+| `cta_l_station_daily` | `data/raw/mirror/l_station_daily.csv.gz` (0.9 MB) | City of Chicago data portal 5neh-572f, "CTA - Ridership - 'L' Station Entries - Daily Totals": 140,074 rows, 2024-01-01 to 2026-08-31 (station id, name, date, day type, entries) | ridership calibration and held-out validation (stations) |
+| `cta_bus_route_daily` | `data/raw/mirror/bus_route_daily.csv.gz` (0.6 MB) | City of Chicago data portal jyb9-n7fm, "CTA - Ridership - Bus Routes - Daily Totals by Route": 111,918 rows, 2024-01-01 to 2026-08-31 | ridership calibration and held-out validation (routes) |
 | landmarks | `data/reference/landmarks.json` | 5 tallest buildings: name, height, coordinates | viewer only; copied from the v0.1 export (which cites Wikipedia, 2026-10-14), not re-verified |
 
 ## Checks on the data
@@ -23,6 +25,24 @@ access is needed to build or run anything.
   (locations are block-level and privacy-shifted); 3 fall outside every area polygon.
 - **Polygons**: one community-area polygon is invalid as published and is repaired with
   `shapely.make_valid`; all 791 tracts are valid.
+
+## City of Chicago data portal: terms
+
+The portal's datasets used here (community areas, CPD records, CTA ridership) are published
+under the City of Chicago Data Terms of Use (https://www.chicago.gov/city/en/narr/foia/data_disclaimer.html,
+read 2026-11-12). They ask any secondary or derivative application to display this disclaimer
+where it can be accessed, which the viewer (footer) and the README do:
+
+> "This site provides applications using data that has been modified for use from its original
+> source, www.cityofchicago.org, the official website of the City of Chicago. The City of
+> Chicago makes no claims as to the content, accuracy, timeliness, or completeness of any of the
+> data provided at this site. The data provided at this site is subject to change at any time.
+> It is understood that the data provided at this site is being used at one's own risk."
+
+The terms also let the City require a user to stop displaying or distributing its data, and
+include an indemnity clause. The ridership mirrors are aggregated counts (daily totals per route
+or station), not individual records. Refresh: re-run the queries recorded in
+`data/sources.toml` (`query`), update the sha256 and re-run `python -m simchi.eval.ridership`.
 
 ## Lost in the v0.1 → v0.2 recovery
 
