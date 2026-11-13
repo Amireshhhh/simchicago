@@ -76,8 +76,14 @@ DAY = {"W": "weekday", "A": "saturday", "U": "sunday"}
 def service_by_daytype(graph, kind: str) -> dict:
     """Scheduled daily vehicle trips per bus route, or train departures per 'L' station (parent),
     for each GTFS reference day type."""
+    from simchi.transit.gtfs import load_extract
     from simchi.transit.ridership import _parent
     out = {d: {} for d in DAY.values()}
+    if kind == "bus":           # every scheduled trip of the route on the reference day (GTFS service table)
+        for r in load_extract("service"):
+            if r["day"] in out:
+                out[r["day"]][r["route"]] = out[r["day"]].get(r["route"], 0) + r["trips"]
+        return out
     for i, p in enumerate(graph.pats):
         rail = bool(graph.pat_rail[i])
         if rail != (kind == "rail"):

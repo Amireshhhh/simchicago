@@ -3,58 +3,82 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SimChicago</title>
+<title>SimChicago · CTA digital twin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 </head>
-<body>
-<canvas id="gl" tabindex="0" aria-label="3D view of simulated Chicago"></canvas>
+<body data-mode="overview">
+<canvas id="gl" tabindex="0" aria-label="3D view of Chicago"></canvas>
+<div id="scrim" aria-hidden="true"></div>
 <div id="labels" aria-hidden="true"></div>
 
-<header class="hud-top">
-  <div class="brand glass">
+<header class="appbar">
+  <a class="brand" href="#overview" aria-label="SimChicago overview">
     <span class="star" aria-hidden="true"></span>
-    <div>
-      <h1>SimChicago</h1>
-      <p id="clock">Loading</p>
-    </div>
-  </div>
+    <span class="bt"><b>SimChicago</b><small>CTA digital twin</small></span>
+  </a>
+  <nav class="modes" aria-label="Mode">
+    <a href="#overview" data-mode="overview"><i class="mi mi-ov"></i>Overview</a>
+    <a href="#live" data-mode="live"><i class="mi mi-live"></i>Live</a>
+    <a href="#insights" data-mode="insights"><i class="mi mi-ins"></i>Insights</a>
+    <a href="#simulate" data-mode="simulate"><i class="mi mi-sim"></i>Simulate</a>
+    <span class="mode-ink" aria-hidden="true"></span>
+  </nav>
+  <a class="feed" href="#live" id="feedPill" title="Status of the near-live CTA snapshot"><i></i><span>Live feed</span></a>
+</header>
+
+<!-- OVERVIEW -->
+<section id="view-overview" class="view" aria-label="Overview"><div id="overviewBody"></div></section>
+
+<!-- INSIGHTS -->
+<section id="view-insights" class="view page" aria-label="Insights"><div id="insightsBody"></div></section>
+
+<!-- LIVE -->
+<aside id="livePanel" class="dock right glass only-live" aria-live="polite"></aside>
+<div class="only-live live-tools glass">
+  <label class="tgl"><input type="checkbox" id="lyrBusRoutes" checked><span></span>Bus routes</label>
+  <label class="select">Reliability lens
+    <select id="relMetric">
+      <option value="">Off</option>
+      <option value="bunching_share">Bunching</option>
+      <option value="gap_share">Gaps</option>
+      <option value="service_delivered">Service delivered</option>
+      <option value="delayed_share">Flagged delayed</option>
+    </select>
+  </label>
+</div>
+<div id="liveLines" class="only-live line-key glass"></div>
+
+<!-- SIMULATE -->
+<div class="only-sim sim-hud">
+  <div class="clockcard glass"><span class="tag simulated">simulated week</span><p id="clock">Loading</p></div>
   <div class="counters glass" id="counters"></div>
-  <nav class="toolbar glass" aria-label="View">
-    <button id="labBtn" class="ghost accent" aria-expanded="false" aria-controls="lab">Experiment Lab</button>
-    <button id="timelinesBtn" class="ghost" aria-expanded="false" aria-controls="timelines">Timelines</button>
-    <button id="tourBtn" class="ghost" title="Fly over the city">Fly-through</button>
-    <button id="liveBtn" class="ghost live" aria-pressed="false" title="Real CTA routes and near-live vehicle positions">Live CTA</button>
-    <label class="select">Lens
-      <select id="lens">
-        <option value="none">Plain</option>
-        <option value="income">Median income (ACS)</option>
-        <option value="transit">Transit commute share (ACS)</option>
-        <option value="commute">Mean commute time (ACS)</option>
-        <option value="jobs">Job density (LEHD)</option>
-        <option value="safety">Perceived safety (simulated)</option>
-        <option value="incidents">Recorded carjackings this week (CPD)</option>
-      </select>
-    </label>
-    <details class="layers">
-      <summary>Layers</summary>
+</div>
+<nav class="only-sim toolbar glass" aria-label="Simulation tools">
+  <button id="labBtn" class="ghost accent" aria-expanded="false" aria-controls="lab">Experiment Lab</button>
+  <button id="timelinesBtn" class="ghost" aria-expanded="false" aria-controls="timelines">Timelines</button>
+  <button id="tourBtn" class="ghost" title="Fly over the city">Fly-through</button>
+  <label class="select">Lens
+    <select id="lens">
+      <option value="none">Plain</option>
+      <option value="income">Median income (ACS)</option>
+      <option value="transit">Transit commute share (ACS)</option>
+      <option value="commute">Mean commute time (ACS)</option>
+      <option value="jobs">Job density (LEHD)</option>
+      <option value="safety">Perceived safety (simulated)</option>
+      <option value="incidents">Recorded carjackings this week (CPD)</option>
+    </select>
+  </label>
+  <details class="layers">
+    <summary>Layers</summary>
       <div class="layer-list">
         <label><input type="checkbox" id="lyrBuildings" checked> Buildings</label>
+        <label><input type="checkbox" id="lyrNetwork"> CTA network overlay</label>
         <label><input type="checkbox" id="lyrTrails" checked> Motion trails</label>
         <label><input type="checkbox" id="lyrFlows"> Commute flows</label>
         <label><input type="checkbox" id="lyrLabels" checked> Area names</label>
         <label><input type="checkbox" id="lyrIncidents" checked> Incidents</label>
-        <label><input type="checkbox" id="lyrBusRoutes" checked> CTA bus routes (with Live CTA)</label>
-        <label class="select">Bus reliability (observed)
-          <select id="relMetric">
-            <option value="">Off</option>
-            <option value="bunching_share">Bunching</option>
-            <option value="gap_share">Gaps</option>
-            <option value="service_delivered">Service delivered</option>
-            <option value="delayed_share">Flagged delayed</option>
-          </select>
-        </label>
         <label><input type="checkbox" id="lyrRain"> Rain (what-if, no weather data)</label>
         <label class="select">Quality
           <select id="quality">
@@ -66,27 +90,23 @@
         <button id="footprintsBtn" class="ghost small" title="Fetch real building footprints around the camera target from data.cityofchicago.org">Load real buildings here</button>
       </div>
     </details>
-  </nav>
-</header>
+</nav>
 
 <aside id="lab" class="drawer left glass hidden" aria-label="Experiment Lab">
   <button id="closeLab" class="icon" aria-label="Close Experiment Lab">×</button>
   <div id="labBody"></div>
 </aside>
-
 <aside id="inspector" class="drawer right glass hidden" aria-label="Inspector">
   <button id="closeInspector" class="icon" aria-label="Close inspector">×</button>
   <div id="inspectorBody"></div>
 </aside>
-
 <aside id="timelines" class="drawer right glass hidden" aria-label="Alternate timelines">
   <button id="closeTimelines" class="icon" aria-label="Close">×</button>
   <div id="timelinesBody"></div>
 </aside>
+<div id="legend" class="legend glass only-sim"></div>
 
-<div id="legend" class="legend glass"></div>
-
-<footer class="ribbon-wrap glass">
+<footer class="ribbon-wrap glass only-sim">
   <div class="transport">
     <button id="play" class="primary" aria-label="Play">Play</button>
     <div class="speeds" role="radiogroup" aria-label="Speed">
@@ -106,7 +126,6 @@
   </div>
 </footer>
 
-<div id="livePanel" class="live-panel glass hidden" aria-live="polite"></div>
 <div id="attrib">Transit data provided by Chicago Transit Authority (GTFS, CTA Bus Tracker, CTA Train Tracker). SimChicago is not affiliated with or endorsed by CTA. Agents are synthetic. <details><summary>City of Chicago data disclaimer</summary>“This site provides applications using data that has been modified for use from its original source, www.cityofchicago.org, the official website of the City of Chicago.  The City of Chicago makes no claims as to the content, accuracy, timeliness, or completeness of any of the data provided at this site.  The data provided at this site is subject to change at any time.  It is understood that the data provided at this site is being used at one’s own risk.”</details></div>
 <div id="toasts" aria-live="polite"></div>
 <div id="tip" role="tooltip"></div>

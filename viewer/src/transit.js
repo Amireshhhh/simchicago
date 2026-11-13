@@ -51,7 +51,7 @@ export function createTransit(scene, T) {
   }
   let busVisible = true;
 
-  const railMats = [];
+  const railMats = [], flowMats = [];
   for (const r of T.routes.filter(x => x.type === 1)) {
     const g = new LineSegmentsGeometry().setPositions(segmentsOf(r.shapes, 2.5));
     for (const [w, op] of [[9, 0.18], [3.2, 1]]) {
@@ -60,8 +60,21 @@ export function createTransit(scene, T) {
       railMats.push(m);
       const l = new LineSegments2(g, m); l.renderOrder = w > 5 ? 3 : 4; group.add(l);
     }
+    // travelling light pulses along each line (decorative motion; not vehicle positions)
+    const fm = new LineMaterial({ color: new THREE.Color(r.color).lerp(new THREE.Color('#ffffff'), 0.55), linewidth: 4.2, transparent: true,
+      opacity: 0.85, depthWrite: false, blending: THREE.AdditiveBlending, dashed: true, dashSize: 260, gapSize: 2200, resolution: res });
+    const fl = new LineSegments2(g, fm); fl.computeLineDistances(); fl.renderOrder = 5; group.add(fl);
+    flowMats.push(fm);
   }
   addEventListener('resize', () => { res.set(innerWidth, innerHeight); });
+  /** Advance the decorative pulses (seconds since start). */
+  function animate(t) { for (const m of flowMats) m.dashOffset = -t * 900; }
+  /** Vehicles per route in the current snapshot. */
+  function stats() {
+    const by = {};
+    for (const v of (snap?.vehicles || [])) by[v.route] = (by[v.route] || 0) + 1;
+    return { by, routes, notes: snap?.notes || [], generated: snap?.generated_utc, n: (snap?.vehicles || []).length };
+  }
 
   // stations
   const stGeo = new THREE.CylinderGeometry(1, 1, 1, 20).translate(0, 0.5, 0);
@@ -143,5 +156,5 @@ export function createTransit(scene, T) {
 
   refresh();
   setInterval(refresh, REFRESH_MS);
-  return { group, update, refresh, setReliability, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; }, get ops() { return ops; } };
+  return { group, update, refresh, animate, stats, setReliability, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; }, get ops() { return ops; } };
 }

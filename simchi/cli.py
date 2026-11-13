@@ -83,6 +83,8 @@ def cmd_demo(args):
     print("viewer data:", out)
     from simchi.export.transit_layer import export_layer
     print("transit layer:", export_layer())
+    from simchi.export.insights import export_insights
+    print("insights:", export_insights())
 
 
 def cmd_serve(args):
@@ -113,6 +115,8 @@ def cmd_export(args):
     print("viewer data:", export_viewer(b, sim))
     from simchi.export.transit_layer import export_layer
     print("transit layer:", export_layer())
+    from simchi.export.insights import export_insights
+    print("insights:", export_insights())
 
 
 def main(argv=None):

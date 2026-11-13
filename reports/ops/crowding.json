@@ -53,8 +53,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 336.5,
-    "scheduled_trips": 52.0,
-    "rides_per_trip": 6.471153846153846
+    "scheduled_trips": 53.0,
+    "rides_per_trip": 6.349056603773585
    },
    {
     "id": "1001",
@@ -69,24 +69,24 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1355.0,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 10.5859375
+    "scheduled_trips": 129.0,
+    "rides_per_trip": 10.503875968992247
    },
    {
     "id": "106",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 703.0,
-    "scheduled_trips": 134.0,
-    "rides_per_trip": 5.246268656716418
+    "scheduled_trips": 135.0,
+    "rides_per_trip": 5.207407407407407
    },
    {
     "id": "108",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 659.0,
-    "scheduled_trips": 68.0,
-    "rides_per_trip": 9.691176470588236
+    "scheduled_trips": 72.0,
+    "rides_per_trip": 9.152777777777779
    },
    {
     "id": "11",
@@ -117,8 +117,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1061.0,
-    "scheduled_trips": 129.0,
-    "rides_per_trip": 8.224806201550388
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 7.917910447761194
    },
    {
     "id": "115",
@@ -133,16 +133,16 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 2799.0,
-    "scheduled_trips": 181.0,
-    "rides_per_trip": 15.464088397790055
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 14.80952380952381
    },
    {
     "id": "12",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 9778.5,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 40.74375
+    "scheduled_trips": 254.0,
+    "rides_per_trip": 38.49803149606299
    },
    {
     "id": "120",
@@ -157,8 +157,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1451.0,
-    "scheduled_trips": 75.0,
-    "rides_per_trip": 19.346666666666668
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 19.092105263157894
    },
    {
     "id": "124",
@@ -181,8 +181,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3656.5,
-    "scheduled_trips": 136.0,
-    "rides_per_trip": 26.886029411764707
+    "scheduled_trips": 146.0,
+    "rides_per_trip": 25.044520547945204
    },
    {
     "id": "130",
@@ -229,16 +229,16 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 10986.5,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 66.99085365853658
+    "scheduled_trips": 222.0,
+    "rides_per_trip": 49.48873873873874
    },
    {
     "id": "147",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 10527.0,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 53.43654822335025
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 50.61057692307692
    },
    {
     "id": "148",
@@ -253,48 +253,48 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 5054.5,
-    "scheduled_trips": 150.0,
-    "rides_per_trip": 33.696666666666665
+    "scheduled_trips": 159.0,
+    "rides_per_trip": 31.78930817610063
    },
    {
     "id": "151",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 14165.5,
-    "scheduled_trips": 189.0,
-    "rides_per_trip": 74.94973544973546
+    "scheduled_trips": 211.0,
+    "rides_per_trip": 67.13507109004739
    },
    {
     "id": "152",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 7320.0,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 40.89385474860335
+    "scheduled_trips": 212.0,
+    "rides_per_trip": 34.528301886792455
    },
    {
     "id": "155",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 4931.0,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 24.53233830845771
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 24.17156862745098
    },
    {
     "id": "156",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 5368.5,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 41.94140625
+    "scheduled_trips": 136.0,
+    "rides_per_trip": 39.474264705882355
    },
    {
     "id": "157",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 5356.0,
-    "scheduled_trips": 124.0,
-    "rides_per_trip": 43.193548387096776
+    "scheduled_trips": 131.0,
+    "rides_per_trip": 40.88549618320611
    },
    {
     "id": "165",
@@ -309,8 +309,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 148.5,
-    "scheduled_trips": 8.0,
-    "rides_per_trip": 18.5625
+    "scheduled_trips": 10.0,
+    "rides_per_trip": 14.85
    },
    {
     "id": "171",
@@ -333,8 +333,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3432.0,
-    "scheduled_trips": 127.0,
-    "rides_per_trip": 27.023622047244096
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 26.4
    },
    {
     "id": "19",
@@ -365,48 +365,48 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 14416.0,
-    "scheduled_trips": 295.0,
-    "rides_per_trip": 48.86779661016949
+    "scheduled_trips": 338.0,
+    "rides_per_trip": 42.650887573964496
    },
    {
     "id": "201",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1044.0,
-    "scheduled_trips": 74.0,
-    "rides_per_trip": 14.108108108108109
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 13.736842105263158
    },
    {
     "id": "206",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 200.0,
-    "scheduled_trips": 21.0,
-    "rides_per_trip": 9.523809523809524
+    "scheduled_trips": 25.0,
+    "rides_per_trip": 8.0
    },
    {
     "id": "21",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 8492.0,
-    "scheduled_trips": 168.0,
-    "rides_per_trip": 50.54761904761905
+    "scheduled_trips": 176.0,
+    "rides_per_trip": 48.25
    },
    {
     "id": "22",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 14137.0,
-    "scheduled_trips": 199.0,
-    "rides_per_trip": 71.04020100502512
+    "scheduled_trips": 239.0,
+    "rides_per_trip": 59.15062761506276
    },
    {
     "id": "24",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1963.0,
-    "scheduled_trips": 90.0,
-    "rides_per_trip": 21.81111111111111
+    "scheduled_trips": 101.0,
+    "rides_per_trip": 19.435643564356436
    },
    {
     "id": "26",
@@ -421,64 +421,64 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 4162.5,
-    "scheduled_trips": 146.0,
-    "rides_per_trip": 28.51027397260274
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 25.694444444444443
    },
    {
     "id": "29",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 7995.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 49.971875
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 49.35493827160494
    },
    {
     "id": "3",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 15797.5,
-    "scheduled_trips": 231.0,
-    "rides_per_trip": 68.38744588744589
+    "scheduled_trips": 243.0,
+    "rides_per_trip": 65.01028806584362
    },
    {
     "id": "30",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1934.0,
-    "scheduled_trips": 107.0,
-    "rides_per_trip": 18.074766355140188
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 16.964912280701753
    },
    {
     "id": "31",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 573.0,
-    "scheduled_trips": 53.0,
-    "rides_per_trip": 10.81132075471698
+    "scheduled_trips": 55.0,
+    "rides_per_trip": 10.418181818181818
    },
    {
     "id": "34",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3194.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 16.215736040609137
+    "scheduled_trips": 236.0,
+    "rides_per_trip": 13.536016949152541
    },
    {
     "id": "35",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3553.5,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 18.130102040816325
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 16.079185520361992
    },
    {
     "id": "36",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 9655.5,
-    "scheduled_trips": 163.0,
-    "rides_per_trip": 59.236196319018404
+    "scheduled_trips": 166.0,
+    "rides_per_trip": 58.16566265060241
    },
    {
     "id": "37",
@@ -501,8 +501,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 13133.0,
-    "scheduled_trips": 215.0,
-    "rides_per_trip": 61.08372093023256
+    "scheduled_trips": 250.0,
+    "rides_per_trip": 52.532
    },
    {
     "id": "43",
@@ -525,32 +525,32 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 9575.5,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 42.36946902654867
+    "scheduled_trips": 251.0,
+    "rides_per_trip": 38.14940239043825
    },
    {
     "id": "48",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 534.0,
-    "scheduled_trips": 66.0,
-    "rides_per_trip": 8.090909090909092
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 7.739130434782608
    },
    {
     "id": "49",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 13882.5,
-    "scheduled_trips": 254.0,
-    "rides_per_trip": 54.65551181102362
+    "scheduled_trips": 271.0,
+    "rides_per_trip": 51.22693726937269
    },
    {
     "id": "49B",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3863.5,
-    "scheduled_trips": 207.0,
-    "rides_per_trip": 18.664251207729468
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 17.481900452488688
    },
    {
     "id": "5",
@@ -565,8 +565,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 8159.5,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 49.153614457831324
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 47.164739884393065
    },
    {
     "id": "51",
@@ -581,40 +581,40 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 6699.5,
-    "scheduled_trips": 188.0,
-    "rides_per_trip": 35.63563829787234
+    "scheduled_trips": 190.0,
+    "rides_per_trip": 35.26052631578948
    },
    {
     "id": "52A",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3160.0,
-    "scheduled_trips": 138.0,
-    "rides_per_trip": 22.89855072463768
+    "scheduled_trips": 142.0,
+    "rides_per_trip": 22.253521126760564
    },
    {
     "id": "53",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 17633.5,
-    "scheduled_trips": 288.0,
-    "rides_per_trip": 61.22743055555556
+    "scheduled_trips": 339.0,
+    "rides_per_trip": 52.01622418879056
    },
    {
     "id": "53A",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 2541.5,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 15.496951219512194
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 14.690751445086706
    },
    {
     "id": "54",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 8706.5,
-    "scheduled_trips": 229.0,
-    "rides_per_trip": 38.019650655021834
+    "scheduled_trips": 272.0,
+    "rides_per_trip": 32.00919117647059
    },
    {
     "id": "54A",
@@ -637,8 +637,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 8334.5,
-    "scheduled_trips": 225.0,
-    "rides_per_trip": 37.04222222222222
+    "scheduled_trips": 264.0,
+    "rides_per_trip": 31.570075757575758
    },
    {
     "id": "55A",
@@ -661,48 +661,48 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 7263.5,
-    "scheduled_trips": 156.0,
-    "rides_per_trip": 46.56089743589744
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 43.4940119760479
    },
    {
     "id": "57",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1491.5,
-    "scheduled_trips": 118.0,
-    "rides_per_trip": 12.639830508474576
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 11.473076923076922
    },
    {
     "id": "59",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 2402.5,
-    "scheduled_trips": 104.0,
-    "rides_per_trip": 23.10096153846154
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 21.07456140350877
    },
    {
     "id": "6",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 6453.0,
-    "scheduled_trips": 185.0,
-    "rides_per_trip": 34.88108108108108
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 34.142857142857146
    },
    {
     "id": "60",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 10483.0,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 46.38495575221239
+    "scheduled_trips": 252.0,
+    "rides_per_trip": 41.59920634920635
    },
    {
     "id": "62",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 7350.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 45.940625
+    "scheduled_trips": 193.0,
+    "rides_per_trip": 38.08549222797927
    },
    {
     "id": "62H",
@@ -717,80 +717,80 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 12323.5,
-    "scheduled_trips": 260.0,
-    "rides_per_trip": 47.39807692307692
+    "scheduled_trips": 304.0,
+    "rides_per_trip": 40.53782894736842
    },
    {
     "id": "63W",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1191.0,
-    "scheduled_trips": 116.0,
-    "rides_per_trip": 10.267241379310345
+    "scheduled_trips": 118.0,
+    "rides_per_trip": 10.09322033898305
    },
    {
     "id": "65",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 6838.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 34.88775510204081
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 33.51960784313726
    },
    {
     "id": "66",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 17122.5,
-    "scheduled_trips": 403.0,
-    "rides_per_trip": 42.48759305210918
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 38.05
    },
    {
     "id": "67",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 6536.0,
-    "scheduled_trips": 194.0,
-    "rides_per_trip": 33.69072164948454
+    "scheduled_trips": 225.0,
+    "rides_per_trip": 29.04888888888889
    },
    {
     "id": "68",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 720.0,
-    "scheduled_trips": 96.0,
-    "rides_per_trip": 7.5
+    "scheduled_trips": 99.0,
+    "rides_per_trip": 7.2727272727272725
    },
    {
     "id": "7",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3433.5,
-    "scheduled_trips": 125.0,
-    "rides_per_trip": 27.468
+    "scheduled_trips": 132.0,
+    "rides_per_trip": 26.011363636363637
    },
    {
     "id": "70",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 6661.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 33.984693877551024
+    "scheduled_trips": 213.0,
+    "rides_per_trip": 31.272300469483568
    },
    {
     "id": "71",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 5999.5,
-    "scheduled_trips": 184.0,
-    "rides_per_trip": 32.60597826086956
+    "scheduled_trips": 199.0,
+    "rides_per_trip": 30.14824120603015
    },
    {
     "id": "72",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 12879.5,
-    "scheduled_trips": 270.0,
-    "rides_per_trip": 47.70185185185185
+    "scheduled_trips": 299.0,
+    "rides_per_trip": 43.075250836120404
    },
    {
     "id": "73",
@@ -805,8 +805,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 9205.5,
-    "scheduled_trips": 266.0,
-    "rides_per_trip": 34.607142857142854
+    "scheduled_trips": 282.0,
+    "rides_per_trip": 32.6436170212766
    },
    {
     "id": "75",
@@ -821,56 +821,56 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 8925.0,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 49.86033519553072
+    "scheduled_trips": 209.0,
+    "rides_per_trip": 42.70334928229665
    },
    {
     "id": "77",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 15325.5,
-    "scheduled_trips": 290.0,
-    "rides_per_trip": 52.84655172413793
+    "scheduled_trips": 328.0,
+    "rides_per_trip": 46.72408536585366
    },
    {
     "id": "78",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 6121.5,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 38.74367088607595
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 36.65568862275449
    },
    {
     "id": "79",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 16250.5,
-    "scheduled_trips": 302.0,
-    "rides_per_trip": 53.80960264900662
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 36.11222222222222
    },
    {
     "id": "8",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 15220.0,
-    "scheduled_trips": 205.0,
-    "rides_per_trip": 74.2439024390244
+    "scheduled_trips": 257.0,
+    "rides_per_trip": 59.221789883268485
    },
    {
     "id": "80",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 7986.5,
-    "scheduled_trips": 187.0,
-    "rides_per_trip": 42.70855614973262
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 38.39663461538461
    },
    {
     "id": "81",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 9304.5,
-    "scheduled_trips": 241.0,
-    "rides_per_trip": 38.607883817427386
+    "scheduled_trips": 262.0,
+    "rides_per_trip": 35.51335877862596
    },
    {
     "id": "81W",
@@ -885,8 +885,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 12798.0,
-    "scheduled_trips": 256.0,
-    "rides_per_trip": 49.9921875
+    "scheduled_trips": 280.0,
+    "rides_per_trip": 45.707142857142856
    },
    {
     "id": "84",
@@ -901,8 +901,8 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 7848.0,
-    "scheduled_trips": 238.0,
-    "rides_per_trip": 32.97478991596638
+    "scheduled_trips": 244.0,
+    "rides_per_trip": 32.16393442622951
    },
    {
     "id": "85A",
@@ -917,16 +917,16 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 1258.5,
-    "scheduled_trips": 100.0,
-    "rides_per_trip": 12.585
+    "scheduled_trips": 106.0,
+    "rides_per_trip": 11.872641509433961
    },
    {
     "id": "87",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 7158.5,
-    "scheduled_trips": 211.0,
-    "rides_per_trip": 33.926540284360186
+    "scheduled_trips": 263.0,
+    "rides_per_trip": 27.218631178707223
    },
    {
     "id": "88",
@@ -941,16 +941,16 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 2313.5,
-    "scheduled_trips": 132.0,
-    "rides_per_trip": 17.526515151515152
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 17.26492537313433
    },
    {
     "id": "9",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 18923.5,
-    "scheduled_trips": 320.0,
-    "rides_per_trip": 59.1359375
+    "scheduled_trips": 365.0,
+    "rides_per_trip": 51.845205479452055
    },
    {
     "id": "90",
@@ -965,40 +965,40 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3837.5,
-    "scheduled_trips": 154.0,
-    "rides_per_trip": 24.91883116883117
+    "scheduled_trips": 155.0,
+    "rides_per_trip": 24.758064516129032
    },
    {
     "id": "92",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 4906.0,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 31.050632911392405
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 30.28395061728395
    },
    {
     "id": "93",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 3941.0,
-    "scheduled_trips": 121.0,
-    "rides_per_trip": 32.570247933884296
+    "scheduled_trips": 125.0,
+    "rides_per_trip": 31.528
    },
    {
     "id": "94",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 9051.5,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 54.52710843373494
+    "scheduled_trips": 170.0,
+    "rides_per_trip": 53.24411764705882
    },
    {
     "id": "95",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 5396.5,
-    "scheduled_trips": 235.0,
-    "rides_per_trip": 22.963829787234044
+    "scheduled_trips": 256.0,
+    "rides_per_trip": 21.080078125
    },
    {
     "id": "96",
@@ -1013,32 +1013,32 @@
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 2202.5,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 21.806930693069308
+    "scheduled_trips": 108.0,
+    "rides_per_trip": 20.39351851851852
    },
    {
     "id": "J14",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 8414.5,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 35.06041666666667
+    "scheduled_trips": 242.0,
+    "rides_per_trip": 34.77066115702479
    },
    {
     "id": "N5",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 341.0,
-    "scheduled_trips": 4.0,
-    "rides_per_trip": 85.25
+    "scheduled_trips": 20.0,
+    "rides_per_trip": 17.05
    },
    {
     "id": "X4",
     "date": "2026-09-01",
     "daytype": "W",
     "forecast_rides": 2609.5,
-    "scheduled_trips": 67.0,
-    "rides_per_trip": 38.94776119402985
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 37.81884057971015
    },
    {
     "id": "X49",
@@ -1077,8 +1077,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 321.0,
-    "scheduled_trips": 52.0,
-    "rides_per_trip": 6.173076923076923
+    "scheduled_trips": 53.0,
+    "rides_per_trip": 6.056603773584905
    },
    {
     "id": "1001",
@@ -1093,24 +1093,24 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1395.0,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 10.8984375
+    "scheduled_trips": 129.0,
+    "rides_per_trip": 10.813953488372093
    },
    {
     "id": "106",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 796.0,
-    "scheduled_trips": 134.0,
-    "rides_per_trip": 5.940298507462686
+    "scheduled_trips": 135.0,
+    "rides_per_trip": 5.896296296296296
    },
    {
     "id": "108",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 697.0,
-    "scheduled_trips": 68.0,
-    "rides_per_trip": 10.25
+    "scheduled_trips": 72.0,
+    "rides_per_trip": 9.680555555555555
    },
    {
     "id": "11",
@@ -1141,8 +1141,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1155.5,
-    "scheduled_trips": 129.0,
-    "rides_per_trip": 8.957364341085272
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 8.623134328358208
    },
    {
     "id": "115",
@@ -1157,16 +1157,16 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 2312.5,
-    "scheduled_trips": 181.0,
-    "rides_per_trip": 12.776243093922652
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 12.235449735449736
    },
    {
     "id": "12",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 10156.0,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 42.31666666666667
+    "scheduled_trips": 254.0,
+    "rides_per_trip": 39.98425196850393
    },
    {
     "id": "120",
@@ -1181,8 +1181,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1401.5,
-    "scheduled_trips": 75.0,
-    "rides_per_trip": 18.686666666666667
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 18.44078947368421
    },
    {
     "id": "124",
@@ -1205,8 +1205,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3749.0,
-    "scheduled_trips": 136.0,
-    "rides_per_trip": 27.566176470588236
+    "scheduled_trips": 146.0,
+    "rides_per_trip": 25.67808219178082
    },
    {
     "id": "130",
@@ -1253,16 +1253,16 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 10957.0,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 66.8109756097561
+    "scheduled_trips": 222.0,
+    "rides_per_trip": 49.35585585585586
    },
    {
     "id": "147",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 10376.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 52.67258883248731
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 49.88701923076923
    },
    {
     "id": "148",
@@ -1277,48 +1277,48 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 4858.5,
-    "scheduled_trips": 150.0,
-    "rides_per_trip": 32.39
+    "scheduled_trips": 159.0,
+    "rides_per_trip": 30.556603773584907
    },
    {
     "id": "151",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 13838.5,
-    "scheduled_trips": 189.0,
-    "rides_per_trip": 73.21957671957672
+    "scheduled_trips": 211.0,
+    "rides_per_trip": 65.58530805687204
    },
    {
     "id": "152",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7053.5,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 39.40502793296089
+    "scheduled_trips": 212.0,
+    "rides_per_trip": 33.27122641509434
    },
    {
     "id": "155",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 4804.0,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 23.90049751243781
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 23.54901960784314
    },
    {
     "id": "156",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 5388.0,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 42.09375
+    "scheduled_trips": 136.0,
+    "rides_per_trip": 39.61764705882353
    },
    {
     "id": "157",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 5100.5,
-    "scheduled_trips": 124.0,
-    "rides_per_trip": 41.13306451612903
+    "scheduled_trips": 131.0,
+    "rides_per_trip": 38.93511450381679
    },
    {
     "id": "165",
@@ -1333,8 +1333,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 88.5,
-    "scheduled_trips": 8.0,
-    "rides_per_trip": 11.0625
+    "scheduled_trips": 10.0,
+    "rides_per_trip": 8.85
    },
    {
     "id": "171",
@@ -1357,8 +1357,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3605.0,
-    "scheduled_trips": 127.0,
-    "rides_per_trip": 28.385826771653544
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 27.73076923076923
    },
    {
     "id": "19",
@@ -1389,48 +1389,48 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 14735.0,
-    "scheduled_trips": 295.0,
-    "rides_per_trip": 49.94915254237288
+    "scheduled_trips": 338.0,
+    "rides_per_trip": 43.594674556213015
    },
    {
     "id": "201",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1155.5,
-    "scheduled_trips": 74.0,
-    "rides_per_trip": 15.614864864864865
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 15.203947368421053
    },
    {
     "id": "206",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 188.0,
-    "scheduled_trips": 21.0,
-    "rides_per_trip": 8.952380952380953
+    "scheduled_trips": 25.0,
+    "rides_per_trip": 7.52
    },
    {
     "id": "21",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7882.5,
-    "scheduled_trips": 168.0,
-    "rides_per_trip": 46.919642857142854
+    "scheduled_trips": 176.0,
+    "rides_per_trip": 44.78693181818182
    },
    {
     "id": "22",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 14247.5,
-    "scheduled_trips": 199.0,
-    "rides_per_trip": 71.59547738693468
+    "scheduled_trips": 239.0,
+    "rides_per_trip": 59.61297071129707
    },
    {
     "id": "24",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 2050.0,
-    "scheduled_trips": 90.0,
-    "rides_per_trip": 22.77777777777778
+    "scheduled_trips": 101.0,
+    "rides_per_trip": 20.297029702970296
    },
    {
     "id": "26",
@@ -1445,64 +1445,64 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 4588.0,
-    "scheduled_trips": 146.0,
-    "rides_per_trip": 31.424657534246574
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 28.320987654320987
    },
    {
     "id": "29",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 8812.0,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 55.075
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 54.39506172839506
    },
    {
     "id": "3",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 14434.0,
-    "scheduled_trips": 231.0,
-    "rides_per_trip": 62.484848484848484
+    "scheduled_trips": 243.0,
+    "rides_per_trip": 59.39917695473251
    },
    {
     "id": "30",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1875.5,
-    "scheduled_trips": 107.0,
-    "rides_per_trip": 17.52803738317757
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 16.45175438596491
    },
    {
     "id": "31",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 555.0,
-    "scheduled_trips": 53.0,
-    "rides_per_trip": 10.471698113207546
+    "scheduled_trips": 55.0,
+    "rides_per_trip": 10.090909090909092
    },
    {
     "id": "34",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3532.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 17.931472081218274
+    "scheduled_trips": 236.0,
+    "rides_per_trip": 14.96822033898305
    },
    {
     "id": "35",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3717.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 18.964285714285715
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 16.81900452488688
    },
    {
     "id": "36",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 9989.0,
-    "scheduled_trips": 163.0,
-    "rides_per_trip": 61.282208588957054
+    "scheduled_trips": 166.0,
+    "rides_per_trip": 60.174698795180724
    },
    {
     "id": "37",
@@ -1525,8 +1525,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 13921.0,
-    "scheduled_trips": 215.0,
-    "rides_per_trip": 64.74883720930232
+    "scheduled_trips": 250.0,
+    "rides_per_trip": 55.684
    },
    {
     "id": "43",
@@ -1549,32 +1549,32 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 9652.5,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 42.71017699115044
+    "scheduled_trips": 251.0,
+    "rides_per_trip": 38.45617529880478
    },
    {
     "id": "48",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 533.0,
-    "scheduled_trips": 66.0,
-    "rides_per_trip": 8.075757575757576
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 7.72463768115942
    },
    {
     "id": "49",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 13697.0,
-    "scheduled_trips": 254.0,
-    "rides_per_trip": 53.925196850393704
+    "scheduled_trips": 271.0,
+    "rides_per_trip": 50.542435424354245
    },
    {
     "id": "49B",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3730.0,
-    "scheduled_trips": 207.0,
-    "rides_per_trip": 18.019323671497585
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 16.877828054298643
    },
    {
     "id": "5",
@@ -1589,8 +1589,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 8925.0,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 53.765060240963855
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 51.589595375722546
    },
    {
     "id": "51",
@@ -1605,40 +1605,40 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 6352.5,
-    "scheduled_trips": 188.0,
-    "rides_per_trip": 33.78989361702128
+    "scheduled_trips": 190.0,
+    "rides_per_trip": 33.43421052631579
    },
    {
     "id": "52A",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3179.5,
-    "scheduled_trips": 138.0,
-    "rides_per_trip": 23.03985507246377
+    "scheduled_trips": 142.0,
+    "rides_per_trip": 22.390845070422536
    },
    {
     "id": "53",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 17458.0,
-    "scheduled_trips": 288.0,
-    "rides_per_trip": 60.61805555555556
+    "scheduled_trips": 339.0,
+    "rides_per_trip": 51.498525073746315
    },
    {
     "id": "53A",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 2550.5,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 15.551829268292684
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 14.742774566473988
    },
    {
     "id": "54",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 8371.0,
-    "scheduled_trips": 229.0,
-    "rides_per_trip": 36.55458515283843
+    "scheduled_trips": 272.0,
+    "rides_per_trip": 30.77573529411765
    },
    {
     "id": "54A",
@@ -1661,8 +1661,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7920.5,
-    "scheduled_trips": 225.0,
-    "rides_per_trip": 35.202222222222225
+    "scheduled_trips": 264.0,
+    "rides_per_trip": 30.001893939393938
    },
    {
     "id": "55A",
@@ -1685,48 +1685,48 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7327.5,
-    "scheduled_trips": 156.0,
-    "rides_per_trip": 46.97115384615385
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 43.877245508982035
    },
    {
     "id": "57",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1728.0,
-    "scheduled_trips": 118.0,
-    "rides_per_trip": 14.64406779661017
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 13.292307692307693
    },
    {
     "id": "59",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 2266.0,
-    "scheduled_trips": 104.0,
-    "rides_per_trip": 21.78846153846154
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 19.87719298245614
    },
    {
     "id": "6",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 6373.0,
-    "scheduled_trips": 185.0,
-    "rides_per_trip": 34.44864864864865
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 33.71957671957672
    },
    {
     "id": "60",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 10431.5,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 46.1570796460177
+    "scheduled_trips": 252.0,
+    "rides_per_trip": 41.39484126984127
    },
    {
     "id": "62",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7231.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 45.196875
+    "scheduled_trips": 193.0,
+    "rides_per_trip": 37.468911917098445
    },
    {
     "id": "62H",
@@ -1741,80 +1741,80 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 12303.5,
-    "scheduled_trips": 260.0,
-    "rides_per_trip": 47.32115384615385
+    "scheduled_trips": 304.0,
+    "rides_per_trip": 40.47203947368421
    },
    {
     "id": "63W",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1175.0,
-    "scheduled_trips": 116.0,
-    "rides_per_trip": 10.129310344827585
+    "scheduled_trips": 118.0,
+    "rides_per_trip": 9.957627118644067
    },
    {
     "id": "65",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7148.5,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 36.4719387755102
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 35.041666666666664
    },
    {
     "id": "66",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 17606.5,
-    "scheduled_trips": 403.0,
-    "rides_per_trip": 43.688585607940446
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 39.12555555555556
    },
    {
     "id": "67",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 6248.0,
-    "scheduled_trips": 194.0,
-    "rides_per_trip": 32.20618556701031
+    "scheduled_trips": 225.0,
+    "rides_per_trip": 27.76888888888889
    },
    {
     "id": "68",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 741.5,
-    "scheduled_trips": 96.0,
-    "rides_per_trip": 7.723958333333333
+    "scheduled_trips": 99.0,
+    "rides_per_trip": 7.48989898989899
    },
    {
     "id": "7",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3477.5,
-    "scheduled_trips": 125.0,
-    "rides_per_trip": 27.82
+    "scheduled_trips": 132.0,
+    "rides_per_trip": 26.34469696969697
    },
    {
     "id": "70",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 6529.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 33.31122448979592
+    "scheduled_trips": 213.0,
+    "rides_per_trip": 30.652582159624412
    },
    {
     "id": "71",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 5625.5,
-    "scheduled_trips": 184.0,
-    "rides_per_trip": 30.57336956521739
+    "scheduled_trips": 199.0,
+    "rides_per_trip": 28.268844221105528
    },
    {
     "id": "72",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 12232.5,
-    "scheduled_trips": 270.0,
-    "rides_per_trip": 45.30555555555556
+    "scheduled_trips": 299.0,
+    "rides_per_trip": 40.91137123745819
    },
    {
     "id": "73",
@@ -1829,8 +1829,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 9163.5,
-    "scheduled_trips": 266.0,
-    "rides_per_trip": 34.44924812030075
+    "scheduled_trips": 282.0,
+    "rides_per_trip": 32.494680851063826
    },
    {
     "id": "75",
@@ -1845,56 +1845,56 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 8932.0,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 49.899441340782126
+    "scheduled_trips": 209.0,
+    "rides_per_trip": 42.73684210526316
    },
    {
     "id": "77",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 14913.0,
-    "scheduled_trips": 290.0,
-    "rides_per_trip": 51.42413793103448
+    "scheduled_trips": 328.0,
+    "rides_per_trip": 45.46646341463415
    },
    {
     "id": "78",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 5976.0,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 37.822784810126585
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 35.78443113772455
    },
    {
     "id": "79",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 16781.5,
-    "scheduled_trips": 302.0,
-    "rides_per_trip": 55.567880794701985
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 37.29222222222222
    },
    {
     "id": "8",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 14560.5,
-    "scheduled_trips": 205.0,
-    "rides_per_trip": 71.02682926829269
+    "scheduled_trips": 257.0,
+    "rides_per_trip": 56.6556420233463
    },
    {
     "id": "80",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 8234.0,
-    "scheduled_trips": 187.0,
-    "rides_per_trip": 44.032085561497325
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 39.58653846153846
    },
    {
     "id": "81",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 9166.0,
-    "scheduled_trips": 241.0,
-    "rides_per_trip": 38.03319502074689
+    "scheduled_trips": 262.0,
+    "rides_per_trip": 34.98473282442748
    },
    {
     "id": "81W",
@@ -1909,8 +1909,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 12622.5,
-    "scheduled_trips": 256.0,
-    "rides_per_trip": 49.306640625
+    "scheduled_trips": 280.0,
+    "rides_per_trip": 45.080357142857146
    },
    {
     "id": "84",
@@ -1925,8 +1925,8 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7751.5,
-    "scheduled_trips": 238.0,
-    "rides_per_trip": 32.569327731092436
+    "scheduled_trips": 244.0,
+    "rides_per_trip": 31.76844262295082
    },
    {
     "id": "85A",
@@ -1941,16 +1941,16 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 1362.0,
-    "scheduled_trips": 100.0,
-    "rides_per_trip": 13.62
+    "scheduled_trips": 106.0,
+    "rides_per_trip": 12.849056603773585
    },
    {
     "id": "87",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 7767.5,
-    "scheduled_trips": 211.0,
-    "rides_per_trip": 36.812796208530806
+    "scheduled_trips": 263.0,
+    "rides_per_trip": 29.53422053231939
    },
    {
     "id": "88",
@@ -1965,16 +1965,16 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 2285.0,
-    "scheduled_trips": 132.0,
-    "rides_per_trip": 17.310606060606062
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 17.05223880597015
    },
    {
     "id": "9",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 18286.5,
-    "scheduled_trips": 320.0,
-    "rides_per_trip": 57.1453125
+    "scheduled_trips": 365.0,
+    "rides_per_trip": 50.1
    },
    {
     "id": "90",
@@ -1989,40 +1989,40 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3780.5,
-    "scheduled_trips": 154.0,
-    "rides_per_trip": 24.5487012987013
+    "scheduled_trips": 155.0,
+    "rides_per_trip": 24.39032258064516
    },
    {
     "id": "92",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 4909.5,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 31.07278481012658
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 30.305555555555557
    },
    {
     "id": "93",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 3942.5,
-    "scheduled_trips": 121.0,
-    "rides_per_trip": 32.582644628099175
+    "scheduled_trips": 125.0,
+    "rides_per_trip": 31.54
    },
    {
     "id": "94",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 9178.0,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 55.28915662650602
+    "scheduled_trips": 170.0,
+    "rides_per_trip": 53.98823529411764
    },
    {
     "id": "95",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 4839.0,
-    "scheduled_trips": 235.0,
-    "rides_per_trip": 20.591489361702127
+    "scheduled_trips": 256.0,
+    "rides_per_trip": 18.90234375
    },
    {
     "id": "96",
@@ -2037,32 +2037,32 @@
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 2205.0,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 21.831683168316832
+    "scheduled_trips": 108.0,
+    "rides_per_trip": 20.416666666666668
    },
    {
     "id": "J14",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 8420.5,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 35.08541666666667
+    "scheduled_trips": 242.0,
+    "rides_per_trip": 34.79545454545455
    },
    {
     "id": "N5",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 291.5,
-    "scheduled_trips": 4.0,
-    "rides_per_trip": 72.875
+    "scheduled_trips": 20.0,
+    "rides_per_trip": 14.575
    },
    {
     "id": "X4",
     "date": "2026-09-02",
     "daytype": "W",
     "forecast_rides": 2945.5,
-    "scheduled_trips": 67.0,
-    "rides_per_trip": 43.96268656716418
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 42.68840579710145
    },
    {
     "id": "X49",
@@ -2101,8 +2101,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 251.5,
-    "scheduled_trips": 52.0,
-    "rides_per_trip": 4.836538461538462
+    "scheduled_trips": 53.0,
+    "rides_per_trip": 4.745283018867925
    },
    {
     "id": "1001",
@@ -2117,24 +2117,24 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1369.0,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 10.6953125
+    "scheduled_trips": 129.0,
+    "rides_per_trip": 10.612403100775193
    },
    {
     "id": "106",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 961.5,
-    "scheduled_trips": 134.0,
-    "rides_per_trip": 7.175373134328358
+    "scheduled_trips": 135.0,
+    "rides_per_trip": 7.122222222222222
    },
    {
     "id": "108",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 666.0,
-    "scheduled_trips": 68.0,
-    "rides_per_trip": 9.794117647058824
+    "scheduled_trips": 72.0,
+    "rides_per_trip": 9.25
    },
    {
     "id": "11",
@@ -2165,8 +2165,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1043.0,
-    "scheduled_trips": 129.0,
-    "rides_per_trip": 8.085271317829458
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 7.7835820895522385
    },
    {
     "id": "115",
@@ -2181,16 +2181,16 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 2467.0,
-    "scheduled_trips": 181.0,
-    "rides_per_trip": 13.629834254143647
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 13.052910052910052
    },
    {
     "id": "12",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 10305.5,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 42.93958333333333
+    "scheduled_trips": 254.0,
+    "rides_per_trip": 40.57283464566929
    },
    {
     "id": "120",
@@ -2205,8 +2205,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1234.5,
-    "scheduled_trips": 75.0,
-    "rides_per_trip": 16.46
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 16.24342105263158
    },
    {
     "id": "124",
@@ -2229,8 +2229,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3994.0,
-    "scheduled_trips": 136.0,
-    "rides_per_trip": 29.36764705882353
+    "scheduled_trips": 146.0,
+    "rides_per_trip": 27.356164383561644
    },
    {
     "id": "130",
@@ -2277,16 +2277,16 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 11415.5,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 69.60670731707317
+    "scheduled_trips": 222.0,
+    "rides_per_trip": 51.421171171171174
    },
    {
     "id": "147",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 10700.0,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 54.31472081218274
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 51.44230769230769
    },
    {
     "id": "148",
@@ -2301,48 +2301,48 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 5220.0,
-    "scheduled_trips": 150.0,
-    "rides_per_trip": 34.8
+    "scheduled_trips": 159.0,
+    "rides_per_trip": 32.83018867924528
    },
    {
     "id": "151",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 13703.5,
-    "scheduled_trips": 189.0,
-    "rides_per_trip": 72.505291005291
+    "scheduled_trips": 211.0,
+    "rides_per_trip": 64.94549763033176
    },
    {
     "id": "152",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 6910.0,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 38.60335195530726
+    "scheduled_trips": 212.0,
+    "rides_per_trip": 32.594339622641506
    },
    {
     "id": "155",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 5104.0,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 25.393034825870647
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 25.019607843137255
    },
    {
     "id": "156",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 5305.5,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 41.44921875
+    "scheduled_trips": 136.0,
+    "rides_per_trip": 39.0110294117647
    },
    {
     "id": "157",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 5152.0,
-    "scheduled_trips": 124.0,
-    "rides_per_trip": 41.54838709677419
+    "scheduled_trips": 131.0,
+    "rides_per_trip": 39.32824427480916
    },
    {
     "id": "165",
@@ -2357,8 +2357,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 129.5,
-    "scheduled_trips": 8.0,
-    "rides_per_trip": 16.1875
+    "scheduled_trips": 10.0,
+    "rides_per_trip": 12.95
    },
    {
     "id": "171",
@@ -2381,8 +2381,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3399.0,
-    "scheduled_trips": 127.0,
-    "rides_per_trip": 26.763779527559056
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 26.146153846153847
    },
    {
     "id": "19",
@@ -2413,48 +2413,48 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 14971.5,
-    "scheduled_trips": 295.0,
-    "rides_per_trip": 50.75084745762712
+    "scheduled_trips": 338.0,
+    "rides_per_trip": 44.294378698224854
    },
    {
     "id": "201",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1181.5,
-    "scheduled_trips": 74.0,
-    "rides_per_trip": 15.966216216216216
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 15.546052631578947
    },
    {
     "id": "206",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 200.0,
-    "scheduled_trips": 21.0,
-    "rides_per_trip": 9.523809523809524
+    "scheduled_trips": 25.0,
+    "rides_per_trip": 8.0
    },
    {
     "id": "21",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7853.5,
-    "scheduled_trips": 168.0,
-    "rides_per_trip": 46.74702380952381
+    "scheduled_trips": 176.0,
+    "rides_per_trip": 44.62215909090909
    },
    {
     "id": "22",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 14155.0,
-    "scheduled_trips": 199.0,
-    "rides_per_trip": 71.13065326633166
+    "scheduled_trips": 239.0,
+    "rides_per_trip": 59.22594142259414
    },
    {
     "id": "24",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 2094.0,
-    "scheduled_trips": 90.0,
-    "rides_per_trip": 23.266666666666666
+    "scheduled_trips": 101.0,
+    "rides_per_trip": 20.73267326732673
    },
    {
     "id": "26",
@@ -2469,64 +2469,64 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 4270.0,
-    "scheduled_trips": 146.0,
-    "rides_per_trip": 29.246575342465754
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 26.358024691358025
    },
    {
     "id": "29",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7895.0,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 49.34375
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 48.73456790123457
    },
    {
     "id": "3",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 15001.0,
-    "scheduled_trips": 231.0,
-    "rides_per_trip": 64.93939393939394
+    "scheduled_trips": 243.0,
+    "rides_per_trip": 61.732510288065846
    },
    {
     "id": "30",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1917.0,
-    "scheduled_trips": 107.0,
-    "rides_per_trip": 17.91588785046729
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 16.81578947368421
    },
    {
     "id": "31",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 538.5,
-    "scheduled_trips": 53.0,
-    "rides_per_trip": 10.160377358490566
+    "scheduled_trips": 55.0,
+    "rides_per_trip": 9.790909090909091
    },
    {
     "id": "34",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3417.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 17.34771573604061
+    "scheduled_trips": 236.0,
+    "rides_per_trip": 14.48093220338983
    },
    {
     "id": "35",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3777.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 19.270408163265305
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 17.09049773755656
    },
    {
     "id": "36",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 9650.0,
-    "scheduled_trips": 163.0,
-    "rides_per_trip": 59.20245398773006
+    "scheduled_trips": 166.0,
+    "rides_per_trip": 58.13253012048193
    },
    {
     "id": "37",
@@ -2549,8 +2549,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 14388.0,
-    "scheduled_trips": 215.0,
-    "rides_per_trip": 66.92093023255813
+    "scheduled_trips": 250.0,
+    "rides_per_trip": 57.552
    },
    {
     "id": "43",
@@ -2573,32 +2573,32 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 10132.0,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 44.83185840707964
+    "scheduled_trips": 251.0,
+    "rides_per_trip": 40.366533864541836
    },
    {
     "id": "48",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 572.5,
-    "scheduled_trips": 66.0,
-    "rides_per_trip": 8.674242424242424
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 8.297101449275363
    },
    {
     "id": "49",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 14211.0,
-    "scheduled_trips": 254.0,
-    "rides_per_trip": 55.94881889763779
+    "scheduled_trips": 271.0,
+    "rides_per_trip": 52.43911439114391
    },
    {
     "id": "49B",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3859.5,
-    "scheduled_trips": 207.0,
-    "rides_per_trip": 18.644927536231883
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 17.463800904977376
    },
    {
     "id": "5",
@@ -2613,8 +2613,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 9126.0,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 54.975903614457835
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 52.7514450867052
    },
    {
     "id": "51",
@@ -2629,40 +2629,40 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 6780.5,
-    "scheduled_trips": 188.0,
-    "rides_per_trip": 36.066489361702125
+    "scheduled_trips": 190.0,
+    "rides_per_trip": 35.68684210526316
    },
    {
     "id": "52A",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3214.5,
-    "scheduled_trips": 138.0,
-    "rides_per_trip": 23.293478260869566
+    "scheduled_trips": 142.0,
+    "rides_per_trip": 22.637323943661972
    },
    {
     "id": "53",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 17863.0,
-    "scheduled_trips": 288.0,
-    "rides_per_trip": 62.02430555555556
+    "scheduled_trips": 339.0,
+    "rides_per_trip": 52.693215339233035
    },
    {
     "id": "53A",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 2624.5,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 16.003048780487806
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 15.170520231213873
    },
    {
     "id": "54",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 8850.0,
-    "scheduled_trips": 229.0,
-    "rides_per_trip": 38.646288209606986
+    "scheduled_trips": 272.0,
+    "rides_per_trip": 32.536764705882355
    },
    {
     "id": "54A",
@@ -2685,8 +2685,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7822.5,
-    "scheduled_trips": 225.0,
-    "rides_per_trip": 34.766666666666666
+    "scheduled_trips": 264.0,
+    "rides_per_trip": 29.630681818181817
    },
    {
     "id": "55A",
@@ -2709,48 +2709,48 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7264.5,
-    "scheduled_trips": 156.0,
-    "rides_per_trip": 46.56730769230769
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 43.5
    },
    {
     "id": "57",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1699.5,
-    "scheduled_trips": 118.0,
-    "rides_per_trip": 14.402542372881356
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 13.073076923076924
    },
    {
     "id": "59",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 2373.0,
-    "scheduled_trips": 104.0,
-    "rides_per_trip": 22.817307692307693
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 20.81578947368421
    },
    {
     "id": "6",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 6376.5,
-    "scheduled_trips": 185.0,
-    "rides_per_trip": 34.46756756756757
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 33.73809523809524
    },
    {
     "id": "60",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 11074.5,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 49.00221238938053
+    "scheduled_trips": 252.0,
+    "rides_per_trip": 43.94642857142857
    },
    {
     "id": "62",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7536.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 47.103125
+    "scheduled_trips": 193.0,
+    "rides_per_trip": 39.04922279792746
    },
    {
     "id": "62H",
@@ -2765,80 +2765,80 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 11928.5,
-    "scheduled_trips": 260.0,
-    "rides_per_trip": 45.878846153846155
+    "scheduled_trips": 304.0,
+    "rides_per_trip": 39.23848684210526
    },
    {
     "id": "63W",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1149.0,
-    "scheduled_trips": 116.0,
-    "rides_per_trip": 9.905172413793103
+    "scheduled_trips": 118.0,
+    "rides_per_trip": 9.73728813559322
    },
    {
     "id": "65",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7290.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 37.19387755102041
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 35.73529411764706
    },
    {
     "id": "66",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 16943.0,
-    "scheduled_trips": 403.0,
-    "rides_per_trip": 42.04218362282879
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 37.65111111111111
    },
    {
     "id": "67",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 6336.5,
-    "scheduled_trips": 194.0,
-    "rides_per_trip": 32.66237113402062
+    "scheduled_trips": 225.0,
+    "rides_per_trip": 28.162222222222223
    },
    {
     "id": "68",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 740.0,
-    "scheduled_trips": 96.0,
-    "rides_per_trip": 7.708333333333333
+    "scheduled_trips": 99.0,
+    "rides_per_trip": 7.474747474747475
    },
    {
     "id": "7",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3224.5,
-    "scheduled_trips": 125.0,
-    "rides_per_trip": 25.796
+    "scheduled_trips": 132.0,
+    "rides_per_trip": 24.428030303030305
    },
    {
     "id": "70",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 6432.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 32.816326530612244
+    "scheduled_trips": 213.0,
+    "rides_per_trip": 30.197183098591548
    },
    {
     "id": "71",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 6518.0,
-    "scheduled_trips": 184.0,
-    "rides_per_trip": 35.42391304347826
+    "scheduled_trips": 199.0,
+    "rides_per_trip": 32.753768844221106
    },
    {
     "id": "72",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 12010.0,
-    "scheduled_trips": 270.0,
-    "rides_per_trip": 44.48148148148148
+    "scheduled_trips": 299.0,
+    "rides_per_trip": 40.16722408026756
    },
    {
     "id": "73",
@@ -2853,8 +2853,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 9665.0,
-    "scheduled_trips": 266.0,
-    "rides_per_trip": 36.33458646616541
+    "scheduled_trips": 282.0,
+    "rides_per_trip": 34.273049645390074
    },
    {
     "id": "75",
@@ -2869,56 +2869,56 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 9054.5,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 50.58379888268156
+    "scheduled_trips": 209.0,
+    "rides_per_trip": 43.322966507177036
    },
    {
     "id": "77",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 15193.5,
-    "scheduled_trips": 290.0,
-    "rides_per_trip": 52.391379310344824
+    "scheduled_trips": 328.0,
+    "rides_per_trip": 46.32164634146341
    },
    {
     "id": "78",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 6410.0,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 40.56962025316456
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 38.383233532934135
    },
    {
     "id": "79",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 16834.0,
-    "scheduled_trips": 302.0,
-    "rides_per_trip": 55.741721854304636
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 37.40888888888889
    },
    {
     "id": "8",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 15779.5,
-    "scheduled_trips": 205.0,
-    "rides_per_trip": 76.97317073170731
+    "scheduled_trips": 257.0,
+    "rides_per_trip": 61.3988326848249
    },
    {
     "id": "80",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 8319.0,
-    "scheduled_trips": 187.0,
-    "rides_per_trip": 44.48663101604278
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 39.99519230769231
    },
    {
     "id": "81",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 9775.0,
-    "scheduled_trips": 241.0,
-    "rides_per_trip": 40.560165975103736
+    "scheduled_trips": 262.0,
+    "rides_per_trip": 37.30916030534351
    },
    {
     "id": "81W",
@@ -2933,8 +2933,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 12130.5,
-    "scheduled_trips": 256.0,
-    "rides_per_trip": 47.384765625
+    "scheduled_trips": 280.0,
+    "rides_per_trip": 43.323214285714286
    },
    {
     "id": "84",
@@ -2949,8 +2949,8 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7682.0,
-    "scheduled_trips": 238.0,
-    "rides_per_trip": 32.27731092436975
+    "scheduled_trips": 244.0,
+    "rides_per_trip": 31.483606557377048
    },
    {
     "id": "85A",
@@ -2965,16 +2965,16 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 1566.5,
-    "scheduled_trips": 100.0,
-    "rides_per_trip": 15.665
+    "scheduled_trips": 106.0,
+    "rides_per_trip": 14.778301886792454
    },
    {
     "id": "87",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 7963.0,
-    "scheduled_trips": 211.0,
-    "rides_per_trip": 37.73933649289099
+    "scheduled_trips": 263.0,
+    "rides_per_trip": 30.277566539923953
    },
    {
     "id": "88",
@@ -2989,16 +2989,16 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 2456.0,
-    "scheduled_trips": 132.0,
-    "rides_per_trip": 18.606060606060606
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 18.328358208955223
    },
    {
     "id": "9",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 18584.0,
-    "scheduled_trips": 320.0,
-    "rides_per_trip": 58.075
+    "scheduled_trips": 365.0,
+    "rides_per_trip": 50.915068493150685
    },
    {
     "id": "90",
@@ -3013,40 +3013,40 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3717.5,
-    "scheduled_trips": 154.0,
-    "rides_per_trip": 24.13961038961039
+    "scheduled_trips": 155.0,
+    "rides_per_trip": 23.983870967741936
    },
    {
     "id": "92",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 4949.5,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 31.325949367088608
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 30.55246913580247
    },
    {
     "id": "93",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 3874.5,
-    "scheduled_trips": 121.0,
-    "rides_per_trip": 32.02066115702479
+    "scheduled_trips": 125.0,
+    "rides_per_trip": 30.996
    },
    {
     "id": "94",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 8591.5,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 51.756024096385545
+    "scheduled_trips": 170.0,
+    "rides_per_trip": 50.53823529411765
    },
    {
     "id": "95",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 4972.5,
-    "scheduled_trips": 235.0,
-    "rides_per_trip": 21.159574468085108
+    "scheduled_trips": 256.0,
+    "rides_per_trip": 19.423828125
    },
    {
     "id": "96",
@@ -3061,32 +3061,32 @@
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 2172.0,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 21.504950495049506
+    "scheduled_trips": 108.0,
+    "rides_per_trip": 20.11111111111111
    },
    {
     "id": "J14",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 8432.5,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 35.135416666666664
+    "scheduled_trips": 242.0,
+    "rides_per_trip": 34.84504132231405
    },
    {
     "id": "N5",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 286.0,
-    "scheduled_trips": 4.0,
-    "rides_per_trip": 71.5
+    "scheduled_trips": 20.0,
+    "rides_per_trip": 14.3
    },
    {
     "id": "X4",
     "date": "2026-09-03",
     "daytype": "W",
     "forecast_rides": 2580.5,
-    "scheduled_trips": 67.0,
-    "rides_per_trip": 38.514925373134325
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 37.39855072463768
    },
    {
     "id": "X49",
@@ -3125,8 +3125,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 361.5,
-    "scheduled_trips": 52.0,
-    "rides_per_trip": 6.951923076923077
+    "scheduled_trips": 53.0,
+    "rides_per_trip": 6.820754716981132
    },
    {
     "id": "1001",
@@ -3141,24 +3141,24 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 1396.5,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 10.91015625
+    "scheduled_trips": 129.0,
+    "rides_per_trip": 10.825581395348838
    },
    {
     "id": "106",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 840.5,
-    "scheduled_trips": 134.0,
-    "rides_per_trip": 6.272388059701493
+    "scheduled_trips": 135.0,
+    "rides_per_trip": 6.225925925925926
    },
    {
     "id": "108",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 549.0,
-    "scheduled_trips": 68.0,
-    "rides_per_trip": 8.073529411764707
+    "scheduled_trips": 72.0,
+    "rides_per_trip": 7.625
    },
    {
     "id": "11",
@@ -3189,8 +3189,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 1039.0,
-    "scheduled_trips": 129.0,
-    "rides_per_trip": 8.054263565891473
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 7.753731343283582
    },
    {
     "id": "115",
@@ -3205,16 +3205,16 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2715.5,
-    "scheduled_trips": 181.0,
-    "rides_per_trip": 15.002762430939226
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 14.367724867724867
    },
    {
     "id": "12",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 9636.0,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 40.15
+    "scheduled_trips": 254.0,
+    "rides_per_trip": 37.93700787401575
    },
    {
     "id": "120",
@@ -3229,8 +3229,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 709.0,
-    "scheduled_trips": 75.0,
-    "rides_per_trip": 9.453333333333333
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 9.328947368421053
    },
    {
     "id": "124",
@@ -3253,8 +3253,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3631.0,
-    "scheduled_trips": 136.0,
-    "rides_per_trip": 26.698529411764707
+    "scheduled_trips": 146.0,
+    "rides_per_trip": 24.86986301369863
    },
    {
     "id": "130",
@@ -3301,16 +3301,16 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 11534.0,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 70.32926829268293
+    "scheduled_trips": 222.0,
+    "rides_per_trip": 51.95495495495496
    },
    {
     "id": "147",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 9536.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 48.40862944162436
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 45.84855769230769
    },
    {
     "id": "148",
@@ -3325,48 +3325,48 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 4565.0,
-    "scheduled_trips": 150.0,
-    "rides_per_trip": 30.433333333333334
+    "scheduled_trips": 159.0,
+    "rides_per_trip": 28.71069182389937
    },
    {
     "id": "151",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 13443.5,
-    "scheduled_trips": 189.0,
-    "rides_per_trip": 71.12962962962963
+    "scheduled_trips": 211.0,
+    "rides_per_trip": 63.71327014218009
    },
    {
     "id": "152",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6745.0,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 37.68156424581006
+    "scheduled_trips": 212.0,
+    "rides_per_trip": 31.816037735849058
    },
    {
     "id": "155",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 5028.5,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 25.01741293532338
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 24.649509803921568
    },
    {
     "id": "156",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3636.0,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 28.40625
+    "scheduled_trips": 136.0,
+    "rides_per_trip": 26.735294117647058
    },
    {
     "id": "157",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 4452.0,
-    "scheduled_trips": 124.0,
-    "rides_per_trip": 35.903225806451616
+    "scheduled_trips": 131.0,
+    "rides_per_trip": 33.98473282442748
    },
    {
     "id": "165",
@@ -3381,8 +3381,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 93.5,
-    "scheduled_trips": 8.0,
-    "rides_per_trip": 11.6875
+    "scheduled_trips": 10.0,
+    "rides_per_trip": 9.35
    },
    {
     "id": "171",
@@ -3405,8 +3405,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3445.5,
-    "scheduled_trips": 127.0,
-    "rides_per_trip": 27.12992125984252
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 26.503846153846155
    },
    {
     "id": "19",
@@ -3437,48 +3437,48 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 14451.0,
-    "scheduled_trips": 295.0,
-    "rides_per_trip": 48.9864406779661
+    "scheduled_trips": 338.0,
+    "rides_per_trip": 42.75443786982248
    },
    {
     "id": "201",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 1073.5,
-    "scheduled_trips": 74.0,
-    "rides_per_trip": 14.506756756756756
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 14.125
    },
    {
     "id": "206",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 180.0,
-    "scheduled_trips": 21.0,
-    "rides_per_trip": 8.571428571428571
+    "scheduled_trips": 25.0,
+    "rides_per_trip": 7.2
    },
    {
     "id": "21",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 8188.5,
-    "scheduled_trips": 168.0,
-    "rides_per_trip": 48.74107142857143
+    "scheduled_trips": 176.0,
+    "rides_per_trip": 46.52556818181818
    },
    {
     "id": "22",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 13950.0,
-    "scheduled_trips": 199.0,
-    "rides_per_trip": 70.10050251256281
+    "scheduled_trips": 239.0,
+    "rides_per_trip": 58.36820083682009
    },
    {
     "id": "24",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2047.5,
-    "scheduled_trips": 90.0,
-    "rides_per_trip": 22.75
+    "scheduled_trips": 101.0,
+    "rides_per_trip": 20.27227722772277
    },
    {
     "id": "26",
@@ -3493,64 +3493,64 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 4086.5,
-    "scheduled_trips": 146.0,
-    "rides_per_trip": 27.98972602739726
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 25.22530864197531
    },
    {
     "id": "29",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 7876.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 49.228125
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 48.620370370370374
    },
    {
     "id": "3",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 15033.0,
-    "scheduled_trips": 231.0,
-    "rides_per_trip": 65.07792207792208
+    "scheduled_trips": 243.0,
+    "rides_per_trip": 61.864197530864196
    },
    {
     "id": "30",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 1913.5,
-    "scheduled_trips": 107.0,
-    "rides_per_trip": 17.88317757009346
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 16.785087719298247
    },
    {
     "id": "31",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 518.0,
-    "scheduled_trips": 53.0,
-    "rides_per_trip": 9.773584905660377
+    "scheduled_trips": 55.0,
+    "rides_per_trip": 9.418181818181818
    },
    {
     "id": "34",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3338.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 16.946700507614214
+    "scheduled_trips": 236.0,
+    "rides_per_trip": 14.146186440677965
    },
    {
     "id": "35",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3714.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 18.948979591836736
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 16.805429864253394
    },
    {
     "id": "36",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 9550.0,
-    "scheduled_trips": 163.0,
-    "rides_per_trip": 58.58895705521472
+    "scheduled_trips": 166.0,
+    "rides_per_trip": 57.53012048192771
    },
    {
     "id": "37",
@@ -3573,8 +3573,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 13003.5,
-    "scheduled_trips": 215.0,
-    "rides_per_trip": 60.48139534883721
+    "scheduled_trips": 250.0,
+    "rides_per_trip": 52.014
    },
    {
     "id": "43",
@@ -3597,32 +3597,32 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 9935.5,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 43.96238938053097
+    "scheduled_trips": 251.0,
+    "rides_per_trip": 39.58366533864542
    },
    {
     "id": "48",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 528.5,
-    "scheduled_trips": 66.0,
-    "rides_per_trip": 8.007575757575758
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 7.659420289855072
    },
    {
     "id": "49",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 13950.0,
-    "scheduled_trips": 254.0,
-    "rides_per_trip": 54.92125984251968
+    "scheduled_trips": 271.0,
+    "rides_per_trip": 51.4760147601476
    },
    {
     "id": "49B",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3690.5,
-    "scheduled_trips": 207.0,
-    "rides_per_trip": 17.82850241545894
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 16.699095022624434
    },
    {
     "id": "5",
@@ -3637,8 +3637,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 8711.5,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 52.4789156626506
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 50.35549132947977
    },
    {
     "id": "51",
@@ -3653,40 +3653,40 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6873.5,
-    "scheduled_trips": 188.0,
-    "rides_per_trip": 36.56117021276596
+    "scheduled_trips": 190.0,
+    "rides_per_trip": 36.17631578947368
    },
    {
     "id": "52A",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3067.0,
-    "scheduled_trips": 138.0,
-    "rides_per_trip": 22.22463768115942
+    "scheduled_trips": 142.0,
+    "rides_per_trip": 21.598591549295776
    },
    {
     "id": "53",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 17526.5,
-    "scheduled_trips": 288.0,
-    "rides_per_trip": 60.85590277777778
+    "scheduled_trips": 339.0,
+    "rides_per_trip": 51.700589970501476
    },
    {
     "id": "53A",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2515.5,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 15.338414634146341
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 14.540462427745664
    },
    {
     "id": "54",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 8883.5,
-    "scheduled_trips": 229.0,
-    "rides_per_trip": 38.79257641921397
+    "scheduled_trips": 272.0,
+    "rides_per_trip": 32.65992647058823
    },
    {
     "id": "54A",
@@ -3709,8 +3709,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 8020.5,
-    "scheduled_trips": 225.0,
-    "rides_per_trip": 35.64666666666667
+    "scheduled_trips": 264.0,
+    "rides_per_trip": 30.380681818181817
    },
    {
     "id": "55A",
@@ -3733,48 +3733,48 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6883.5,
-    "scheduled_trips": 156.0,
-    "rides_per_trip": 44.125
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 41.2185628742515
    },
    {
     "id": "57",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 1569.5,
-    "scheduled_trips": 118.0,
-    "rides_per_trip": 13.30084745762712
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 12.073076923076924
    },
    {
     "id": "59",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2587.5,
-    "scheduled_trips": 104.0,
-    "rides_per_trip": 24.879807692307693
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 22.69736842105263
    },
    {
     "id": "6",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6617.5,
-    "scheduled_trips": 185.0,
-    "rides_per_trip": 35.770270270270274
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 35.01322751322751
    },
    {
     "id": "60",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 10425.0,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 46.1283185840708
+    "scheduled_trips": 252.0,
+    "rides_per_trip": 41.36904761904762
    },
    {
     "id": "62",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 7496.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 46.853125
+    "scheduled_trips": 193.0,
+    "rides_per_trip": 38.8419689119171
    },
    {
     "id": "62H",
@@ -3789,80 +3789,80 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 13141.5,
-    "scheduled_trips": 260.0,
-    "rides_per_trip": 50.54423076923077
+    "scheduled_trips": 304.0,
+    "rides_per_trip": 43.22861842105263
    },
    {
     "id": "63W",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 1105.0,
-    "scheduled_trips": 116.0,
-    "rides_per_trip": 9.525862068965518
+    "scheduled_trips": 118.0,
+    "rides_per_trip": 9.364406779661017
    },
    {
     "id": "65",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 7386.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 37.683673469387756
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 36.205882352941174
    },
    {
     "id": "66",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 16890.5,
-    "scheduled_trips": 403.0,
-    "rides_per_trip": 41.911910669975185
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 37.534444444444446
    },
    {
     "id": "67",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6455.0,
-    "scheduled_trips": 194.0,
-    "rides_per_trip": 33.27319587628866
+    "scheduled_trips": 225.0,
+    "rides_per_trip": 28.68888888888889
    },
    {
     "id": "68",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 716.5,
-    "scheduled_trips": 96.0,
-    "rides_per_trip": 7.463541666666667
+    "scheduled_trips": 99.0,
+    "rides_per_trip": 7.237373737373737
    },
    {
     "id": "7",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2984.5,
-    "scheduled_trips": 125.0,
-    "rides_per_trip": 23.876
+    "scheduled_trips": 132.0,
+    "rides_per_trip": 22.609848484848484
    },
    {
     "id": "70",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6583.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 33.58673469387755
+    "scheduled_trips": 213.0,
+    "rides_per_trip": 30.906103286384976
    },
    {
     "id": "71",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6737.0,
-    "scheduled_trips": 184.0,
-    "rides_per_trip": 36.61413043478261
+    "scheduled_trips": 199.0,
+    "rides_per_trip": 33.85427135678392
    },
    {
     "id": "72",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 12554.5,
-    "scheduled_trips": 270.0,
-    "rides_per_trip": 46.49814814814815
+    "scheduled_trips": 299.0,
+    "rides_per_trip": 41.98829431438127
    },
    {
     "id": "73",
@@ -3877,8 +3877,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 9318.0,
-    "scheduled_trips": 266.0,
-    "rides_per_trip": 35.03007518796993
+    "scheduled_trips": 282.0,
+    "rides_per_trip": 33.04255319148936
    },
    {
     "id": "75",
@@ -3893,56 +3893,56 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 8913.0,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 49.79329608938548
+    "scheduled_trips": 209.0,
+    "rides_per_trip": 42.645933014354064
    },
    {
     "id": "77",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 14999.0,
-    "scheduled_trips": 290.0,
-    "rides_per_trip": 51.720689655172414
+    "scheduled_trips": 328.0,
+    "rides_per_trip": 45.728658536585364
    },
    {
     "id": "78",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 6299.0,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 39.86708860759494
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 37.7185628742515
    },
    {
     "id": "79",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 17375.5,
-    "scheduled_trips": 302.0,
-    "rides_per_trip": 57.53476821192053
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 38.61222222222222
    },
    {
     "id": "8",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 14533.0,
-    "scheduled_trips": 205.0,
-    "rides_per_trip": 70.89268292682927
+    "scheduled_trips": 257.0,
+    "rides_per_trip": 56.54863813229572
    },
    {
     "id": "80",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 8055.0,
-    "scheduled_trips": 187.0,
-    "rides_per_trip": 43.07486631016043
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 38.72596153846154
    },
    {
     "id": "81",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 9286.0,
-    "scheduled_trips": 241.0,
-    "rides_per_trip": 38.531120331950206
+    "scheduled_trips": 262.0,
+    "rides_per_trip": 35.44274809160305
    },
    {
     "id": "81W",
@@ -3957,8 +3957,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 12271.5,
-    "scheduled_trips": 256.0,
-    "rides_per_trip": 47.935546875
+    "scheduled_trips": 280.0,
+    "rides_per_trip": 43.82678571428571
    },
    {
     "id": "84",
@@ -3973,8 +3973,8 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 7697.0,
-    "scheduled_trips": 238.0,
-    "rides_per_trip": 32.34033613445378
+    "scheduled_trips": 244.0,
+    "rides_per_trip": 31.545081967213115
    },
    {
     "id": "85A",
@@ -3989,16 +3989,16 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 1268.5,
-    "scheduled_trips": 100.0,
-    "rides_per_trip": 12.685
+    "scheduled_trips": 106.0,
+    "rides_per_trip": 11.966981132075471
    },
    {
     "id": "87",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 8312.5,
-    "scheduled_trips": 211.0,
-    "rides_per_trip": 39.3957345971564
+    "scheduled_trips": 263.0,
+    "rides_per_trip": 31.606463878326995
    },
    {
     "id": "88",
@@ -4013,16 +4013,16 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2408.0,
-    "scheduled_trips": 132.0,
-    "rides_per_trip": 18.242424242424242
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 17.970149253731343
    },
    {
     "id": "9",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 18400.0,
-    "scheduled_trips": 320.0,
-    "rides_per_trip": 57.5
+    "scheduled_trips": 365.0,
+    "rides_per_trip": 50.41095890410959
    },
    {
     "id": "90",
@@ -4037,40 +4037,40 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3666.0,
-    "scheduled_trips": 154.0,
-    "rides_per_trip": 23.805194805194805
+    "scheduled_trips": 155.0,
+    "rides_per_trip": 23.651612903225807
    },
    {
     "id": "92",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 4692.0,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 29.696202531645568
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 28.962962962962962
    },
    {
     "id": "93",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 3795.0,
-    "scheduled_trips": 121.0,
-    "rides_per_trip": 31.363636363636363
+    "scheduled_trips": 125.0,
+    "rides_per_trip": 30.36
    },
    {
     "id": "94",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 9034.0,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 54.42168674698795
+    "scheduled_trips": 170.0,
+    "rides_per_trip": 53.141176470588235
    },
    {
     "id": "95",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 5053.0,
-    "scheduled_trips": 235.0,
-    "rides_per_trip": 21.50212765957447
+    "scheduled_trips": 256.0,
+    "rides_per_trip": 19.73828125
    },
    {
     "id": "96",
@@ -4085,32 +4085,32 @@
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2267.0,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 22.445544554455445
+    "scheduled_trips": 108.0,
+    "rides_per_trip": 20.99074074074074
    },
    {
     "id": "J14",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 7767.5,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 32.364583333333336
+    "scheduled_trips": 242.0,
+    "rides_per_trip": 32.09710743801653
    },
    {
     "id": "N5",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 331.0,
-    "scheduled_trips": 4.0,
-    "rides_per_trip": 82.75
+    "scheduled_trips": 20.0,
+    "rides_per_trip": 16.55
    },
    {
     "id": "X4",
     "date": "2026-09-04",
     "daytype": "W",
     "forecast_rides": 2583.0,
-    "scheduled_trips": 67.0,
-    "rides_per_trip": 38.55223880597015
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 37.43478260869565
    },
    {
     "id": "X49",
@@ -4149,8 +4149,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 913.5,
-    "scheduled_trips": 106.0,
-    "rides_per_trip": 8.617924528301886
+    "scheduled_trips": 107.0,
+    "rides_per_trip": 8.537383177570094
    },
    {
     "id": "106",
@@ -4189,8 +4189,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 702.0,
-    "scheduled_trips": 89.0,
-    "rides_per_trip": 7.887640449438202
+    "scheduled_trips": 90.0,
+    "rides_per_trip": 7.8
    },
    {
     "id": "115",
@@ -4205,16 +4205,16 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2174.5,
-    "scheduled_trips": 132.0,
-    "rides_per_trip": 16.473484848484848
+    "scheduled_trips": 141.0,
+    "rides_per_trip": 15.421985815602836
    },
    {
     "id": "12",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 7496.0,
-    "scheduled_trips": 202.0,
-    "rides_per_trip": 37.10891089108911
+    "scheduled_trips": 215.0,
+    "rides_per_trip": 34.86511627906977
    },
    {
     "id": "124",
@@ -4229,8 +4229,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2440.0,
-    "scheduled_trips": 110.0,
-    "rides_per_trip": 22.181818181818183
+    "scheduled_trips": 119.0,
+    "rides_per_trip": 20.50420168067227
    },
    {
     "id": "128",
@@ -4253,56 +4253,56 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 10544.5,
-    "scheduled_trips": 185.0,
-    "rides_per_trip": 56.997297297297294
+    "scheduled_trips": 192.0,
+    "rides_per_trip": 54.919270833333336
    },
    {
     "id": "147",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 8826.0,
-    "scheduled_trips": 209.0,
-    "rides_per_trip": 42.229665071770334
+    "scheduled_trips": 219.0,
+    "rides_per_trip": 40.3013698630137
    },
    {
     "id": "15",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 3567.0,
-    "scheduled_trips": 134.0,
-    "rides_per_trip": 26.619402985074625
+    "scheduled_trips": 138.0,
+    "rides_per_trip": 25.847826086956523
    },
    {
     "id": "151",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 16214.0,
-    "scheduled_trips": 218.0,
-    "rides_per_trip": 74.37614678899082
+    "scheduled_trips": 225.0,
+    "rides_per_trip": 72.06222222222222
    },
    {
     "id": "152",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 4507.5,
-    "scheduled_trips": 110.0,
-    "rides_per_trip": 40.97727272727273
+    "scheduled_trips": 121.0,
+    "rides_per_trip": 37.252066115702476
    },
    {
     "id": "155",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 4126.5,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 23.053072625698324
+    "scheduled_trips": 182.0,
+    "rides_per_trip": 22.673076923076923
    },
    {
     "id": "169",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 20.0,
-    "scheduled_trips": 0.0,
-    "rides_per_trip": null
+    "scheduled_trips": 1.0,
+    "rides_per_trip": 20.0
    },
    {
     "id": "171",
@@ -4325,8 +4325,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2536.0,
-    "scheduled_trips": 119.0,
-    "rides_per_trip": 21.310924369747898
+    "scheduled_trips": 121.0,
+    "rides_per_trip": 20.958677685950413
    },
    {
     "id": "19",
@@ -4341,8 +4341,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 10235.5,
-    "scheduled_trips": 213.0,
-    "rides_per_trip": 48.05399061032864
+    "scheduled_trips": 255.0,
+    "rides_per_trip": 40.13921568627451
    },
    {
     "id": "201",
@@ -4357,72 +4357,72 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6498.0,
-    "scheduled_trips": 123.0,
-    "rides_per_trip": 52.829268292682926
+    "scheduled_trips": 148.0,
+    "rides_per_trip": 43.9054054054054
    },
    {
     "id": "22",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 14311.5,
-    "scheduled_trips": 205.0,
-    "rides_per_trip": 69.81219512195122
+    "scheduled_trips": 224.0,
+    "rides_per_trip": 63.890625
    },
    {
     "id": "28",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2188.0,
-    "scheduled_trips": 65.0,
-    "rides_per_trip": 33.66153846153846
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 16.83076923076923
    },
    {
     "id": "29",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 8172.5,
-    "scheduled_trips": 163.0,
-    "rides_per_trip": 50.13803680981595
+    "scheduled_trips": 165.0,
+    "rides_per_trip": 49.53030303030303
    },
    {
     "id": "3",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 12874.0,
-    "scheduled_trips": 188.0,
-    "rides_per_trip": 68.47872340425532
+    "scheduled_trips": 195.0,
+    "rides_per_trip": 66.02051282051282
    },
    {
     "id": "30",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 1552.5,
-    "scheduled_trips": 100.0,
-    "rides_per_trip": 15.525
+    "scheduled_trips": 106.0,
+    "rides_per_trip": 14.64622641509434
    },
    {
     "id": "34",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2723.0,
-    "scheduled_trips": 192.0,
-    "rides_per_trip": 14.182291666666666
+    "scheduled_trips": 210.0,
+    "rides_per_trip": 12.966666666666667
    },
    {
     "id": "35",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2311.5,
-    "scheduled_trips": 178.0,
-    "rides_per_trip": 12.985955056179776
+    "scheduled_trips": 205.0,
+    "rides_per_trip": 11.27560975609756
    },
    {
     "id": "36",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 10323.5,
-    "scheduled_trips": 172.0,
-    "rides_per_trip": 60.020348837209305
+    "scheduled_trips": 175.0,
+    "rides_per_trip": 58.99142857142857
    },
    {
     "id": "39",
@@ -4437,8 +4437,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 13557.0,
-    "scheduled_trips": 222.0,
-    "rides_per_trip": 61.067567567567565
+    "scheduled_trips": 254.0,
+    "rides_per_trip": 53.374015748031496
    },
    {
     "id": "43",
@@ -4461,24 +4461,24 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6854.5,
-    "scheduled_trips": 202.0,
-    "rides_per_trip": 33.93316831683168
+    "scheduled_trips": 219.0,
+    "rides_per_trip": 31.299086757990867
    },
    {
     "id": "49",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 13595.5,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 56.64791666666667
+    "scheduled_trips": 256.0,
+    "rides_per_trip": 53.107421875
    },
    {
     "id": "49B",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2768.5,
-    "scheduled_trips": 161.0,
-    "rides_per_trip": 17.195652173913043
+    "scheduled_trips": 177.0,
+    "rides_per_trip": 15.641242937853107
    },
    {
     "id": "5",
@@ -4509,40 +4509,40 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 4804.0,
-    "scheduled_trips": 144.0,
-    "rides_per_trip": 33.361111111111114
+    "scheduled_trips": 148.0,
+    "rides_per_trip": 32.45945945945946
    },
    {
     "id": "52A",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 1716.0,
-    "scheduled_trips": 80.0,
-    "rides_per_trip": 21.45
+    "scheduled_trips": 84.0,
+    "rides_per_trip": 20.428571428571427
    },
    {
     "id": "53",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 13972.0,
-    "scheduled_trips": 229.0,
-    "rides_per_trip": 61.01310043668122
+    "scheduled_trips": 272.0,
+    "rides_per_trip": 51.36764705882353
    },
    {
     "id": "53A",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 1493.0,
-    "scheduled_trips": 0.0,
-    "rides_per_trip": null
+    "scheduled_trips": 122.0,
+    "rides_per_trip": 12.237704918032787
    },
    {
     "id": "54",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6855.5,
-    "scheduled_trips": 206.0,
-    "rides_per_trip": 33.279126213592235
+    "scheduled_trips": 238.0,
+    "rides_per_trip": 28.804621848739497
    },
    {
     "id": "54B",
@@ -4557,8 +4557,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6706.5,
-    "scheduled_trips": 204.0,
-    "rides_per_trip": 32.875
+    "scheduled_trips": 240.0,
+    "rides_per_trip": 27.94375
    },
    {
     "id": "55N",
@@ -4581,40 +4581,40 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 850.5,
-    "scheduled_trips": 72.0,
-    "rides_per_trip": 11.8125
+    "scheduled_trips": 77.0,
+    "rides_per_trip": 11.045454545454545
    },
    {
     "id": "59",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 1479.0,
-    "scheduled_trips": 78.0,
-    "rides_per_trip": 18.96153846153846
+    "scheduled_trips": 85.0,
+    "rides_per_trip": 17.4
    },
    {
     "id": "6",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 7110.5,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 35.375621890547265
+    "scheduled_trips": 205.0,
+    "rides_per_trip": 34.68536585365854
    },
    {
     "id": "60",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 8316.0,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 42.213197969543145
+    "scheduled_trips": 220.0,
+    "rides_per_trip": 37.8
    },
    {
     "id": "62",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 5788.5,
-    "scheduled_trips": 111.0,
-    "rides_per_trip": 52.148648648648646
+    "scheduled_trips": 172.0,
+    "rides_per_trip": 33.65406976744186
    },
    {
     "id": "62H",
@@ -4629,40 +4629,40 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 10033.5,
-    "scheduled_trips": 234.0,
-    "rides_per_trip": 42.87820512820513
+    "scheduled_trips": 262.0,
+    "rides_per_trip": 38.295801526717554
    },
    {
     "id": "63W",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 689.0,
-    "scheduled_trips": 78.0,
-    "rides_per_trip": 8.833333333333334
+    "scheduled_trips": 80.0,
+    "rides_per_trip": 8.6125
    },
    {
     "id": "65",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6635.5,
-    "scheduled_trips": 152.0,
-    "rides_per_trip": 43.6546052631579
+    "scheduled_trips": 161.0,
+    "rides_per_trip": 41.214285714285715
    },
    {
     "id": "66",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 14238.5,
-    "scheduled_trips": 341.0,
-    "rides_per_trip": 41.75513196480939
+    "scheduled_trips": 373.0,
+    "rides_per_trip": 38.17292225201072
    },
    {
     "id": "67",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 5207.5,
-    "scheduled_trips": 189.0,
-    "rides_per_trip": 27.552910052910054
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 25.036057692307693
    },
    {
     "id": "68",
@@ -4677,24 +4677,24 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 4658.0,
-    "scheduled_trips": 140.0,
-    "rides_per_trip": 33.27142857142857
+    "scheduled_trips": 149.0,
+    "rides_per_trip": 31.261744966442954
    },
    {
     "id": "71",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 5922.5,
-    "scheduled_trips": 176.0,
-    "rides_per_trip": 33.65056818181818
+    "scheduled_trips": 187.0,
+    "rides_per_trip": 31.671122994652407
    },
    {
     "id": "72",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 11240.0,
-    "scheduled_trips": 213.0,
-    "rides_per_trip": 52.76995305164319
+    "scheduled_trips": 247.0,
+    "rides_per_trip": 45.506072874493924
    },
    {
     "id": "73",
@@ -4709,8 +4709,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 7842.5,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 34.70132743362832
+    "scheduled_trips": 237.0,
+    "rides_per_trip": 33.09071729957806
    },
    {
     "id": "75",
@@ -4725,56 +4725,56 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6559.0,
-    "scheduled_trips": 136.0,
-    "rides_per_trip": 48.22794117647059
+    "scheduled_trips": 142.0,
+    "rides_per_trip": 46.190140845070424
    },
    {
     "id": "77",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 12173.5,
-    "scheduled_trips": 225.0,
-    "rides_per_trip": 54.10444444444445
+    "scheduled_trips": 249.0,
+    "rides_per_trip": 48.889558232931726
    },
    {
     "id": "78",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 5000.5,
-    "scheduled_trips": 122.0,
-    "rides_per_trip": 40.98770491803279
+    "scheduled_trips": 132.0,
+    "rides_per_trip": 37.88257575757576
    },
    {
     "id": "79",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 13550.0,
-    "scheduled_trips": 283.0,
-    "rides_per_trip": 47.879858657243815
+    "scheduled_trips": 381.0,
+    "rides_per_trip": 35.56430446194226
    },
    {
     "id": "8",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 12068.5,
-    "scheduled_trips": 181.0,
-    "rides_per_trip": 66.6767955801105
+    "scheduled_trips": 187.0,
+    "rides_per_trip": 64.53743315508021
    },
    {
     "id": "80",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6673.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 41.709375
+    "scheduled_trips": 177.0,
+    "rides_per_trip": 37.70338983050848
    },
    {
     "id": "81",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 7915.0,
-    "scheduled_trips": 215.0,
-    "rides_per_trip": 36.81395348837209
+    "scheduled_trips": 234.0,
+    "rides_per_trip": 33.824786324786324
    },
    {
     "id": "81W",
@@ -4789,8 +4789,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 9449.0,
-    "scheduled_trips": 233.0,
-    "rides_per_trip": 40.55364806866953
+    "scheduled_trips": 246.0,
+    "rides_per_trip": 38.41056910569106
    },
    {
     "id": "84",
@@ -4805,8 +4805,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 6173.0,
-    "scheduled_trips": 209.0,
-    "rides_per_trip": 29.535885167464116
+    "scheduled_trips": 213.0,
+    "rides_per_trip": 28.981220657276996
    },
    {
     "id": "85A",
@@ -4821,8 +4821,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 5992.5,
-    "scheduled_trips": 170.0,
-    "rides_per_trip": 35.25
+    "scheduled_trips": 213.0,
+    "rides_per_trip": 28.133802816901408
    },
    {
     "id": "88",
@@ -4837,16 +4837,16 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2093.5,
-    "scheduled_trips": 121.0,
-    "rides_per_trip": 17.301652892561982
+    "scheduled_trips": 122.0,
+    "rides_per_trip": 17.15983606557377
    },
    {
     "id": "9",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 18563.5,
-    "scheduled_trips": 269.0,
-    "rides_per_trip": 69.0092936802974
+    "scheduled_trips": 305.0,
+    "rides_per_trip": 60.863934426229505
    },
    {
     "id": "90",
@@ -4877,8 +4877,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 2470.0,
-    "scheduled_trips": 75.0,
-    "rides_per_trip": 32.93333333333333
+    "scheduled_trips": 78.0,
+    "rides_per_trip": 31.666666666666668
    },
    {
     "id": "94",
@@ -4893,16 +4893,16 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 4179.0,
-    "scheduled_trips": 209.0,
-    "rides_per_trip": 19.995215311004785
+    "scheduled_trips": 233.0,
+    "rides_per_trip": 17.935622317596568
    },
    {
     "id": "97",
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 1887.5,
-    "scheduled_trips": 88.0,
-    "rides_per_trip": 21.448863636363637
+    "scheduled_trips": 91.0,
+    "rides_per_trip": 20.74175824175824
    },
    {
     "id": "J14",
@@ -4917,8 +4917,8 @@
     "date": "2026-09-05",
     "daytype": "A",
     "forecast_rides": 362.0,
-    "scheduled_trips": 4.0,
-    "rides_per_trip": 90.5
+    "scheduled_trips": 20.0,
+    "rides_per_trip": 18.1
    },
    {
     "id": "10",
@@ -4941,8 +4941,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 623.5,
-    "scheduled_trips": 98.0,
-    "rides_per_trip": 6.362244897959184
+    "scheduled_trips": 105.0,
+    "rides_per_trip": 5.938095238095238
    },
    {
     "id": "106",
@@ -4981,8 +4981,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 443.5,
-    "scheduled_trips": 71.0,
-    "rides_per_trip": 6.246478873239437
+    "scheduled_trips": 72.0,
+    "rides_per_trip": 6.159722222222222
    },
    {
     "id": "115",
@@ -4997,16 +4997,16 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1690.0,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 16.73267326732673
+    "scheduled_trips": 111.0,
+    "rides_per_trip": 15.225225225225225
    },
    {
     "id": "12",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 6251.5,
-    "scheduled_trips": 194.0,
-    "rides_per_trip": 32.22422680412371
+    "scheduled_trips": 219.0,
+    "rides_per_trip": 28.54566210045662
    },
    {
     "id": "124",
@@ -5021,8 +5021,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1757.5,
-    "scheduled_trips": 102.0,
-    "rides_per_trip": 17.230392156862745
+    "scheduled_trips": 113.0,
+    "rides_per_trip": 15.553097345132743
    },
    {
     "id": "128",
@@ -5045,55 +5045,55 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 7726.5,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 46.545180722891565
+    "scheduled_trips": 169.0,
+    "rides_per_trip": 45.718934911242606
    },
    {
     "id": "147",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 6041.0,
-    "scheduled_trips": 159.0,
-    "rides_per_trip": 37.9937106918239
+    "scheduled_trips": 168.0,
+    "rides_per_trip": 35.958333333333336
    },
    {
     "id": "15",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 2673.0,
-    "scheduled_trips": 106.0,
-    "rides_per_trip": 25.21698113207547
+    "scheduled_trips": 110.0,
+    "rides_per_trip": 24.3
    },
    {
     "id": "151",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 11393.0,
-    "scheduled_trips": 177.0,
-    "rides_per_trip": 64.36723163841808
+    "scheduled_trips": 185.0,
+    "rides_per_trip": 61.58378378378379
    },
    {
     "id": "152",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 3600.0,
-    "scheduled_trips": 90.0,
-    "rides_per_trip": 40.0
+    "scheduled_trips": 97.0,
+    "rides_per_trip": 37.11340206185567
    },
    {
     "id": "155",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 3200.0,
-    "scheduled_trips": 143.0,
-    "rides_per_trip": 22.377622377622377
+    "scheduled_trips": 146.0,
+    "rides_per_trip": 21.91780821917808
    },
    {
     "id": "169",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 54.0,
-    "scheduled_trips": 0.0,
+    "scheduled_trips": null,
     "rides_per_trip": null
    },
    {
@@ -5109,8 +5109,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1985.0,
-    "scheduled_trips": 96.0,
-    "rides_per_trip": 20.677083333333332
+    "scheduled_trips": 98.0,
+    "rides_per_trip": 20.255102040816325
    },
    {
     "id": "19",
@@ -5125,80 +5125,80 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 8625.5,
-    "scheduled_trips": 204.0,
-    "rides_per_trip": 42.28186274509804
+    "scheduled_trips": 243.0,
+    "rides_per_trip": 35.49588477366255
    },
    {
     "id": "21",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4443.0,
-    "scheduled_trips": 81.0,
-    "rides_per_trip": 54.851851851851855
+    "scheduled_trips": 128.0,
+    "rides_per_trip": 34.7109375
    },
    {
     "id": "22",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 10284.0,
-    "scheduled_trips": 176.0,
-    "rides_per_trip": 58.43181818181818
+    "scheduled_trips": 193.0,
+    "rides_per_trip": 53.284974093264246
    },
    {
     "id": "28",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 2106.5,
-    "scheduled_trips": 57.0,
-    "rides_per_trip": 36.95614035087719
+    "scheduled_trips": 116.0,
+    "rides_per_trip": 18.15948275862069
    },
    {
     "id": "29",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 5761.5,
-    "scheduled_trips": 135.0,
-    "rides_per_trip": 42.67777777777778
+    "scheduled_trips": 137.0,
+    "rides_per_trip": 42.05474452554745
    },
    {
     "id": "3",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 9694.0,
-    "scheduled_trips": 149.0,
-    "rides_per_trip": 65.06040268456375
+    "scheduled_trips": 150.0,
+    "rides_per_trip": 64.62666666666667
    },
    {
     "id": "30",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 770.5,
-    "scheduled_trips": 0.0,
-    "rides_per_trip": null
+    "scheduled_trips": 82.0,
+    "rides_per_trip": 9.396341463414634
    },
    {
     "id": "34",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 2442.5,
-    "scheduled_trips": 186.0,
-    "rides_per_trip": 13.131720430107526
+    "scheduled_trips": 205.0,
+    "rides_per_trip": 11.914634146341463
    },
    {
     "id": "35",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1904.0,
-    "scheduled_trips": 174.0,
-    "rides_per_trip": 10.942528735632184
+    "scheduled_trips": 202.0,
+    "rides_per_trip": 9.425742574257425
    },
    {
     "id": "36",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 8677.0,
-    "scheduled_trips": 159.0,
-    "rides_per_trip": 54.57232704402516
+    "scheduled_trips": 163.0,
+    "rides_per_trip": 53.23312883435583
    },
    {
     "id": "39",
@@ -5213,8 +5213,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 10271.5,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 52.40561224489796
+    "scheduled_trips": 229.0,
+    "rides_per_trip": 44.853711790393014
    },
    {
     "id": "43",
@@ -5237,24 +5237,24 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 5656.0,
-    "scheduled_trips": 199.0,
-    "rides_per_trip": 28.42211055276382
+    "scheduled_trips": 217.0,
+    "rides_per_trip": 26.06451612903226
    },
    {
     "id": "49",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 10743.0,
-    "scheduled_trips": 212.0,
-    "rides_per_trip": 50.674528301886795
+    "scheduled_trips": 227.0,
+    "rides_per_trip": 47.32599118942731
    },
    {
     "id": "49B",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 2119.0,
-    "scheduled_trips": 143.0,
-    "rides_per_trip": 14.818181818181818
+    "scheduled_trips": 156.0,
+    "rides_per_trip": 13.583333333333334
    },
    {
     "id": "5",
@@ -5285,40 +5285,40 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 3687.0,
-    "scheduled_trips": 110.0,
-    "rides_per_trip": 33.518181818181816
+    "scheduled_trips": 117.0,
+    "rides_per_trip": 31.512820512820515
    },
    {
     "id": "52A",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1431.0,
-    "scheduled_trips": 60.0,
-    "rides_per_trip": 23.85
+    "scheduled_trips": 64.0,
+    "rides_per_trip": 22.359375
    },
    {
     "id": "53",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 11153.0,
-    "scheduled_trips": 209.0,
-    "rides_per_trip": 53.36363636363637
+    "scheduled_trips": 248.0,
+    "rides_per_trip": 44.971774193548384
    },
    {
     "id": "53A",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1019.5,
-    "scheduled_trips": 0.0,
-    "rides_per_trip": null
+    "scheduled_trips": 102.0,
+    "rides_per_trip": 9.995098039215685
    },
    {
     "id": "54",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 5054.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 25.65736040609137
+    "scheduled_trips": 223.0,
+    "rides_per_trip": 22.66591928251121
    },
    {
     "id": "54B",
@@ -5333,8 +5333,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 5284.0,
-    "scheduled_trips": 193.0,
-    "rides_per_trip": 27.378238341968913
+    "scheduled_trips": 227.0,
+    "rides_per_trip": 23.277533039647576
    },
    {
     "id": "56",
@@ -5349,15 +5349,15 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 431.5,
-    "scheduled_trips": 50.0,
-    "rides_per_trip": 8.63
+    "scheduled_trips": 57.0,
+    "rides_per_trip": 7.5701754385964914
    },
    {
     "id": "59",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 10.0,
-    "scheduled_trips": 0.0,
+    "scheduled_trips": null,
     "rides_per_trip": null
    },
    {
@@ -5365,32 +5365,32 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 5430.5,
-    "scheduled_trips": 163.0,
-    "rides_per_trip": 33.3159509202454
+    "scheduled_trips": 168.0,
+    "rides_per_trip": 32.32440476190476
    },
    {
     "id": "60",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 6358.0,
-    "scheduled_trips": 195.0,
-    "rides_per_trip": 32.6051282051282
+    "scheduled_trips": 220.0,
+    "rides_per_trip": 28.9
    },
    {
     "id": "62",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4624.5,
-    "scheduled_trips": 127.0,
-    "rides_per_trip": 36.41338582677165
+    "scheduled_trips": 148.0,
+    "rides_per_trip": 31.24662162162162
    },
    {
     "id": "63",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 8049.0,
-    "scheduled_trips": 218.0,
-    "rides_per_trip": 36.92201834862385
+    "scheduled_trips": 264.0,
+    "rides_per_trip": 30.488636363636363
    },
    {
     "id": "63W",
@@ -5405,24 +5405,24 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4155.0,
-    "scheduled_trips": 117.0,
-    "rides_per_trip": 35.51282051282051
+    "scheduled_trips": 122.0,
+    "rides_per_trip": 34.057377049180324
    },
    {
     "id": "66",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 10652.0,
-    "scheduled_trips": 250.0,
-    "rides_per_trip": 42.608
+    "scheduled_trips": 280.0,
+    "rides_per_trip": 38.042857142857144
    },
    {
     "id": "67",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4047.0,
-    "scheduled_trips": 151.0,
-    "rides_per_trip": 26.801324503311257
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 24.233532934131738
    },
    {
     "id": "68",
@@ -5437,24 +5437,24 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 3521.5,
-    "scheduled_trips": 126.0,
-    "rides_per_trip": 27.9484126984127
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 26.279850746268657
    },
    {
     "id": "71",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4675.0,
-    "scheduled_trips": 147.0,
-    "rides_per_trip": 31.802721088435373
+    "scheduled_trips": 155.0,
+    "rides_per_trip": 30.161290322580644
    },
    {
     "id": "72",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 8163.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 41.64795918367347
+    "scheduled_trips": 234.0,
+    "rides_per_trip": 34.88461538461539
    },
    {
     "id": "73",
@@ -5469,8 +5469,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 6334.0,
-    "scheduled_trips": 214.0,
-    "rides_per_trip": 29.598130841121495
+    "scheduled_trips": 229.0,
+    "rides_per_trip": 27.65938864628821
    },
    {
     "id": "75",
@@ -5485,56 +5485,56 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4183.5,
-    "scheduled_trips": 92.0,
-    "rides_per_trip": 45.47282608695652
+    "scheduled_trips": 98.0,
+    "rides_per_trip": 42.68877551020408
    },
    {
     "id": "77",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 9842.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 49.96192893401015
+    "scheduled_trips": 229.0,
+    "rides_per_trip": 42.980349344978166
    },
    {
     "id": "78",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 3418.5,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 33.84653465346535
+    "scheduled_trips": 107.0,
+    "rides_per_trip": 31.94859813084112
    },
    {
     "id": "79",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 10605.0,
-    "scheduled_trips": 202.0,
-    "rides_per_trip": 52.5
+    "scheduled_trips": 283.0,
+    "rides_per_trip": 37.47349823321555
    },
    {
     "id": "8",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 9078.5,
-    "scheduled_trips": 141.0,
-    "rides_per_trip": 64.38652482269504
+    "scheduled_trips": 145.0,
+    "rides_per_trip": 62.610344827586204
    },
    {
     "id": "80",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 5171.5,
-    "scheduled_trips": 117.0,
-    "rides_per_trip": 44.2008547008547
+    "scheduled_trips": 144.0,
+    "rides_per_trip": 35.91319444444444
    },
    {
     "id": "81",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 6424.5,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 31.96268656716418
+    "scheduled_trips": 220.0,
+    "rides_per_trip": 29.202272727272728
    },
    {
     "id": "81W",
@@ -5549,8 +5549,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 7707.5,
-    "scheduled_trips": 220.0,
-    "rides_per_trip": 35.03409090909091
+    "scheduled_trips": 266.0,
+    "rides_per_trip": 28.975563909774436
    },
    {
     "id": "84",
@@ -5565,16 +5565,16 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4688.0,
-    "scheduled_trips": 204.0,
-    "rides_per_trip": 22.980392156862745
+    "scheduled_trips": 209.0,
+    "rides_per_trip": 22.43062200956938
    },
    {
     "id": "87",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 4652.5,
-    "scheduled_trips": 143.0,
-    "rides_per_trip": 32.53496503496503
+    "scheduled_trips": 176.0,
+    "rides_per_trip": 26.43465909090909
    },
    {
     "id": "88",
@@ -5589,16 +5589,16 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1545.5,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 15.301980198019802
+    "scheduled_trips": 102.0,
+    "rides_per_trip": 15.151960784313726
    },
    {
     "id": "9",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 15068.5,
-    "scheduled_trips": 238.0,
-    "rides_per_trip": 63.313025210084035
+    "scheduled_trips": 276.0,
+    "rides_per_trip": 54.596014492753625
    },
    {
     "id": "90",
@@ -5629,8 +5629,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1874.5,
-    "scheduled_trips": 74.0,
-    "rides_per_trip": 25.33108108108108
+    "scheduled_trips": 77.0,
+    "rides_per_trip": 24.344155844155843
    },
    {
     "id": "94",
@@ -5645,16 +5645,16 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 3372.0,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 16.776119402985074
+    "scheduled_trips": 224.0,
+    "rides_per_trip": 15.053571428571429
    },
    {
     "id": "97",
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 1285.5,
-    "scheduled_trips": 62.0,
-    "rides_per_trip": 20.733870967741936
+    "scheduled_trips": 65.0,
+    "rides_per_trip": 19.776923076923076
    },
    {
     "id": "J14",
@@ -5669,8 +5669,8 @@
     "date": "2026-09-06",
     "daytype": "U",
     "forecast_rides": 362.5,
-    "scheduled_trips": 6.0,
-    "rides_per_trip": 60.416666666666664
+    "scheduled_trips": 22.0,
+    "rides_per_trip": 16.477272727272727
    },
    {
     "id": "1",
@@ -5693,8 +5693,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 356.5,
-    "scheduled_trips": 52.0,
-    "rides_per_trip": 6.855769230769231
+    "scheduled_trips": 53.0,
+    "rides_per_trip": 6.726415094339623
    },
    {
     "id": "1001",
@@ -5709,24 +5709,24 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 1482.0,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 11.578125
+    "scheduled_trips": 129.0,
+    "rides_per_trip": 11.488372093023257
    },
    {
     "id": "106",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 969.0,
-    "scheduled_trips": 134.0,
-    "rides_per_trip": 7.231343283582089
+    "scheduled_trips": 135.0,
+    "rides_per_trip": 7.177777777777778
    },
    {
     "id": "108",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 631.0,
-    "scheduled_trips": 68.0,
-    "rides_per_trip": 9.279411764705882
+    "scheduled_trips": 72.0,
+    "rides_per_trip": 8.76388888888889
    },
    {
     "id": "11",
@@ -5757,8 +5757,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 1228.5,
-    "scheduled_trips": 129.0,
-    "rides_per_trip": 9.523255813953488
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 9.167910447761194
    },
    {
     "id": "115",
@@ -5773,16 +5773,16 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2513.5,
-    "scheduled_trips": 181.0,
-    "rides_per_trip": 13.886740331491712
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 13.298941798941799
    },
    {
     "id": "12",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 10383.0,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 43.2625
+    "scheduled_trips": 254.0,
+    "rides_per_trip": 40.87795275590551
    },
    {
     "id": "120",
@@ -5797,8 +5797,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 1147.0,
-    "scheduled_trips": 75.0,
-    "rides_per_trip": 15.293333333333333
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 15.092105263157896
    },
    {
     "id": "124",
@@ -5821,8 +5821,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3985.0,
-    "scheduled_trips": 136.0,
-    "rides_per_trip": 29.301470588235293
+    "scheduled_trips": 146.0,
+    "rides_per_trip": 27.294520547945204
    },
    {
     "id": "130",
@@ -5869,16 +5869,16 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 9246.0,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 56.3780487804878
+    "scheduled_trips": 222.0,
+    "rides_per_trip": 41.648648648648646
    },
    {
     "id": "147",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 9160.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 46.5
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 44.04086538461539
    },
    {
     "id": "148",
@@ -5893,48 +5893,48 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 5409.5,
-    "scheduled_trips": 150.0,
-    "rides_per_trip": 36.06333333333333
+    "scheduled_trips": 159.0,
+    "rides_per_trip": 34.022012578616355
    },
    {
     "id": "151",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 12412.5,
-    "scheduled_trips": 189.0,
-    "rides_per_trip": 65.67460317460318
+    "scheduled_trips": 211.0,
+    "rides_per_trip": 58.82701421800948
    },
    {
     "id": "152",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 7609.5,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 42.51117318435754
+    "scheduled_trips": 212.0,
+    "rides_per_trip": 35.8938679245283
    },
    {
     "id": "155",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 4840.0,
-    "scheduled_trips": 201.0,
-    "rides_per_trip": 24.079601990049753
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 23.725490196078432
    },
    {
     "id": "156",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 4342.0,
-    "scheduled_trips": 128.0,
-    "rides_per_trip": 33.921875
+    "scheduled_trips": 136.0,
+    "rides_per_trip": 31.926470588235293
    },
    {
     "id": "157",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 5913.0,
-    "scheduled_trips": 124.0,
-    "rides_per_trip": 47.685483870967744
+    "scheduled_trips": 131.0,
+    "rides_per_trip": 45.13740458015267
    },
    {
     "id": "165",
@@ -5949,8 +5949,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 85.5,
-    "scheduled_trips": 8.0,
-    "rides_per_trip": 10.6875
+    "scheduled_trips": 10.0,
+    "rides_per_trip": 8.55
    },
    {
     "id": "171",
@@ -5973,8 +5973,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3329.0,
-    "scheduled_trips": 127.0,
-    "rides_per_trip": 26.212598425196852
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 25.607692307692307
    },
    {
     "id": "19",
@@ -6005,48 +6005,48 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 13913.0,
-    "scheduled_trips": 295.0,
-    "rides_per_trip": 47.16271186440678
+    "scheduled_trips": 338.0,
+    "rides_per_trip": 41.162721893491124
    },
    {
     "id": "201",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 1068.5,
-    "scheduled_trips": 74.0,
-    "rides_per_trip": 14.43918918918919
+    "scheduled_trips": 76.0,
+    "rides_per_trip": 14.05921052631579
    },
    {
     "id": "206",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 331.5,
-    "scheduled_trips": 21.0,
-    "rides_per_trip": 15.785714285714286
+    "scheduled_trips": 25.0,
+    "rides_per_trip": 13.26
    },
    {
     "id": "21",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 7652.0,
-    "scheduled_trips": 168.0,
-    "rides_per_trip": 45.54761904761905
+    "scheduled_trips": 176.0,
+    "rides_per_trip": 43.47727272727273
    },
    {
     "id": "22",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 12751.5,
-    "scheduled_trips": 199.0,
-    "rides_per_trip": 64.07788944723617
+    "scheduled_trips": 239.0,
+    "rides_per_trip": 53.35355648535565
    },
    {
     "id": "24",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2097.0,
-    "scheduled_trips": 90.0,
-    "rides_per_trip": 23.3
+    "scheduled_trips": 101.0,
+    "rides_per_trip": 20.762376237623762
    },
    {
     "id": "26",
@@ -6061,64 +6061,64 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 4545.5,
-    "scheduled_trips": 146.0,
-    "rides_per_trip": 31.133561643835616
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 28.058641975308642
    },
    {
     "id": "29",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 7427.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 46.421875
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 45.848765432098766
    },
    {
     "id": "3",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 14388.0,
-    "scheduled_trips": 231.0,
-    "rides_per_trip": 62.285714285714285
+    "scheduled_trips": 243.0,
+    "rides_per_trip": 59.20987654320987
    },
    {
     "id": "30",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2140.0,
-    "scheduled_trips": 107.0,
-    "rides_per_trip": 20.0
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 18.771929824561404
    },
    {
     "id": "31",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 553.0,
-    "scheduled_trips": 53.0,
-    "rides_per_trip": 10.433962264150944
+    "scheduled_trips": 55.0,
+    "rides_per_trip": 10.054545454545455
    },
    {
     "id": "34",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3540.5,
-    "scheduled_trips": 197.0,
-    "rides_per_trip": 17.972081218274113
+    "scheduled_trips": 236.0,
+    "rides_per_trip": 15.002118644067796
    },
    {
     "id": "35",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3504.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 17.877551020408163
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 15.855203619909503
    },
    {
     "id": "36",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 9209.0,
-    "scheduled_trips": 163.0,
-    "rides_per_trip": 56.49693251533742
+    "scheduled_trips": 166.0,
+    "rides_per_trip": 55.475903614457835
    },
    {
     "id": "37",
@@ -6141,8 +6141,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 14488.0,
-    "scheduled_trips": 215.0,
-    "rides_per_trip": 67.38604651162791
+    "scheduled_trips": 250.0,
+    "rides_per_trip": 57.952
    },
    {
     "id": "43",
@@ -6165,32 +6165,32 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 9260.0,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 40.97345132743363
+    "scheduled_trips": 251.0,
+    "rides_per_trip": 36.89243027888446
    },
    {
     "id": "48",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 651.5,
-    "scheduled_trips": 66.0,
-    "rides_per_trip": 9.871212121212121
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 9.442028985507246
    },
    {
     "id": "49",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 13845.0,
-    "scheduled_trips": 254.0,
-    "rides_per_trip": 54.50787401574803
+    "scheduled_trips": 271.0,
+    "rides_per_trip": 51.08856088560886
    },
    {
     "id": "49B",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3673.0,
-    "scheduled_trips": 207.0,
-    "rides_per_trip": 17.743961352657006
+    "scheduled_trips": 221.0,
+    "rides_per_trip": 16.619909502262445
    },
    {
     "id": "5",
@@ -6205,8 +6205,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 8156.0,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 49.13253012048193
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 47.14450867052023
    },
    {
     "id": "51",
@@ -6221,40 +6221,40 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 6916.0,
-    "scheduled_trips": 188.0,
-    "rides_per_trip": 36.787234042553195
+    "scheduled_trips": 190.0,
+    "rides_per_trip": 36.4
    },
    {
     "id": "52A",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3194.0,
-    "scheduled_trips": 138.0,
-    "rides_per_trip": 23.144927536231883
+    "scheduled_trips": 142.0,
+    "rides_per_trip": 22.492957746478872
    },
    {
     "id": "53",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 18235.0,
-    "scheduled_trips": 288.0,
-    "rides_per_trip": 63.31597222222222
+    "scheduled_trips": 339.0,
+    "rides_per_trip": 53.7905604719764
    },
    {
     "id": "53A",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2851.0,
-    "scheduled_trips": 164.0,
-    "rides_per_trip": 17.384146341463413
+    "scheduled_trips": 173.0,
+    "rides_per_trip": 16.479768786127167
    },
    {
     "id": "54",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 8323.0,
-    "scheduled_trips": 229.0,
-    "rides_per_trip": 36.34497816593886
+    "scheduled_trips": 272.0,
+    "rides_per_trip": 30.59926470588235
    },
    {
     "id": "54A",
@@ -6277,8 +6277,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 8007.0,
-    "scheduled_trips": 225.0,
-    "rides_per_trip": 35.586666666666666
+    "scheduled_trips": 264.0,
+    "rides_per_trip": 30.329545454545453
    },
    {
     "id": "55A",
@@ -6301,48 +6301,48 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 6696.5,
-    "scheduled_trips": 156.0,
-    "rides_per_trip": 42.92628205128205
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 40.09880239520958
    },
    {
     "id": "57",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 1646.5,
-    "scheduled_trips": 118.0,
-    "rides_per_trip": 13.953389830508474
+    "scheduled_trips": 130.0,
+    "rides_per_trip": 12.665384615384616
    },
    {
     "id": "59",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2595.5,
-    "scheduled_trips": 104.0,
-    "rides_per_trip": 24.95673076923077
+    "scheduled_trips": 114.0,
+    "rides_per_trip": 22.767543859649123
    },
    {
     "id": "6",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 6062.0,
-    "scheduled_trips": 185.0,
-    "rides_per_trip": 32.76756756756757
+    "scheduled_trips": 189.0,
+    "rides_per_trip": 32.074074074074076
    },
    {
     "id": "60",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 11513.5,
-    "scheduled_trips": 226.0,
-    "rides_per_trip": 50.94469026548673
+    "scheduled_trips": 252.0,
+    "rides_per_trip": 45.68849206349206
    },
    {
     "id": "62",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 7226.5,
-    "scheduled_trips": 160.0,
-    "rides_per_trip": 45.165625
+    "scheduled_trips": 193.0,
+    "rides_per_trip": 37.443005181347154
    },
    {
     "id": "62H",
@@ -6357,80 +6357,80 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 12564.0,
-    "scheduled_trips": 260.0,
-    "rides_per_trip": 48.323076923076925
+    "scheduled_trips": 304.0,
+    "rides_per_trip": 41.328947368421055
    },
    {
     "id": "63W",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 1193.5,
-    "scheduled_trips": 116.0,
-    "rides_per_trip": 10.288793103448276
+    "scheduled_trips": 118.0,
+    "rides_per_trip": 10.114406779661017
    },
    {
     "id": "65",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 6607.5,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 33.71173469387755
+    "scheduled_trips": 204.0,
+    "rides_per_trip": 32.38970588235294
    },
    {
     "id": "66",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 16328.0,
-    "scheduled_trips": 403.0,
-    "rides_per_trip": 40.516129032258064
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 36.284444444444446
    },
    {
     "id": "67",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 7138.0,
-    "scheduled_trips": 194.0,
-    "rides_per_trip": 36.79381443298969
+    "scheduled_trips": 225.0,
+    "rides_per_trip": 31.724444444444444
    },
    {
     "id": "68",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 819.5,
-    "scheduled_trips": 96.0,
-    "rides_per_trip": 8.536458333333334
+    "scheduled_trips": 99.0,
+    "rides_per_trip": 8.277777777777779
    },
    {
     "id": "7",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3890.5,
-    "scheduled_trips": 125.0,
-    "rides_per_trip": 31.124
+    "scheduled_trips": 132.0,
+    "rides_per_trip": 29.473484848484848
    },
    {
     "id": "70",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 6530.0,
-    "scheduled_trips": 196.0,
-    "rides_per_trip": 33.316326530612244
+    "scheduled_trips": 213.0,
+    "rides_per_trip": 30.657276995305164
    },
    {
     "id": "71",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 6337.5,
-    "scheduled_trips": 184.0,
-    "rides_per_trip": 34.442934782608695
+    "scheduled_trips": 199.0,
+    "rides_per_trip": 31.84673366834171
    },
    {
     "id": "72",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 11624.0,
-    "scheduled_trips": 270.0,
-    "rides_per_trip": 43.05185185185185
+    "scheduled_trips": 299.0,
+    "rides_per_trip": 38.876254180602004
    },
    {
     "id": "73",
@@ -6445,8 +6445,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 9161.5,
-    "scheduled_trips": 266.0,
-    "rides_per_trip": 34.44172932330827
+    "scheduled_trips": 282.0,
+    "rides_per_trip": 32.487588652482266
    },
    {
     "id": "75",
@@ -6461,56 +6461,56 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 8389.5,
-    "scheduled_trips": 179.0,
-    "rides_per_trip": 46.86871508379888
+    "scheduled_trips": 209.0,
+    "rides_per_trip": 40.14114832535885
    },
    {
     "id": "77",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 14599.5,
-    "scheduled_trips": 290.0,
-    "rides_per_trip": 50.34310344827586
+    "scheduled_trips": 328.0,
+    "rides_per_trip": 44.510670731707314
    },
    {
     "id": "78",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 6169.5,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 39.04746835443038
+    "scheduled_trips": 167.0,
+    "rides_per_trip": 36.94311377245509
    },
    {
     "id": "79",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 17263.0,
-    "scheduled_trips": 302.0,
-    "rides_per_trip": 57.16225165562914
+    "scheduled_trips": 450.0,
+    "rides_per_trip": 38.36222222222222
    },
    {
     "id": "8",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 15801.5,
-    "scheduled_trips": 205.0,
-    "rides_per_trip": 77.08048780487805
+    "scheduled_trips": 257.0,
+    "rides_per_trip": 61.48443579766537
    },
    {
     "id": "80",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 7937.5,
-    "scheduled_trips": 187.0,
-    "rides_per_trip": 42.44652406417112
+    "scheduled_trips": 208.0,
+    "rides_per_trip": 38.16105769230769
    },
    {
     "id": "81",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 9041.0,
-    "scheduled_trips": 241.0,
-    "rides_per_trip": 37.51452282157676
+    "scheduled_trips": 262.0,
+    "rides_per_trip": 34.50763358778626
    },
    {
     "id": "81W",
@@ -6525,8 +6525,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 12416.5,
-    "scheduled_trips": 256.0,
-    "rides_per_trip": 48.501953125
+    "scheduled_trips": 280.0,
+    "rides_per_trip": 44.34464285714286
    },
    {
     "id": "84",
@@ -6541,8 +6541,8 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 8316.5,
-    "scheduled_trips": 238.0,
-    "rides_per_trip": 34.94327731092437
+    "scheduled_trips": 244.0,
+    "rides_per_trip": 34.084016393442624
    },
    {
     "id": "85A",
@@ -6557,16 +6557,16 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 1907.0,
-    "scheduled_trips": 100.0,
-    "rides_per_trip": 19.07
+    "scheduled_trips": 106.0,
+    "rides_per_trip": 17.99056603773585
    },
    {
     "id": "87",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 7654.0,
-    "scheduled_trips": 211.0,
-    "rides_per_trip": 36.274881516587676
+    "scheduled_trips": 263.0,
+    "rides_per_trip": 29.102661596958175
    },
    {
     "id": "88",
@@ -6581,16 +6581,16 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2425.0,
-    "scheduled_trips": 132.0,
-    "rides_per_trip": 18.37121212121212
+    "scheduled_trips": 134.0,
+    "rides_per_trip": 18.097014925373134
    },
    {
     "id": "9",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 18364.0,
-    "scheduled_trips": 320.0,
-    "rides_per_trip": 57.3875
+    "scheduled_trips": 365.0,
+    "rides_per_trip": 50.31232876712329
    },
    {
     "id": "90",
@@ -6605,40 +6605,40 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3782.0,
-    "scheduled_trips": 154.0,
-    "rides_per_trip": 24.558441558441558
+    "scheduled_trips": 155.0,
+    "rides_per_trip": 24.4
    },
    {
     "id": "92",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 4916.0,
-    "scheduled_trips": 158.0,
-    "rides_per_trip": 31.11392405063291
+    "scheduled_trips": 162.0,
+    "rides_per_trip": 30.34567901234568
    },
    {
     "id": "93",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 3814.0,
-    "scheduled_trips": 121.0,
-    "rides_per_trip": 31.520661157024794
+    "scheduled_trips": 125.0,
+    "rides_per_trip": 30.512
    },
    {
     "id": "94",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 8461.5,
-    "scheduled_trips": 166.0,
-    "rides_per_trip": 50.97289156626506
+    "scheduled_trips": 170.0,
+    "rides_per_trip": 49.773529411764706
    },
    {
     "id": "95",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 5039.0,
-    "scheduled_trips": 235.0,
-    "rides_per_trip": 21.442553191489363
+    "scheduled_trips": 256.0,
+    "rides_per_trip": 19.68359375
    },
    {
     "id": "96",
@@ -6653,32 +6653,32 @@
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2209.0,
-    "scheduled_trips": 101.0,
-    "rides_per_trip": 21.871287128712872
+    "scheduled_trips": 108.0,
+    "rides_per_trip": 20.453703703703702
    },
    {
     "id": "J14",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 8315.0,
-    "scheduled_trips": 240.0,
-    "rides_per_trip": 34.645833333333336
+    "scheduled_trips": 242.0,
+    "rides_per_trip": 34.35950413223141
    },
    {
     "id": "N5",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 233.0,
-    "scheduled_trips": 4.0,
-    "rides_per_trip": 58.25
+    "scheduled_trips": 20.0,
+    "rides_per_trip": 11.65
    },
    {
     "id": "X4",
     "date": "2026-09-07",
     "daytype": "W",
     "forecast_rides": 2594.0,
-    "scheduled_trips": 67.0,
-    "rides_per_trip": 38.71641791044776
+    "scheduled_trips": 69.0,
+    "rides_per_trip": 37.594202898550726
    },
    {
     "id": "X49",

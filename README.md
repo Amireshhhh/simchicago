@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 79 tests
+python -m pytest tests           # 80 tests
 cd viewer && npm test            # 11 tests
 ```
 
@@ -116,14 +116,23 @@ TOML), and `GET /experiments/<name>` returns its results.
 
 ## Viewer
 
-`npm run build` writes `viewer/dist/` (`index.html` + `app.js`, and a single-file
-`standalone.html`); it reads `viewer/dist/data/run.json`, written by `demo` or `export`.
-Controls: drag to pan, right-drag to rotate, scroll to zoom; Space plays, arrow keys step;
-click a resident or an area to inspect it; **Experiment Lab** shows every exported
-experiment; **Fly-through** tours the city; **Layers** toggles buildings, trails, commute
-flows, labels, incidents and a what-if rain overlay. Buildings are procedural; **Load real
-buildings here** fetches footprints around the camera from the City of Chicago data portal
-(not testable offline; not exercised in this repository's tests).
+`npm run build` writes `viewer/dist/`; `python -m simchi.cli demo` writes its data
+(`run.json`, `transit.json`, `insights.json`). The viewer has four modes, switched in the top
+bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
+
+- **Overview**: what SimChicago does and what is new, each claim with its real number and its
+  source (observed, scheduled, simulated, assumed), over a slowly orbiting 3D city.
+- **Live**: the real CTA network (rail lines in their colours with travelling light pulses, bus
+  routes, stations) and the latest near-live snapshot: buses and trains reporting, trains by
+  line, snapshot age, holding advice and feed flags, and the bus reliability lens. The sun and
+  sky follow Chicago's current time.
+- **Insights**: a dashboard of real data and validated results: CTA ridership 2024-2026,
+  busiest routes and stations, every validation check with pass/fail, held-out ridership
+  accuracy, the intervention ranking with 95% intervals and equity, crowding forecasts,
+  anomaly detection and polling bias. Charts have hover tooltips.
+- **Simulate**: the synthetic city's week (residents, trips, incidents), lenses, layers, the
+  Experiment Lab and alternate timelines. Drag to pan, right-drag to rotate, scroll to zoom;
+  Space plays, arrow keys step; click a resident or an area to inspect it.
 
 ## Live CTA layer
 

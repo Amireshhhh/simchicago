@@ -6,6 +6,8 @@ import { createAgents, ACT_COLOR, MODE_COLOR } from './agents.js';
 import { createIncidents, createFlows } from './overlays.js';
 import { renderLab } from './lab.js';
 import { createTransit } from './transit.js';
+import { renderInsights } from './insights.js';
+import { renderOverview } from './overview.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -143,7 +145,7 @@ function legend(lo, hi) {
   $('#legendToggle').onclick = () => { legendCollapsed = !legendCollapsed; store('simchi-legend-collapsed', legendCollapsed); legend(lastLo, lastHi); };
   lastLo = lo; lastHi = hi;
 }
-let legendCollapsed = store('simchi-legend-collapsed') ?? false, lastLo, lastHi;
+let legendCollapsed = store('simchi-legend-collapsed') ?? true, lastLo, lastHi;
 $('#lens').onchange = e => { lens = e.target.value; lensDay = -1; applyLens(); };
 
 // ------------------------------------------------------------------------------------------ ribbon
@@ -258,8 +260,8 @@ document.querySelectorAll('.speeds button').forEach(b => b.onclick = () => { doc
 $('#quality').onchange = e => { quality = e.target.value; store('simchi-quality', quality); S.applyQuality(quality); nBuildings = city.buildBuildings({ low: 9000, medium: 26000, high: 60000 }[quality]); };
 $('#lyrBuildings').onchange = e => { city.bldGroup.visible = e.target.checked; };
 $('#lyrTrails').onchange = e => { opts.trails = e.target.checked; };
-$('#lyrFlows').onchange = e => { flows.lines.visible = e.target.checked; };
-$('#lyrIncidents').onchange = e => { incidents.group.visible = e.target.checked; };
+$('#lyrFlows').onchange = () => applyModeLayers();
+$('#lyrIncidents').onchange = () => applyModeLayers();
 $('#lyrRain').onchange = e => { S.rain.visible = e.target.checked; };
 addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
@@ -282,71 +284,127 @@ $('#tourBtn').onclick = () => { tourStep = 0; tourTimer = 0; toast('Fly-through:
 addEventListener('keydown', e => { if (e.key === 'Escape') tourStep = -1; });
 $('#gl').addEventListener('pointerdown', () => { tourStep = -1; flight = null; });
 
-// Live CTA: real routes and stations (GTFS) and near-live vehicles from the published snapshot
-let transit = null, transitLoading = false, lastPanel = 0;
-async function toggleLive() {
-  const btn = $('#liveBtn'), on = btn.getAttribute('aria-pressed') !== 'true';
-  btn.setAttribute('aria-pressed', String(on));
-  $('#livePanel').classList.toggle('hidden', !on);
-  if (on && !transit && !transitLoading) {
-    transitLoading = true;
-    $('#livePanel').innerHTML = '<h3>Live CTA</h3>Loading the CTA network…';
+// ------------------------------------------------------------------------------------------ live CTA
+// Real routes and stations (GTFS) and near-live vehicles from the published snapshot.
+let transit = null, transitLoading = null, lastPanel = 0;
+function ensureTransit() {
+  if (transit || transitLoading) return transitLoading;
+  transitLoading = (async () => {
     try {
       const r = await fetch('data/transit.json');
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      transit = createTransit(scene, await r.json());
+      const T = await r.json();
+      transit = createTransit(scene, T);
       transit.setBusVisible($('#lyrBusRoutes').checked);
-    } catch (e) { $('#livePanel').innerHTML = `<h3>Live CTA</h3>Could not load the CTA network: ${esc(e.message)}`; }
-    transitLoading = false;
-  }
-  if (transit) transit.group.visible = on;
+      $('#liveLines').innerHTML = T.routes.filter(x => x.type === 1).map(x => `<span><i style="background:${x.color}"></i>${esc(LINE_NAME[x.id] || x.long || x.id)}</span>`).join('') + '<span><i style="background:#9fb4cc;height:2px"></i>Bus routes</span>';
+      applyModeLayers();
+    } catch (e) { $('#livePanel').innerHTML = `<h2>Live CTA</h2><p>Could not load the CTA network: ${esc(e.message)}</p>`; }
+    return transit;
+  })();
+  return transitLoading;
 }
-$('#liveBtn').onclick = toggleLive;
+const LINE_NAME = { Red: 'Red', Blue: 'Blue', Brn: 'Brown', G: 'Green', Org: 'Orange', P: 'Purple', Pink: 'Pink', Y: 'Yellow' };
 $('#lyrBusRoutes').onchange = e => { if (transit) transit.setBusVisible(e.target.checked); };
-let reliability, relNote = '';
+$('#lyrNetwork').onchange = () => applyModeLayers();
+let reliability;
 async function applyReliability() {
   const metric = $('#relMetric').value;
-  if (metric && $('#liveBtn').getAttribute('aria-pressed') !== 'true') await toggleLive();
+  await ensureTransit();
   if (!transit) return;
   if (metric && reliability === undefined) {
     try { const r = await fetch('data/reliability.json', { cache: 'no-store' }); reliability = r.ok ? await r.json() : null; } catch { reliability = null; }
   }
   const n = transit.setReliability(metric ? reliability : null, metric);
-  relNote = !metric ? '' : reliability ? `Reliability lens: ${REL_METRICS[metric].label}; ${n} routes with observed data (teal good, red poor). Observed from polled positions vs GTFS schedule; see reports/reliability.`
-    : 'Reliability lens: no observed reliability data published yet (it is built from the polled history).';
-  toast(relNote);
+  if (metric) toast(reliability && n ? `Reliability lens: ${REL_METRICS[metric].label}; ${n} routes (teal good, red poor), observed vs GTFS schedule.`
+    : 'Reliability lens: no observed reliability data yet. It is built from the polled history once the live feed has run.');
 }
 $('#relMetric').onchange = applyReliability;
 function opsHtml(o) {
   if (!o) return '';
   const adv = o.holding.advice || [], A = o.anomalies || {};
   const n = k => (A[k] || []).length;
-  return `<div class="ops"><b>Operations view</b> <span class="tag simulated">advisory</span>
-    <div>${adv.length ? `Holding advice for ${adv.length} bunched vehicle${adv.length > 1 ? 's' : ''}: ` + adv.slice(0, 4).map(a => `${esc(a.vehicle.replace(/^bus:/, 'bus '))} (route ${esc(a.route)}) hold ${a.hold_min} min`).join('; ') : 'No bunched vehicles flagged for holding.'}</div>
-    <div>Feed flags: ${n('jump')} position jumps, ${n('stuck')} stuck mid-route, ${n('off_route')} off route, ${n('outage')} route-directions with no vehicle while ≥3 scheduled.</div>
-    <div class="fine">Holding rule failed its simulated test; flags were tested on constructed labels only (docs/EVALUATION.md).</div></div>`;
+  return `<h3>Operations view <span class="prov simulated" title="Advisory: the holding rule failed its pre-registered simulated test">advisory</span></h3>
+    <div>${adv.length ? `Holding advice for ${adv.length} bunched vehicle${adv.length > 1 ? 's' : ''}:<ul class="history">${adv.slice(0, 5).map(x => `<li>${esc(x.vehicle.replace(/^bus:/, 'Bus '))} · route ${esc(x.route)} · hold ${x.hold_min} min</li>`).join('')}</ul>` : 'No bunched vehicles flagged for holding.'}</div>
+    <div class="row2"><div class="stat"><b>${n('jump') + n('stuck') + n('off_route')}</b><span>vehicle feed flags (jumps, stuck, off route)</span></div><div class="stat"><b>${n('outage')}</b><span>route-directions with no vehicle while ≥3 scheduled</span></div></div>`;
 }
 function renderLivePanel(st) {
   const el = $('#livePanel');
-  if (!st || st.state === 'loading') { el.innerHTML = '<h3>Live CTA</h3>Loading the latest snapshot…'; return; }
-  if (st.state === 'none') {
-    el.innerHTML = '<h3>Live CTA</h3>No live snapshot is published yet. Routes and stations are from CTA GTFS.<div class="fine">Snapshots are taken server-side by a scheduled workflow; the browser never calls CTA.</div>';
-    return;
-  }
-  const age = st.ageMin < 1 ? 'under a minute' : `${Math.round(st.ageMin)} min`;
+  const head = '<h2><span class="feeddot"></span>Live CTA <span class="prov observed">observed</span></h2>';
+  const foot = `<p class="fine">Near-live: snapshots are polled server-side in GitHub Actions (the browser never calls CTA); GitHub runs the job at most every 5 minutes and can delay or skip it. Data: Chicago Transit Authority. SimChicago is not affiliated with or endorsed by CTA.</p>`;
+  if (!transit || !st || st.state === 'loading') { el.innerHTML = `${head}<p>Loading the CTA network…</p>`; return; }
+  const rails = transit.stats().routes;
+  const network = `<h3>Network <span class="prov scheduled">scheduled</span></h3><div class="row2"><div class="stat"><b>${Object.values(rails).filter(r => r.type === 1).length}</b><span>'L' lines</span></div><div class="stat"><b>${Object.values(rails).filter(r => r.type === 3).length}</b><span>bus routes</span></div></div>`;
+  if (st.state === 'none') { el.innerHTML = `${head}<div class="empty"><b>No snapshot published yet.</b>Routes and stations are from CTA's GTFS timetable.</div>${network}${foot}`; return; }
+  const age = st.ageMin < 1 ? 'under a minute' : st.ageMin < 120 ? `${Math.round(st.ageMin)} min` : `${(st.ageMin / 60).toFixed(1)} h`;
   if (st.empty) {
-    el.innerHTML = `<h3>Live CTA</h3>The latest snapshot (${age} old) has no vehicle positions. Routes and stations are from CTA GTFS.
-      ${(st.notes || []).length ? `<div class="fine">Workflow notes: ${st.notes.map(esc).join('; ')}</div>` : ''}
-      <div class="fine">Snapshots are taken server-side by a scheduled workflow; the browser never calls CTA.</div>`;
+    const keys = (st.notes || []).some(n => /no key/.test(n));
+    el.innerHTML = `${head}<div class="empty"><b>${keys ? 'Waiting for the CTA API keys.' : 'The latest snapshot has no vehicle positions.'}</b>${keys ? 'The polling workflow ran but found no CTA_BUS_KEY / CTA_TRAIN_KEY secret, so it made no requests. Once the repository secrets are set, buses and trains appear here.' : ''}<div class="fine" style="margin-top:6px">Snapshot ${age} old. Notes: ${(st.notes || []).map(esc).join('; ') || '–'}</div></div>${network}${foot}`;
     return;
   }
-  el.innerHTML = `<h3>Live CTA <span class="tag observed">observed</span></h3>
-    ${fmtInt(st.bus)} buses and ${fmtInt(st.train)} trains, snapshot
-    <span class="age ${st.stale ? 'stale' : ''}">${age} old${st.stale ? ' (stale: not animated)' : ''}</span>.
-    ${st.replaying ? '<div>Replaying the last ~2 minutes of observed positions along route shapes (×10).</div>' : ''}
-    ${opsHtml(transit && transit.ops)}
-    <div class="fine">"Live" means near-live: GitHub runs the snapshot workflow at most every 5 minutes, and runs can be delayed or skipped. Positions may be missing, delayed or wrong. Data provided by Chicago Transit Authority; SimChicago is not affiliated with or endorsed by CTA.</div>`;
+  const s = transit.stats(), max = Math.max(1, ...Object.values(s.by));
+  const lines = Object.entries(s.by).filter(([r]) => s.routes[r]?.type === 1).sort((a, b) => b[1] - a[1]);
+  el.innerHTML = `${head}
+    <div class="row2"><div class="stat"><div class="big">${fmtInt(st.bus)}</div><span>buses reporting</span></div><div class="stat"><div class="big">${fmtInt(st.train)}</div><span>trains reporting</span></div></div>
+    <p class="fine">Snapshot <span class="age ${st.stale ? 'stale' : ''}">${age} old</span>${st.stale ? ' · stale, shown without motion' : st.replaying ? ' · replaying the last ~2 minutes along route shapes (×10)' : ''}</p>
+    <h3>Trains by line</h3><div class="linebars">${lines.map(([r, n]) => `<div><span>${esc(LINE_NAME[r] || r)}</span><i style="width:${n / max * 100}%;background:${s.routes[r].color}"></i><b>${n}</b></div>`).join('') || '<span class="fine">No trains in this snapshot.</span>'}</div>
+    ${opsHtml(transit.ops)}${network}${foot}`;
 }
+// header status pill: reads the published snapshot once a minute (no CTA calls)
+async function feedStatus() {
+  const pill = $('#feedPill'), label = pill.querySelector('span');
+  try {
+    const r = await fetch(`live/latest.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!r.ok) throw new Error('none');
+    const s = await r.json(), ageMin = (Date.now() - Date.parse(s.generated_utc)) / 60000, n = (s.vehicles || []).length;
+    pill.className = `feed ${n ? (ageMin < 30 ? 'ok' : 'warn') : 'warn'}`;
+    label.textContent = n ? `Live · ${n} vehicles · ${ageMin < 60 ? Math.round(ageMin) + ' min' : (ageMin / 60).toFixed(1) + ' h'} ago` : (s.notes || []).some(x => /no key/.test(x)) ? 'Live feed · waiting for keys' : 'Live feed · no positions';
+  } catch { pill.className = 'feed'; label.textContent = 'Live feed · no snapshot'; }
+}
+feedStatus(); setInterval(feedStatus, 60000);
+
+// ------------------------------------------------------------------------------------------ modes
+let simStarted = false, mode = 'overview', insights = null, overviewDone = false, insightsDone = false;
+fetch('data/insights.json').then(r => r.ok ? r.json() : null).then(j => { insights = j; if (mode === 'overview') renderMode(); if (mode === 'insights') renderMode(); }).catch(() => {});
+function applyModeLayers() {
+  const sim = mode === 'simulate', live = mode === 'live', ov = mode === 'overview';
+  agents.points.visible = sim || ov;
+  if (agents.trails) agents.trails.visible = sim || ov;
+  incidents.group.visible = sim && $('#lyrIncidents').checked;
+  flows.lines.visible = sim && $('#lyrFlows').checked;
+  if (transit) {
+    transit.group.visible = live || ov || (sim && $('#lyrNetwork').checked);
+    transit.setBusVisible((live && $('#lyrBusRoutes').checked));
+  }
+}
+function renderMode() {
+  if (mode === 'overview' && !overviewDone && insights) { renderOverview($('#overviewBody'), insights, D); overviewDone = true; wireCards(); }
+  if (mode === 'insights' && !insightsDone && insights) { renderInsights($('#insightsBody'), insights); insightsDone = true; }
+}
+function wireCards() {
+  document.querySelectorAll('.ocard').forEach(c => c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', `${e.clientX - r.left}px`); c.style.setProperty('--my', `${e.clientY - r.top}px`); }));
+}
+const CAM = { overview: [5200, -6500, 30000, 0.95], live: [1800, -3200, 24000, 0.82], simulate: [2500, -2500, 26000, 1.0] };
+function setMode(m) {
+  if (!['overview', 'live', 'insights', 'simulate'].includes(m)) m = 'overview';
+  const prev = mode; mode = m;
+  document.body.dataset.mode = m;
+  document.querySelectorAll('.modes a').forEach(a => a.classList.toggle('on', a.dataset.mode === m));
+  moveInk();
+  if (m === 'live' || m === 'overview') ensureTransit();
+  if (m !== 'simulate') { playing = false; $('#play').textContent = 'Play'; tourStep = -1; }
+  else if (!simStarted) { simStarted = true; playing = true; $('#play').textContent = 'Pause'; }   // start the week moving on first visit
+  if (CAM[m] && prev !== m && !(prev === 'insights' && m === 'overview')) flyTo(...CAM[m].slice(0, 3), CAM[m][3], 2400);
+  applyModeLayers();
+  renderMode();
+  if (m === 'live') { lastPanel = 0; renderLivePanel(transit ? transit.update(Date.now()) : { state: 'loading' }); }
+}
+function moveInk() {
+  const on = document.querySelector('.modes a.on'), ink = document.querySelector('.mode-ink');
+  if (!on || !ink) return;
+  ink.style.left = `${on.offsetLeft}px`; ink.style.width = `${on.offsetWidth}px`;
+}
+addEventListener('resize', moveInk);
+addEventListener('hashchange', () => setMode(location.hash.slice(1).split('/')[0]));
 
 // real building footprints around the camera target (City of Chicago Building Footprints, syp8-uezg)
 $('#footprintsBtn').onclick = async () => {
@@ -368,13 +426,13 @@ function toast(html) { const t = document.createElement('div'); t.className = 't
 
 // ------------------------------------------------------------------------------------------ frame loop
 const sunDir = new THREE.Vector3();
-let last = performance.now(), lastInspect = -1, lastDay = -1;
+let last = performance.now(), lastInspect = -1, lastDay = -1, skip = 0;
 function counters(c, live) {
   const day = Math.floor(simT / 1440), d = D.daily[Math.min(day, D.daily.length - 1)];
   const todayObs = D.incidents.filter(i => i.label === 'observed' && Math.floor(i.t / 1440) === day).length;
   $('#counters').innerHTML = [
     [fmtInt(c.out), 'out and about'], [fmtInt(c.travelling), 'travelling'], [fmtInt(c.home), 'at home'],
-    [todayObs, 'recorded incidents today', live.some(i => i.label === 'observed')], [d.agents_exposed, 'agents exposed today'],
+    [todayObs, 'incidents today', live.some(i => i.label === 'observed')], [d.agents_exposed, 'exposed today'],
   ].map(([v, l, alert]) => `<div class="counter ${alert ? 'alert' : ''}"><b>${v}</b><span>${l}</span></div>`).join('');
   if (day !== lastDay) {
     lastDay = day;
@@ -397,23 +455,30 @@ function frame(now) {
       tourStep = (tourStep + 1) % TOUR.length;
     }
   }
+  if (mode === 'overview' && !flight) {           // slow orbit behind the overview
+    const v = camera.position.clone().sub(controls.target); v.applyAxisAngle(new THREE.Vector3(0, 1, 0), dt * 0.035); camera.position.copy(controls.target).add(v);
+  }
   controls.update();
   const camDist = camera.position.distanceTo(controls.target);
+  if (mode === 'insights' && ++skip % 6) { requestAnimationFrame(frame); return; }   // the page covers the city: draw rarely
 
-  const sp = sunPosition(utcMs(D.meta.start_date, simT, UTC_OFFSET_H), LAT, LON);
+  // the simulated week sets the sun in Simulate; Live and Overview show Chicago now
+  const sunMs = mode === 'simulate' ? utcMs(D.meta.start_date, simT, UTC_OFFSET_H) : Date.now();
+  const sp = sunPosition(sunMs, LAT, LON);
   sunVector(sp.elevation, sp.azimuth, sunDir);
   const light = S.setSun(sunDir, S.rain.visible);
   city.uniforms.night.value = light.night;
   city.outlineMat.opacity = 0.22 + 0.25 * light.night;
   city.uniforms.time.value = now / 1000;
-  opts.night = light.night; opts.speed = speed;
+  opts.night = light.night; opts.speed = speed; opts.trails = $('#lyrTrails').checked && (mode === 'simulate' || mode === 'overview');
   const c = agents.update(simT, camDist, opts);
   const live = incidents.update(simT, camDist, radius);
   flows.update(now / 1000);
   S.updateRain(dt);
   if (transit && transit.group.visible) {
+    transit.animate(now / 1000);
     const st = transit.update(Date.now());
-    if (now - lastPanel > 1000) { lastPanel = now; renderLivePanel(st); }
+    if (mode === 'live' && now - lastPanel > 1000) { lastPanel = now; renderLivePanel(st); }
   }
   if (selected >= 0) { agents.select(selected, camDist); if (Math.abs(simT - lastInspect) > 5) { lastInspect = simT; renderAgent(selected); } }
   if (lens === 'safety' && Math.floor(simT / 1440) !== lensDay) { lensDay = Math.floor(simT / 1440); applyLens(); }
@@ -425,6 +490,7 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 legend();
+setMode(location.hash.slice(1).split('/')[0] || 'overview');
 boot('Ready', 1);
 $('#boot').classList.add('gone');
 window.__simchi = { D, agents, city, S, setTime: t => setTime(t), flyTo, nBuildings: () => nBuildings, get simT() { return simT; } };
