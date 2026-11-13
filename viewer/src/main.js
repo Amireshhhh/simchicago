@@ -296,6 +296,7 @@ function ensureTransit() {
       const T = await r.json();
       transit = createTransit(scene, T);
       transit.setBusVisible($('#lyrBusRoutes').checked);
+      transit.setBusColor(theme === 'neon' ? '#f5ff3b' : '#ffb547');
       $('#liveLines').innerHTML = T.routes.filter(x => x.type === 1).map(x => `<span><i style="background:${x.color}"></i>${esc(LINE_NAME[x.id] || x.long || x.id)}</span>`).join('') + '<span><i style="background:#9fb4cc;height:2px"></i>Bus routes</span>';
       applyModeLayers();
     } catch (e) { $('#livePanel').innerHTML = `<h2>Live CTA</h2><p>Could not load the CTA network: ${esc(e.message)}</p>`; }
@@ -304,7 +305,8 @@ function ensureTransit() {
   return transitLoading;
 }
 const LINE_NAME = { Red: 'Red', Blue: 'Blue', Brn: 'Brown', G: 'Green', Org: 'Orange', P: 'Purple', Pink: 'Pink', Y: 'Yellow' };
-$('#lyrBusRoutes').onchange = e => { if (transit) transit.setBusVisible(e.target.checked); };
+$('#lyrBusRoutes').onchange = e => { if (transit) { transit.setBusVisible(e.target.checked); transit.setBusMarkers(e.target.checked); } };
+$('#lyrReplay').onchange = e => { if (transit) transit.setReplay(e.target.checked); };
 $('#lyrNetwork').onchange = () => applyModeLayers();
 let reliability;
 async function applyReliability() {
@@ -345,7 +347,8 @@ function renderLivePanel(st) {
   const lines = Object.entries(s.by).filter(([r]) => s.routes[r]?.type === 1).sort((a, b) => b[1] - a[1]);
   el.innerHTML = `${head}
     <div class="row2"><div class="stat"><div class="big">${fmtInt(st.bus)}</div><span>buses reporting</span></div><div class="stat"><div class="big">${fmtInt(st.train)}</div><span>trains reporting</span></div></div>
-    <p class="fine">Snapshot <span class="age ${st.stale ? 'stale' : ''}">${age} old</span>${st.stale ? ' · stale, shown without motion' : st.replaying ? ' · replaying the last ~2 minutes along route shapes (×10)' : ''}</p>
+    <p class="fine">Snapshot <span class="age ${st.stale ? 'stale' : ''}">${age} old</span>${st.stale ? ' · stale (dimmed)' : ''} · ${st.replaying ? 'replaying the ~2 observed minutes along route shapes (×10)' : 'each marker is the last reported position; nothing is interpolated'}</p>
+    ${(st.notes || []).length ? `<div class="empty" style="margin-top:8px"><b>Feed notes</b>${st.notes.map(n => esc(n)).join('<br>')}${st.notes.some(n => /Invalid API access key/.test(n)) ? '<br>CTA rejected a key: check the value of that repository secret.' : ''}</div>` : ''}
     <h3>Trains by line</h3><div class="linebars">${lines.map(([r, n]) => `<div><span>${esc(LINE_NAME[r] || r)}</span><i style="width:${n / max * 100}%;background:${s.routes[r].color}"></i><b>${n}</b></div>`).join('') || '<span class="fine">No trains in this snapshot.</span>'}</div>
     ${opsHtml(transit.ops)}${network}${foot}`;
 }
@@ -362,6 +365,23 @@ async function feedStatus() {
 }
 feedStatus(); setInterval(feedStatus, 60000);
 
+// ------------------------------------------------------------------------------------------ theme
+let theme = store('simchi-theme') || 'real';
+function setTheme(t) {
+  theme = t === 'neon' ? 'neon' : 'real';
+  store('simchi-theme', theme);
+  document.body.dataset.theme = theme;
+  document.querySelectorAll('.theme button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.theme === theme)));
+  const n = theme === 'neon' ? 1 : 0;
+  city.uniforms.neon.value = n; S.setNeon(n);
+  city.outlineMat.color.set(n ? '#ff2bd6' : '#5fd4ff');
+  city.lakeMat.color.set(n ? '#14062a' : '#0f3a55');
+  if (transit) transit.setBusColor(n ? '#f5ff3b' : '#ffb547');
+}
+document.querySelectorAll('.theme button').forEach(b => b.onclick = () => setTheme(b.dataset.theme));
+setTheme(theme);
+const NEON_SUN = new THREE.Vector3(-0.35, -0.42, -0.84).normalize();   // a fixed night sky for the neon look
+
 // ------------------------------------------------------------------------------------------ modes
 let simStarted = false, mode = 'overview', insights = null, overviewDone = false, insightsDone = false;
 fetch('data/insights.json').then(r => r.ok ? r.json() : null).then(j => { insights = j; if (mode === 'overview') renderMode(); if (mode === 'insights') renderMode(); }).catch(() => {});
@@ -374,6 +394,7 @@ function applyModeLayers() {
   if (transit) {
     transit.group.visible = live || ov || (sim && $('#lyrNetwork').checked);
     transit.setBusVisible((live && $('#lyrBusRoutes').checked));
+    transit.setPulses(ov);                                   // decorative pulses only on the Overview: Live shows reported positions only
   }
 }
 function renderMode() {
@@ -466,6 +487,7 @@ function frame(now) {
   const sunMs = mode === 'simulate' ? utcMs(D.meta.start_date, simT, UTC_OFFSET_H) : Date.now();
   const sp = sunPosition(sunMs, LAT, LON);
   sunVector(sp.elevation, sp.azimuth, sunDir);
+  if (theme === 'neon') sunDir.copy(NEON_SUN);
   const light = S.setSun(sunDir, S.rain.visible);
   city.uniforms.night.value = light.night;
   city.outlineMat.opacity = 0.22 + 0.25 * light.night;

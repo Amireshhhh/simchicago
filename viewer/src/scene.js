@@ -127,6 +127,8 @@ export function createScene(canvas) {
 
   /** Light the scene for a sun direction; returns {day, dusk, night} in [0, 1]. */
   const tmp = new THREE.Vector3();
+  let neon = 0;
+  const setNeon = v => { neon = v; };
   function setSun(sunDir, rainy) {
     const el = Math.asin(THREE.MathUtils.clamp(sunDir.y, -1, 1));
     const day = THREE.MathUtils.smoothstep(el, -0.1, 0.18);
@@ -148,12 +150,13 @@ export function createScene(canvas) {
     const fogDay = new THREE.Color(rainy ? 0x6f7f92 : 0xa9c3dd), fogNight = new THREE.Color(0x07101e);
     scene.fog.color.copy(fogNight).lerp(fogDay, day).lerp(new THREE.Color(0xe39a6c), dusk * 0.25 * (1 - night));
     scene.fog.density = rainy ? 0.000034 : 0.0000055 + 0.000006 * night;
-    bloom.strength = 0.3 + 0.45 * night;
-    bloom.threshold = 0.88 - 0.16 * night;
+    bloom.strength = 0.3 + 0.45 * night + 0.12 * neon;
+    bloom.threshold = 0.88 - 0.16 * night + 0.06 * neon;
+    if (neon) { scene.fog.color.lerp(new THREE.Color(0x12051f), neon); scene.fog.density = 0.000012; }
     renderer.toneMappingExposure = 0.95 + 0.05 * day;
     updateEnv(sunDir);
     return { day, dusk, night };
   }
 
-  return { renderer, scene, camera, controls, composer, bloom, sun, applyQuality, setSun, rain, updateRain };
+  return { renderer, scene, camera, controls, composer, bloom, sun, applyQuality, setSun, setNeon, rain, updateRain };
 }

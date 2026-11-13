@@ -51,7 +51,7 @@ export function createTransit(scene, T) {
   }
   let busVisible = true;
 
-  const railMats = [], flowMats = [];
+  const railMats = [], flowMats = [], flowObjs = [];
   for (const r of T.routes.filter(x => x.type === 1)) {
     const g = new LineSegmentsGeometry().setPositions(segmentsOf(r.shapes, 2.5));
     for (const [w, op] of [[9, 0.18], [3.2, 1]]) {
@@ -64,7 +64,7 @@ export function createTransit(scene, T) {
     const fm = new LineMaterial({ color: new THREE.Color(r.color).lerp(new THREE.Color('#ffffff'), 0.55), linewidth: 4.2, transparent: true,
       opacity: 0.85, depthWrite: false, blending: THREE.AdditiveBlending, dashed: true, dashSize: 260, gapSize: 2200, resolution: res });
     const fl = new LineSegments2(g, fm); fl.computeLineDistances(); fl.renderOrder = 5; group.add(fl);
-    flowMats.push(fm);
+    flowMats.push(fm); flowObjs.push(fl);
   }
   addEventListener('resize', () => { res.set(innerWidth, innerHeight); });
   /** Advance the decorative pulses (seconds since start). */
@@ -84,14 +84,25 @@ export function createTransit(scene, T) {
   T.stations.forEach((s, i) => { M.compose(P.set(s.x, 0, s.z), Q, S.set(30, 5, 30)); stations.setMatrixAt(i, M); });
   group.add(stations);
 
-  // live vehicles (instanced markers, one mesh per mode)
-  const busGeoV = new THREE.BoxGeometry(40, 18, 90).translate(0, 9, 0);
-  const trainGeoV = new THREE.BoxGeometry(46, 24, 190).translate(0, 12, 0);
-  const mkV = (geo, n) => { const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.35, emissive: 0xffffff, emissiveIntensity: 0.55 }), n);
-    m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); m.frustumCulled = false; m.count = 0; group.add(m); return m; };
-  let busMesh = mkV(busGeoV, 1), trainMesh = mkV(trainGeoV, 1);
-  let snap = null, prepared = [], status = { state: 'loading' }, ops = null;
-  const up = new THREE.Vector3(0, 1, 0), C = new THREE.Color();
+  // live vehicles: screen-space glowing markers at the last observed position (sized in pixels so
+  // they stay visible at city scale); trains in their line colour, buses amber (red when CTA flags
+  // them delayed). Nothing moves unless the optional replay of the run's ~2 observed minutes is on.
+  const vMat = new THREE.ShaderMaterial({
+    uniforms: { t: { value: 0 }, pr: { value: Math.min(devicePixelRatio, 2) }, dim: { value: 1 } },
+    vertexShader: `attribute float size; attribute vec3 color; varying vec3 vC; uniform float pr;
+      void main(){ vC = color; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = size * pr; }`,
+    fragmentShader: `varying vec3 vC; uniform float t; uniform float dim;
+      void main(){ vec2 q = gl_PointCoord * 2.0 - 1.0; float r = length(q); if (r > 1.0) discard;
+        float core = smoothstep(0.42, 0.30, r); float ring = smoothstep(0.62, 0.55, r) * smoothstep(0.48, 0.55, r);
+        float halo = (1.0 - r) * 0.38 * (0.75 + 0.25 * sin(t * 2.4));
+        vec3 c = mix(vC, vec3(1.0), core * 0.55) * dim; float a = max(core, max(ring, halo));
+        gl_FragColor = vec4(c * (core + ring + halo * 1.2), a); }`,
+    transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending });
+  const vGeo = new THREE.BufferGeometry();
+  const vPts = new THREE.Points(vGeo, vMat); vPts.frustumCulled = false; vPts.renderOrder = 9; group.add(vPts);
+  let snap = null, prepared = [], status = { state: 'loading' }, ops = null, replay = false, showBuses = true;
+  const BUS = new THREE.Color('#ffb547'), BUS_DLY = new THREE.Color('#ff4d6d');
+  function setBusColor(hex) { BUS.set(hex); if (snap) prepare(snap); }
 
   function prepare(s) {
     prepared = s.vehicles.map(v => {
@@ -99,11 +110,15 @@ export function createTransit(scene, T) {
       const track = v.track.map(t => [t[1], t[2]]);
       const legs = [];
       for (let k = 0; k < track.length - 1; k++) legs.push(bestShape(shapes, track[k], track[k + 1]));
-      return { v, track, legs, color: v.mode === 'train' && routes[v.route] ? routes[v.route].color : (v.dly ? '#ff7a59' : '#e8f0fa') };
+      const color = v.mode === 'train' && routes[v.route] ? new THREE.Color(routes[v.route].color) : (v.dly ? BUS_DLY : BUS);
+      return { v, track, legs, color };
     });
-    const nb = prepared.filter(p => p.v.mode === 'bus').length, nt = prepared.length - nb;
-    group.remove(busMesh, trainMesh);
-    busMesh = mkV(busGeoV, Math.max(1, nb)); trainMesh = mkV(trainGeoV, Math.max(1, nt));
+    const n = prepared.length;
+    vGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+    vGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+    vGeo.setAttribute('size', new THREE.BufferAttribute(new Float32Array(n), 1));
+    prepared.forEach((p, i) => { p.color.toArray(vGeo.attributes.color.array, i * 3); });
+    vGeo.attributes.color.needsUpdate = true;
   }
 
   async function refresh() {
@@ -120,41 +135,40 @@ export function createTransit(scene, T) {
     status = { state: 'ok' };
   }
 
-  /** Place vehicles. Replays the observed window (between the run's polls) in a loop, moving
-   *  along route shapes; stale snapshots are drawn at their last position without motion. */
+  /** Place vehicles at their last observed position (or, with replay on, replay the run's observed
+   *  window along route shapes). Stale snapshots are dimmed. */
   function update(nowMs) {
     if (!snap) return status;
+    vMat.uniforms.t.value = nowMs / 1000;
     const age = snapshotAge(snap.generated_utc, nowMs, STALE_MIN);
+    vMat.uniforms.dim.value = age.stale ? 0.45 : 1;
     const polls = snap.poll_times_utc.map(t => Date.parse(t));
     const t0 = polls[0], t1 = polls[polls.length - 1];
-    const live = !age.stale && t1 > t0;
-    const tRep = live ? t0 + ((nowMs / 1000) % REPLAY_SECONDS) / REPLAY_SECONDS * (t1 - t0) : t1;
+    const moving = replay && !age.stale && t1 > t0;
+    const tRep = moving ? t0 + ((nowMs / 1000) % REPLAY_SECONDS) / REPLAY_SECONDS * (t1 - t0) : t1;
+    const pos = vGeo.attributes.position?.array, size = vGeo.attributes.size?.array;
     let nb = 0, nt = 0;
-    for (const p of prepared) {
+    prepared.forEach((p, i) => {
       const tr = p.v.track, track = p.track;
-      let x = track[track.length - 1][0], z = track[track.length - 1][1], hd = p.v.hdg;
-      if (live && track.length > 1) {
+      let x = track[track.length - 1][0], z = track[track.length - 1][1];
+      if (moving && track.length > 1) {
         const times = tr.map(q => Date.parse(q[0]));
         let k = 0;
         while (k < times.length - 2 && times[k + 1] <= tRep) k++;
         if (tRep < times[0]) { x = track[0][0]; z = track[0][1]; }
-        else {
-          const f = times[k + 1] > times[k] ? (tRep - times[k]) / (times[k + 1] - times[k]) : 1;
-          [x, z] = alongShape(p.legs[k], track[k], track[k + 1], f);
-        }
+        else { const f = times[k + 1] > times[k] ? (tRep - times[k]) / (times[k + 1] - times[k]) : 1; [x, z] = alongShape(p.legs[k], track[k], track[k + 1], f); }
       }
-      Q.setFromAxisAngle(up, -hd * Math.PI / 180);
-      M.compose(P.set(x, 0, z), Q, S.set(1, 1, 1));
-      C.set(p.color).multiplyScalar(age.stale ? 0.35 : 1);
-      if (p.v.mode === 'bus') { busMesh.setMatrixAt(nb, M); busMesh.setColorAt(nb, C); nb++; }
-      else { trainMesh.setMatrixAt(nt, M); trainMesh.setColorAt(nt, C); nt++; }
-    }
-    for (const [m, n] of [[busMesh, nb], [trainMesh, nt]]) { m.count = n; m.instanceMatrix.needsUpdate = true; if (m.instanceColor) m.instanceColor.needsUpdate = true; }
-    return { state: 'ok', ageMin: age.ageMin, stale: age.stale, bus: nb, train: nt, generated: snap.generated_utc, notes: snap.notes || [], empty: !(snap.vehicles || []).length,
-             requests: snap.requests, notes: snap.notes, replaying: live };
+      const bus = p.v.mode === 'bus';
+      pos[i * 3] = x; pos[i * 3 + 1] = bus ? 8 : 14; pos[i * 3 + 2] = z;
+      size[i] = bus ? (showBuses ? 9 : 0) : 17;
+      if (bus) nb++; else nt++;
+    });
+    if (pos) { vGeo.attributes.position.needsUpdate = true; vGeo.attributes.size.needsUpdate = true; }
+    return { state: 'ok', ageMin: age.ageMin, stale: age.stale, bus: nb, train: nt, generated: snap.generated_utc,
+             empty: !(snap.vehicles || []).length, requests: snap.requests, notes: snap.notes || [], replaying: moving };
   }
 
   refresh();
   setInterval(refresh, REFRESH_MS);
-  return { group, update, refresh, animate, stats, setReliability, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; }, get ops() { return ops; } };
+  return { group, update, refresh, animate, stats, setReliability, setReplay: v => { replay = v; }, setBusColor, setPulses: v => { flowObjs.forEach(o => { o.visible = v; }); }, setBusMarkers: v => { showBuses = v; }, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; }, get ops() { return ops; } };
 }

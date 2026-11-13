@@ -19,7 +19,7 @@ export function streetGrid(D) {
 
 export function createCity(scene, D) {
   const group = new THREE.Group(); scene.add(group);
-  const time = { value: 0 }, night = { value: 0 };
+  const time = { value: 0 }, night = { value: 0 }, neon = { value: 0 };   // neon: 0 real look, 1 cyberpunk
   const grid = streetGrid(D);
   const gridU = { uGrid: { value: new THREE.Vector4(grid.ox, grid.oz, grid.c, grid.s) } };
   // grid coordinates (metres east / north of State & Madison along the street grid)
@@ -33,9 +33,9 @@ export function createCity(scene, D) {
   // Arterials glow sodium-orange at night. Streets are drawn, not mapped: no road data.
   const landMat = new THREE.MeshStandardMaterial({ color: 0x3a434c, roughness: 0.95 });
   landMat.onBeforeCompile = sh => {
-    sh.uniforms.uNight = night; sh.uniforms.uGrid = gridU.uGrid;
+    sh.uniforms.uNight = night; sh.uniforms.uGrid = gridU.uGrid; sh.uniforms.uNeon = neon;
     sh.vertexShader = 'varying vec3 vWP;\n' + sh.vertexShader.replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;');
-    sh.fragmentShader = 'uniform float uNight; uniform vec4 uGrid; varying vec3 vWP;\n' + sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+    sh.fragmentShader = 'uniform float uNight; uniform float uNeon; uniform vec4 uGrid; varying vec3 vWP;\n' + sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
       {
         vec2 d = vWP.xz - uGrid.xy;
         vec2 g = vec2(d.x * uGrid.z + d.y * uGrid.w, d.x * uGrid.w - d.y * uGrid.z);   // east, north
@@ -49,7 +49,10 @@ export function createCity(scene, D) {
         float wl = max(4.0, px * 0.8);
         float l = (1.0 - smoothstep(wl - px * 0.5, wl + px * 0.5, min(loc.x, loc.y))) * min(1.0, 4.0 / wl);
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.50, 0.53, 0.57), (a * 0.6 + l * 0.35) * (1.0 - uNight));
-        totalEmissiveRadiance += vec3(1.0, 0.52, 0.16) * (a * 1.1 + l * 0.35) * uNight;
+        // real: sodium-orange street lights at night; neon: magenta arterials, cyan side streets
+        vec3 street = mix(vec3(1.0, 0.52, 0.16) * (a * 1.1 + l * 0.35), vec3(1.0, 0.16, 0.78) * a * 1.25 + vec3(0.0, 0.85, 1.0) * l * 0.45, uNeon);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.05, 0.03, 0.09), uNeon * 0.85);
+        totalEmissiveRadiance += street * uNight;
       }`);
   };
   const land = new THREE.Mesh(flat(new THREE.ShapeGeometry(D.city_rings.map(toShape))), landMat);
@@ -107,14 +110,14 @@ export function createCity(scene, D) {
   function windowMaterial(params) {
     const m = new THREE.MeshStandardMaterial(params);
     m.onBeforeCompile = sh => {
-      sh.uniforms.uNight = night;
+      sh.uniforms.uNight = night; sh.uniforms.uNeon = neon;
       sh.vertexShader = 'varying vec3 vWP; varying vec3 vWN;\n' + sh.vertexShader.replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
         vec4 wp4 = vec4(transformed, 1.0);
         #ifdef USE_INSTANCING
           wp4 = instanceMatrix * wp4;
         #endif
         vWP = (modelMatrix * wp4).xyz; vWN = normalize(mat3(modelMatrix) * objectNormal);`);
-      sh.fragmentShader = 'uniform float uNight; varying vec3 vWP; varying vec3 vWN;\nfloat h21(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }\n' +
+      sh.fragmentShader = 'uniform float uNight; uniform float uNeon; varying vec3 vWP; varying vec3 vWN;\nfloat h21(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }\n' +
         sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         float side = 1.0 - abs(vWN.y);
         if (vWP.y > 2.0 && side > 0.5) {
@@ -129,10 +132,10 @@ export function createCity(scene, D) {
           float r = h21(cell + floor(vWP.xz / (37. * k)) + k * 17.0);
           float onFrac = (.10 + .22 * uNight) / sqrt(k);    // merged cells are larger, so fewer are lit
           float on = step(r, onFrac);
-          vec3 warm = vec3(1., .70, .36), cool = vec3(.62, .82, 1.);
+          vec3 warm = mix(vec3(1., .70, .36), vec3(1., .18, .74), uNeon), cool = mix(vec3(.62, .82, 1.), vec3(.0, .92, 1.), uNeon);
           vec3 col = mix(warm, cool, step(.78, h21(cell * 1.7 + k)));
           diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.55, win * 0.5);
-          diffuseColor.rgb *= mix(1.0, 0.42, uNight);
+          diffuseColor.rgb *= mix(1.0, 0.42, uNight) * mix(1.0, 0.35, uNeon);
           totalEmissiveRadiance += col * win * on * (0.04 + 1.2 * uNight) * side;
           // far away (many merged cells) add the averaged glow of the windows too small to draw
           totalEmissiveRadiance += mix(warm, cool, 0.22) * (.10 + .22 * uNight) * 0.27 * 1.2 * uNight * side * smoothstep(4.0, 32.0, k) * 0.8;
@@ -216,5 +219,5 @@ export function createCity(scene, D) {
     return shapes.length;
   }
 
-  return { group, areaFill, outlines, outlineMat, bldGroup, buildBuildings, addFootprints, lake, land, grid, uniforms: { time, night } };
+  return { group, areaFill, outlines, outlineMat, bldGroup, buildBuildings, addFootprints, lake, land, grid, uniforms: { time, night, neon }, lakeMat };
 }

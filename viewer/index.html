@@ -25,7 +25,13 @@
     <a href="#simulate" data-mode="simulate"><i class="mi mi-sim"></i>Simulate</a>
     <span class="mode-ink" aria-hidden="true"></span>
   </nav>
-  <a class="feed" href="#live" id="feedPill" title="Status of the near-live CTA snapshot"><i></i><span>Live feed</span></a>
+  <div class="bar-right">
+    <div class="theme" role="radiogroup" aria-label="Look">
+      <button data-theme="real" role="radio" title="Realistic: natural colours, sun and sky at Chicago's current time">Real</button>
+      <button data-theme="neon" role="radio" title="Neon: a cyberpunk night city">Neon</button>
+    </div>
+    <a class="feed" href="#live" id="feedPill" title="Status of the near-live CTA snapshot"><i></i><span>Live feed</span></a>
+  </div>
 </header>
 
 <!-- OVERVIEW -->
@@ -38,6 +44,7 @@
 <aside id="livePanel" class="dock right glass only-live" aria-live="polite"></aside>
 <div class="only-live live-tools glass">
   <label class="tgl"><input type="checkbox" id="lyrBusRoutes" checked><span></span>Bus routes</label>
+  <label class="tgl" title="Replay the ~2 minutes this snapshot observed (3 polls), along route shapes, 10x faster. Off: every vehicle sits at its last reported position."><input type="checkbox" id="lyrReplay"><span></span>Replay last 2 min</label>
   <label class="select">Reliability lens
     <select id="relMetric">
       <option value="">Off</option>

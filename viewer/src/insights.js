@@ -15,11 +15,11 @@ const status = p => p === null || p === undefined ? '<span class="st info"><b>i<
   : p ? '<span class="st good"><b>✓</b>Pass</span>' : '<span class="st bad"><b>✕</b>Fail</span>';
 
 const shortIv = n => n.startsWith('Frequent network') ? 'Top-10 bus routes, headways ×0.75' : n.startsWith('All buses') ? 'All buses, headways ×0.8' : n.startsWith("All 'L'") ? "All 'L' lines, headways ×0.8" : n;
-const SECTIONS = [['ridership', 'Ridership'], ['validation', 'Model vs reality'], ['interventions', 'Interventions'], ['operations', 'Operations'], ['reliability', 'Reliability']];
+const SECTIONS = [['ridership', 'Ridership'], ['validation', 'Model vs reality'], ['design', 'Service design'], ['interventions', 'Interventions'], ['operations', 'Operations'], ['reliability', 'Reliability']];
 
 export function renderInsights(root, I) {
   if (!I) { root.innerHTML = '<div class="page-inner"><h1>Insights</h1><p>No insights export found (data/insights.json). Run <code>python -m simchi.cli demo</code>.</p></div>'; return; }
-  const R = I.ridership, V = I.validation || [], M = I.models || {}, IV = I.interventions, O = I.ops || {};
+  const R = I.ridership, V = I.validation || [], M = I.models || {}, IV = I.interventions, O = I.ops || {}, SD = I.service_design;
   const nPass = V.filter(c => c.pass === true).length, nFail = V.filter(c => c.pass === false).length;
   const rv = M.ridership_validation || {};
   root.innerHTML = `<div class="page-inner">
@@ -64,6 +64,24 @@ export function renderInsights(root, I) {
         <p class="note">Estimated from differences between community areas, so the time sensitivity is not a measured causal effect.</p></div>
     </div>
   </section>
+
+  ${SD ? `<section id="sec-design" class="sec">
+    <h2>Service design: same budget, better allocation ${chip('observed')} ${chip('scheduled')} ${chip('simulated')}</h2>
+    <p class="sub">Two tested ways to get more riders per bus-hour or the same riders for fewer bus-hours. Each design is simulated on ${SD.replicates} synthetic populations against today's schedule (95% intervals); costs are scheduled vehicle-hours from GTFS; demand is observed CTA ridership.</p>
+    <div class="grid2">
+      <div class="card"><h3>Re-allocate bus frequency (square-root rule)</h3>
+        <p class="sub">Riders wait about half a headway, so total waiting is Σ Q/(2f) for ridership Q and frequency f, while cost is Σ C·f for round-trip time C. Minimising waiting for a fixed budget gives <b>f ∝ √(Q/C)</b>: busy, short routes get more buses, quiet long ones fewer (bounded to 0.6×-1.6× today).</p>
+        <div id="chSdTrips"></div><p class="note">Change in simulated transit trips per weekday; vehicle-hours change as shown in the table.</p></div>
+      <div class="card"><h3>Bus stop balancing on the ten busiest routes ${chip('hypothesis')}</h3>
+        <p class="sub">Keep terminals, transfer points and stops at least 400 m apart; buses skip the rest and save an assumed 20 s per skipped stop. Riders walk to the next stop; the network model routes them.</p>
+        <div id="tbSdStops" class="tablewrap"></div></div>
+    </div>
+    <div class="card wide" style="margin-top:14px"><h3>Results</h3><div id="tbSd" class="tablewrap"></div></div>
+    <div class="grid2">
+      <div class="card"><h3>Routes that gain service</h3><p class="sub">Square-root allocation at today's budget: proposed weekday trips ÷ today's.</p><div id="chSdUp"></div></div>
+      <div class="card"><h3>Routes that give service back</h3><p class="sub">Lower ridership per round-trip hour; the hours move to the routes on the left.</p><div id="chSdDown"></div></div>
+    </div>
+  </section>` : ''}
 
   <section id="sec-interventions" class="sec">
     <h2>Interventions ${chip('simulated')} ${chip('scheduled')}</h2>
@@ -113,6 +131,15 @@ export function renderInsights(root, I) {
       intervalChart(root.querySelector('#chIvService'), { rows: rk.filter(r => r.ranked_by.includes('vehicle-hours') && Number.isFinite(r.value)).map(r => ({ label: shortIv(r.intervention), mean: r.value, lo: r.ci_low, hi: r.ci_high, tip: `${fmt(r.vehicle_hours_per_weekday)} added vehicle-hours, +${fmt(r.transit_trips)} trips/weekday` })) });
       intervalChart(root.querySelector('#chIvFare'), { rows: rk.filter(r => r.ranked_by.includes('revenue')).map(r => ({ label: r.intervention, mean: r.value, lo: r.ci_low, hi: r.ci_high, tip: `+${fmt(r.transit_trips)} trips/weekday` })), color: 'var(--s2)' });
       root.querySelector('#tbEquity').innerHTML = `<table class="tb"><thead><tr><th>Intervention</th><th>Added veh-h/day</th><th>Δ transit trips/day</th><th>Time savings to low-income areas</th><th>Jobs reachable: low-income / other areas</th></tr></thead><tbody>${rk.map(r => `<tr><td>${esc(r.intervention)}</td><td class="n">${fmt(r.vehicle_hours_per_weekday)}</td><td class="n">${Number.isFinite(r.transit_trips) ? '+' + fmt(r.transit_trips) : '–'}</td><td class="n">${pct(r.low_income_share_of_savings, 0)}</td><td class="n">${r.access_jobs ? `+${fmt(r.access_gain_low)} / +${fmt(r.access_gain_other)}` : '–'}</td></tr>`).join('')}</tbody></table>`;
+    }
+    if (SD) {
+      const short = n => n.replace("Re-allocate bus frequency (square-root rule), ", 'Square-root, ').replace(" of today's bus vehicle-hours", ' budget').replace(/Bus stop balancing.*/, 'Stop balancing, top-10');
+      intervalChart(root.querySelector('#chSdTrips'), { rows: SD.results.filter(r => r.transit_trips).map(r => ({ label: short(r.name), mean: r.transit_trips.mean, lo: r.transit_trips.ci_low, hi: r.transit_trips.ci_high, tip: `${fmt(r.vehicle_hours)} vehicle-hours per weekday` })), valueFmt: v => (v >= 0 ? '+' : '') + fmt(v) });
+      root.querySelector('#tbSd').innerHTML = `<table class="tb"><thead><tr><th>Design</th><th>Δ bus veh-h/weekday</th><th>Δ transit trips/day [95%]</th><th>Rider time saved/day</th><th>Savings to low-income areas</th><th>Jobs in 45 min (low-income / other)</th></tr></thead><tbody>${SD.results.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${r.vehicle_hours >= 0 ? '+' : ''}${fmt(r.vehicle_hours)}</td><td class="n">${r.transit_trips ? `${r.transit_trips.mean >= 0 ? '+' : ''}${fmt(r.transit_trips.mean)} [${fmt(r.transit_trips.ci_low)}, ${fmt(r.transit_trips.ci_high)}]` : '–'}</td><td class="n">${r.time_saved_min ? fmt(r.time_saved_min.mean / 60) + ' h' : '–'}</td><td class="n">${r.low_income_share_of_savings ? pct(r.low_income_share_of_savings.mean, 0) : '–'}</td><td class="n">${fmt(r.access_gain_low)} / ${fmt(r.access_gain_other)}</td></tr>`).join('')}</tbody></table>`;
+      const stops = Object.values(SD.analytic).find(a => a.removed_stops)?.removed_stops || {};
+      root.querySelector('#tbSdStops').innerHTML = `<table class="tb"><thead><tr><th>Route</th><th>Stops no longer served (both directions)</th></tr></thead><tbody>${Object.entries(stops).map(([r, n]) => `<tr><td>${esc(r)}</td><td class="n">${n}</td></tr>`).join('')}</tbody></table>`;
+      barList(root.querySelector('#chSdUp'), { rows: SD.more_service.map(r => ({ label: `${r.route} ${r.name}`, value: r.multiplier, tip: `${Math.round(r.weekday_trips)} → ${Math.round(r.proposed_trips)} weekday trips; ${Math.round(r.boardings)} boardings/weekday` })), color: 'var(--s3)', valueFmt: v => '×' + v.toFixed(2) });
+      barList(root.querySelector('#chSdDown'), { rows: SD.less_service.map(r => ({ label: `${r.route} ${r.name}`, value: r.multiplier, tip: `${Math.round(r.weekday_trips)} → ${Math.round(r.proposed_trips)} weekday trips; ${Math.round(r.boardings)} boardings/weekday` })), color: 'var(--s2)', valueFmt: v => '×' + v.toFixed(2) });
     }
     if (O.crowding) barList(root.querySelector('#chCrowd'), { rows: O.crowding.top_bus.map(r => ({ label: `${r.id} ${r.name}`, value: r.per_trip, tip: `${fmt(r.rides)} rides over ${r.trips} scheduled trips` })), color: 'var(--s3)', valueFmt: v => v.toFixed(0), unit: ' /trip' });
     if (O.anomalies) root.querySelector('#tbAnom').innerHTML = `<table class="tb"><thead><tr><th>Detector</th><th>Precision</th><th>Recall</th><th>TP / FP / FN</th></tr></thead><tbody>${Object.entries(O.anomalies.detectors).map(([k, v]) => `<tr><td>${esc(k.replace('_', ' '))}</td><td class="n">${v.precision.toFixed(2)}</td><td class="n">${v.recall.toFixed(2)}</td><td class="n">${v.tp} / ${v.fp} / ${v.fn}</td></tr>`).join('')}</tbody></table>`;
