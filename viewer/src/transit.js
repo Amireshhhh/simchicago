@@ -137,7 +137,7 @@ export function createTransit(scene, T) {
       else { trainMesh.setMatrixAt(nt, M); trainMesh.setColorAt(nt, C); nt++; }
     }
     for (const [m, n] of [[busMesh, nb], [trainMesh, nt]]) { m.count = n; m.instanceMatrix.needsUpdate = true; if (m.instanceColor) m.instanceColor.needsUpdate = true; }
-    return { state: 'ok', ageMin: age.ageMin, stale: age.stale, bus: nb, train: nt, generated: snap.generated_utc,
+    return { state: 'ok', ageMin: age.ageMin, stale: age.stale, bus: nb, train: nt, generated: snap.generated_utc, notes: snap.notes || [], empty: !(snap.vehicles || []).length,
              requests: snap.requests, notes: snap.notes, replaying: live };
   }
 

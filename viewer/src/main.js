@@ -334,6 +334,12 @@ function renderLivePanel(st) {
     return;
   }
   const age = st.ageMin < 1 ? 'under a minute' : `${Math.round(st.ageMin)} min`;
+  if (st.empty) {
+    el.innerHTML = `<h3>Live CTA</h3>The latest snapshot (${age} old) has no vehicle positions. Routes and stations are from CTA GTFS.
+      ${(st.notes || []).length ? `<div class="fine">Workflow notes: ${st.notes.map(esc).join('; ')}</div>` : ''}
+      <div class="fine">Snapshots are taken server-side by a scheduled workflow; the browser never calls CTA.</div>`;
+    return;
+  }
   el.innerHTML = `<h3>Live CTA <span class="tag observed">observed</span></h3>
     ${fmtInt(st.bus)} buses and ${fmtInt(st.train)} trains, snapshot
     <span class="age ${st.stale ? 'stale' : ''}">${age} old${st.stale ? ' (stale: not animated)' : ''}</span>.
