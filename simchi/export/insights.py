@@ -133,10 +133,24 @@ def models_block() -> dict:
     return out
 
 
+def service_design_block():
+    r = _load(REPORTS / "service_design" / "service_design.json")
+    if not r:
+        return None
+    recs = r["route_recommendations"]
+    up = sorted(recs, key=lambda x: -x["multiplier"])[:12]
+    down = sorted(recs, key=lambda x: x["multiplier"])[:12]
+    keep = ("name", "vehicle_hours", "transit_trips", "car_trips", "time_saved_min", "low_income_share_of_savings", "access_jobs",
+            "access_gain_low", "access_gain_other")
+    return {"label": r["label"], "replicates": r["replicates"], "low_income_population_share": r["low_income_population_share"],
+            "results": [{k: x.get(k) for k in keep} for x in r["results"]], "analytic": r["analytic"],
+            "more_service": up, "less_service": down, "routes": len(recs)}
+
+
 def build_insights() -> dict:
     return {"schema": "simchi.insights/1", "network": network_block(), "ridership": ridership_block(),
             "validation": validation_block(), "models": models_block(), "interventions": interventions_block(),
-            "ops": ops_block()}
+            "ops": ops_block(), "service_design": service_design_block()}
 
 
 def export_insights(out: Path | None = None) -> Path:

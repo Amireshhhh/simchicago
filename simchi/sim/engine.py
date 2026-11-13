@@ -122,6 +122,8 @@ def network_scenario(cfg: SimConfig) -> NetworkScenario:
     return NetworkScenario(headway_multiplier=dict(n.get("headway_multiplier", {})),
                            ivt_multiplier=dict(n.get("ivt_multiplier", {})),
                            wait_multiplier=dict(n.get("wait_multiplier", {})),
+                           removed_stops={r: tuple(v) for r, v in n.get("removed_stops", {}).items()},
+                           stop_saving_s=float(n.get("stop_saving_s", 0.0)),
                            fare_bus=float(n.get("fare_bus", FARE_BUS)), fare_rail=float(n.get("fare_rail", FARE_RAIL)))
 
 

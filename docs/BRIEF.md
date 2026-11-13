@@ -27,6 +27,18 @@ by CTA.*
    reachable within 60 minutes at night by 69,600 per resident on average (+31% over 226,900),
    but SimChicago cannot say how many riders it adds: its mode choice describes AM-peak commutes.
 
+## Saving cost: service design (simulated)
+
+- **Bus stop balancing** on the ten busiest routes (no stops closer than 400 m, terminals and
+  transfer points kept) saves **553 scheduled bus-hours a weekday** and adds **+9,700 transit
+  trips [+4,200, +15,300]**, assuming 20 s saved per skipped stop (not measured).
+- **Re-allocating bus hours by the square-root rule at today's budget** gains no measurable
+  ridership (+3,900 [−3,400, +11,300]); CTA's allocation is near the rule's optimum.
+- **Cutting bus hours loses riders** even with the best allocation: −5% of hours costs about
+  7,200 trips a weekday, −10% about 20,200.
+- Details and caveats (no capacity limit in the re-allocation; timed arrivals on infrequent
+  routes): `docs/EVALUATION.md`, Service design.
+
 ## Equity
 
 Residents of the lowest-income community areas (23 areas, 24.8% of residents) receive:

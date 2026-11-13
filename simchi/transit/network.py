@@ -80,6 +80,8 @@ class NetworkScenario:
     headway_multiplier: dict = field(default_factory=dict)
     ivt_multiplier: dict = field(default_factory=dict)
     wait_multiplier: dict = field(default_factory=dict)      # e.g. more regular service (hypothesis)
+    removed_stops: dict = field(default_factory=dict)        # route id -> stop ids no longer served (stop balancing)
+    stop_saving_s: float = 0.0                               # in-vehicle seconds saved per stop no longer served
     fare_bus: float = FARE_BUS
     fare_rail: float = FARE_RAIL
     day: str = "weekday"
@@ -94,7 +96,10 @@ class NetworkScenario:
         nz = lambda d: tuple(sorted((k, float(v)) for k, v in d.items() if float(v) != 1.0))  # noqa: E731
         key = (nz(self.headway_multiplier), nz(self.ivt_multiplier), self.fare_bus, self.fare_rail, self.day, self.band)
         w = nz(self.wait_multiplier)
-        return key + (w,) if w else key
+        key = key + (w,) if w else key
+        if any(self.removed_stops.values()):
+            key = key + (tuple(sorted((r, tuple(sorted(v))) for r, v in self.removed_stops.items() if v)), float(self.stop_saving_s))
+        return key
 
 
 @dataclass
@@ -224,21 +229,26 @@ class Graph:
             wm = sc.factor(sc.wait_multiplier, p["route"], rail)
             base = int(self.pat_off[i])
             st = p["stops"]
+            gone = set(sc.removed_stops.get(p["route"], ()))
             for k in range(len(st)):
                 node = base + k
-                if k < len(st) - 1:
+                skipped = 0 < k < len(st) - 1 and st[k] in gone       # terminals are always served
+                if k < len(st) - 1 and not skipped:
                     trips = seg_trips[(p["route"], p["direction"], st[k], st[k + 1])]
                     wt = min(0.5 * band_min / trips * hm, WAIT_CAP_MIN) * wm
                     wait[node] = wt
                     rows.append(self.pnode_stop[node])                       # board
                     cols.append(self.P0 + node)
                     w.append(PATH_W_WAIT * wt + TRANSFER_PENALTY_MIN)
+                if k < len(st) - 1:
                     seg = max(off[k + 1] - off[k], 0.0) * im
+                    if 0 < k + 1 < len(st) - 1 and st[k + 1] in gone:        # the vehicle no longer stops there
+                        seg = max(seg - sc.stop_saving_s / 60.0, 0.0)
                     ivt_in[node + 1] = seg
                     rows.append(self.P0 + node)                              # ride
                     cols.append(self.P0 + node + 1)
                     w.append(seg)
-                if k > 0:
+                if k > 0 and not skipped:
                     rows.append(self.P0 + node)                              # alight
                     cols.append(ns + self.pnode_stop[node])
                     w.append(0.0)

@@ -70,7 +70,7 @@ export function renderInsights(root, I) {
     <p class="sub">Two tested ways to get more riders per bus-hour or the same riders for fewer bus-hours. Each design is simulated on ${SD.replicates} synthetic populations against today's schedule (95% intervals); costs are scheduled vehicle-hours from GTFS; demand is observed CTA ridership.</p>
     <div class="grid2">
       <div class="card"><h3>Re-allocate bus frequency (square-root rule)</h3>
-        <p class="sub">Riders wait about half a headway, so total waiting is Σ Q/(2f) for ridership Q and frequency f, while cost is Σ C·f for round-trip time C. Minimising waiting for a fixed budget gives <b>f ∝ √(Q/C)</b>: busy, short routes get more buses, quiet long ones fewer (bounded to 0.6×-1.6× today).</p>
+        <p class="sub">Riders wait about half a headway, so total waiting is Σ Q/(2f) for ridership Q and frequency f, while cost is Σ C·f for round-trip time C. Minimising waiting for a fixed budget gives <b>f ∝ √(Q/C)</b> (bounded to 0.6×-1.6× today). Today's busiest routes already run very often, so the rule moves hours to infrequent routes, where each extra bus cuts more waiting.</p>
         <div id="chSdTrips"></div><p class="note">Change in simulated transit trips per weekday; vehicle-hours change as shown in the table.</p></div>
       <div class="card"><h3>Bus stop balancing on the ten busiest routes ${chip('hypothesis')}</h3>
         <p class="sub">Keep terminals, transfer points and stops at least 400 m apart; buses skip the rest and save an assumed 20 s per skipped stop. Riders walk to the next stop; the network model routes them.</p>
@@ -79,8 +79,9 @@ export function renderInsights(root, I) {
     <div class="card wide" style="margin-top:14px"><h3>Results</h3><div id="tbSd" class="tablewrap"></div></div>
     <div class="grid2">
       <div class="card"><h3>Routes that gain service</h3><p class="sub">Square-root allocation at today's budget: proposed weekday trips ÷ today's.</p><div id="chSdUp"></div></div>
-      <div class="card"><h3>Routes that give service back</h3><p class="sub">Lower ridership per round-trip hour; the hours move to the routes on the left.</p><div id="chSdDown"></div></div>
+      <div class="card"><h3>Routes that give service back</h3><p class="sub">Already frequent for their ridership by this rule; the hours move to the routes on the left.</p><div id="chSdDown"></div></div>
     </div>
+    <p class="note">These lists are what the formula implies, not an operational recommendation: it has no crowding limit (cutting route 66 by 30% would crowd it) and assumes riders wait half a headway even on hourly routes, where they time their arrival. The simulation finds no measurable ridership gain from it at today's budget; cutting hours loses riders. Stop balancing is the design that saves hours and gains riders, under its 20 s assumption.</p>
   </section>` : ''}
 
   <section id="sec-interventions" class="sec">

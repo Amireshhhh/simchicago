@@ -84,7 +84,8 @@ def network_scenario(net: dict, band="am_peak") -> N.NetworkScenario:
                              ivt_multiplier=dict(net.get("ivt_multiplier", {})),
                              wait_multiplier=dict(net.get("wait_multiplier", {})),
                              fare_bus=float(net.get("fare_bus", N.FARE_BUS)), fare_rail=float(net.get("fare_rail", N.FARE_RAIL)),
-                             band=band)
+                             removed_stops={r: tuple(v) for r, v in net.get("removed_stops", {}).items()},
+                             stop_saving_s=float(net.get("stop_saving_s", 0.0)), band=band)
 
 
 def vehicle_hours(sc: N.NetworkScenario, bands) -> float:
@@ -95,6 +96,8 @@ def vehicle_hours(sc: N.NetworkScenario, bands) -> float:
         rail = routes[p["route"]]
         hm = sc.factor(sc.headway_multiplier, p["route"], rail)
         im = sc.factor(sc.ivt_multiplier, p["route"], rail)
+        gone = set(sc.removed_stops.get(p["route"], ()))
+        skipped = sum(1 for s_ in p["stops"][1:-1] if s_ in gone)
         for band in bands:
             n = p.get("trips_band", {}).get("weekday", {}).get(band, 0)
             off = p["offsets_min"].get(band)
@@ -102,7 +105,7 @@ def vehicle_hours(sc: N.NetworkScenario, bands) -> float:
                 continue
             rt = off[-1] / 60.0
             base += n * rt
-            new += n / hm * rt * im
+            new += n / hm * max(rt * im - skipped * sc.stop_saving_s / 3600.0, 0.0)
     return new - base
 
 
@@ -147,7 +150,7 @@ def _ci(x):
     return {"mean": m, "ci_low": m - h, "ci_high": m + h}
 
 
-def run(R: int = 10, n: int = 2000) -> dict:
+def run(R: int = 10, n: int = 2000, ivs: list | None = None) -> dict:
     from simchi.experiments import make_config
     from simchi.pipeline import build
     from simchi.sim.engine import _choose_modes, run_sim, scenario_skim
@@ -155,7 +158,7 @@ def run(R: int = 10, n: int = 2000) -> dict:
 
     world = build_world()
     top = top_bus_routes()
-    ivs = interventions(top)
+    ivs = ivs if ivs is not None else interventions(top)
     low = low_income_areas(world)
     pop = world.cds.table["TOT_POP"].to_numpy(float)
 
@@ -198,12 +201,17 @@ def run(R: int = 10, n: int = 2000) -> dict:
             if iv.get("behaviour", True):
                 over = {}
                 for a, v in iv["network"].items():
+                    if a in ("removed_stops", "stop_saving_s"):
+                        continue                                    # set on the config directly below
                     if isinstance(v, dict):
                         for kk, vv in v.items():
                             over[f"network.{a}.{kk}"] = vv
                     else:
                         over[f"network.{a}"] = v
                 cfg = make_config(base_cfg, over, seed)
+                for a in ("removed_stops", "stop_saving_s"):
+                    if a in iv["network"]:
+                        cfg.network[a] = iv["network"][a]
                 sk = scenario_skim(b, cfg)
                 s1 = run_sim(b, cfg).daily[0]
                 saved = 2.0 * (sk0.total[hi_, wj] - sk.total[hi_, wj]) * rider * w

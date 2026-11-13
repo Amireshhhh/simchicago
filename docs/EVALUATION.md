@@ -284,6 +284,42 @@ and reliability raise their 45-minute job access more than other areas' (e.g. al
 +23,200 vs +10,500 jobs). Caveats (cross-sectional time sensitivity, assumed value of time and
 effect sizes, model-scale revenue, train-hours not comparable to bus-hours) are in the brief.
 
+## Service design (frequency re-allocation, stop balancing)
+
+`python -m simchi.service_design --replicates 10` (→ `reports/service_design/`; method in
+`docs/DESIGN.md` §10c). Simulated on 10 synthetic populations against today's schedule; paired
+95% intervals; vehicle-hours scheduled (GTFS); demand observed (CTA weekday boardings, last 12
+months).
+
+| Design | Δ bus vehicle-hours / weekday | Δ transit trips / weekday [95%] | Commuter time saved / weekday [95%] | Share to low-income areas |
+|---|---|---|---|---|
+| Square-root re-allocation, 100% of today's budget | 0 | +3,930 [−3,408, +11,269] | +1,960 h [+1,591, +2,329] | 1% [−8, 10] |
+| Square-root re-allocation, 95% budget | −786 | −7,168 [−12,621, −1,715] | −1,908 h [−2,327, −1,489] | 44% [37, 51] |
+| Square-root re-allocation, 90% budget | −1,571 | −20,226 [−27,293, −13,160] | −6,258 h [−6,713, −5,803] | 28% [26, 29] |
+| Stop balancing, top-10 routes (20 s per skipped stop, assumed) | −553 | +9,703 [+4,154, +15,252] | +5,178 h [+4,689, +5,668] | 15% [10, 20] |
+
+What this says:
+
+- **Re-allocating today's bus hours by the square-root rule gains no measurable ridership** (the
+  interval spans zero) although it saves commuters about 1,960 hours a day; the analytic waiting
+  change at observed demand is −168 rider-hours a day. By this criterion CTA's current
+  allocation is close to the rule's optimum within the 0.6-1.6× bounds.
+- **Cutting bus hours, even with the best allocation, loses riders**: 5% fewer bus-hours (−786 a
+  weekday) costs about 7,200 trips; 10% costs about 20,200. Low-income areas carry 28-44% of the
+  added waiting, more than their 24.8% population share.
+- **Stop balancing is the one design here that both saves bus-hours and gains riders**: removing
+  stops closer than 400 m on the ten busiest routes (keeping terminals and transfer points;
+  49-106 stop positions per route, both directions) saves 553 scheduled bus-hours a weekday and
+  adds about 9,700 trips, *if* each skipped stop saves 20 s. That saving is an assumption, not
+  measured; with the live feed running, observed run times before/after could replace it.
+- **Caveats of the re-allocation.** The rule moves service towards infrequent routes (up to 1.6×,
+  e.g. routes 206, 148, 143) and away from the busiest (route 66 ×0.70, 9 ×0.77, 53 ×0.81),
+  because it assumes riders wait half a headway even on hourly routes (where they time their
+  arrival) and has no capacity limit (cutting route 66's trips by 30% would crowd it). The route
+  list in the viewer is what the formula implies, not an operational recommendation; a version
+  with crowding limits and timed-arrival waits is the next step.
+- 'L' lines are not re-allocated: rail ridership is published by station, not by line.
+
 ## Experiments
 
 Effects are paired differences against the baseline scenario over the same seeds, with

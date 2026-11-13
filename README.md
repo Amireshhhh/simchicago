@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 80 tests
+python -m pytest tests           # 83 tests
 cd viewer && npm test            # 11 tests
 ```
 
@@ -170,6 +170,14 @@ bus priority, reliability, late-night service, fares) by simulated transit trips
 added scheduled vehicle-hour (or per $1,000 of fare revenue), with paired 95% intervals,
 equity splits and job accessibility; results in `reports/interventions/`, summary in
 `docs/BRIEF.md`, chart in the viewer's Experiment Lab.
+
+## Service design
+
+`python -m simchi.service_design --replicates 10` tests cost-saving service designs in the
+simulation: re-allocating bus frequencies by the square-root rule (f ∝ √(ridership / round-trip
+time), at 100%, 95% and 90% of today's bus-hours) and bus stop balancing on the ten busiest
+routes. Results: `reports/service_design/`, the Insights page ("Service design") and
+`docs/EVALUATION.md`.
 
 ## Operations tools
 

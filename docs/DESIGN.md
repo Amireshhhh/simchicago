@@ -272,6 +272,27 @@ changing the headway CV from c₀ to c₁ multiplies waits by (1 + c₁²)/(1 + 
   from terminals, off route, outage against Little's-law scheduled vehicles), evaluated by
   injecting labelled anomalies into a feed.
 
+## 10c. Service design
+
+`simchi/service_design.py`. **Frequency re-allocation.** With random passenger arrivals the mean
+wait is half the headway, so a route with daily boardings Q_r and f_r round trips a day causes
+waiting proportional to Q_r / (2 f_r); its scheduled vehicle-hours are C_r f_r (C_r: mean round
+trip, h). Minimising Σ Q_r/(2 f_r) subject to Σ C_r f_r = B: the Lagrangian
+L = Σ Q_r/(2 f_r) + λ(Σ C_r f_r − B) gives ∂L/∂f_r = −Q_r/(2 f_r²) + λ C_r = 0, so
+f_r* = √(Q_r / (2 λ C_r)) ∝ √(Q_r / C_r) (the square-root rule); each term Q_r/(2 f_r) is
+convex for f_r > 0 and the constraint is linear, so the stationary point is the global minimum.
+Q_r is observed (CTA weekday boardings, last 12 months), C_r and f_r scheduled (GTFS, counted
+exactly as the vehicle-hour cost proxy counts them, so the budget identity holds to rounding).
+Each route is bounded to 0.6-1.6× today's frequency (water-filling: routes that hit a bound are
+fixed and the rest re-scaled). Budgets of 100%, 95% and 90% of today's bus vehicle-hours are
+tested; the frequency change applies to every time band. 'L' lines are not re-allocated because
+CTA publishes rail ridership by station, not by line. **Stop balancing.** On each pattern of
+the ten busiest bus routes a stop is kept if it is a terminal, a transfer point (another route
+serves it, or an 'L' station is within 150 m) or at least 400 m (straight line) past the last kept
+stop; the network model removes boarding and alighting at the others and subtracts an assumed
+20 s of in-vehicle time per skipped stop. Both designs run through the intervention runner
+(§10a): same synthetic populations, paired intervals, same metrics.
+
 ## 11. Viewer
 
 three.js r180 with a post-processing chain (render → bloom → FXAA → output with ACES tone
