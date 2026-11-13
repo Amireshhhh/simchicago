@@ -140,7 +140,7 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
   routes, stations, simplified shapes, representative stop patterns, scheduled trips and
   headways per route, direction, day type and hour) in the simulation's coordinate frame.
   Refresh: `python scripts/fetch_gtfs.py --refresh` (see `docs/DATASETS.md`).
-- `.github/workflows/live.yml` runs every 5 minutes: `python -m simchi.transit.live` takes
+- `.github/workflows/live.yml` runs about every 5 minutes (each run queues the next, at most one per 5 minutes; an hourly schedule restarts the chain): `python -m simchi.transit.live` takes
   3 polls, 60 s apart (Bus Tracker `getvehicles`, 10 routes per request, only routes with
   scheduled service in the current hour; Train Tracker `ttpositions`), stops at a hard
   per-run request cap, writes `latest.json` (labelled `observed`) and redeploys the site.

@@ -3,15 +3,22 @@ name: Live CTA snapshot
 # Near-live CTA vehicle positions, polled server-side and published as a static snapshot.
 # Budget and terms: docs/CTA_TERMS.md. Keys come only from the CTA_BUS_KEY / CTA_TRAIN_KEY
 # secrets and are never written anywhere. Off the top of the hour, as GitHub recommends.
+# GitHub's 5-minute schedule fired only a few times a day here, so the schedule is now an hourly
+# restarter and each run queues the next one through workflow_dispatch (the job "next"): never sooner than
+# 5 minutes after the previous run started, and only if no other run of this workflow is
+# queued or running. The rate therefore stays at most one run per 5 minutes (288 a day), the
+# budget in docs/CTA_TERMS.md (plus at most 24 hourly restarts: 312 runs a day at most). To stop the chain, set the repository variable LIVE_CHAIN to
+# "off" (Settings -> Secrets and variables -> Actions -> Variables) or disable the workflow.
 on:
   schedule:
-    - cron: "2-59/5 * * * *"
+    - cron: "17 * * * *"     # hourly restarter, in case the run-to-run chain below breaks
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write          # queue the next run (see the "next" job)
 
 # Shared with pages.yml: the two workflows never deploy at the same time.
 concurrency:
@@ -113,3 +120,23 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  next:
+    needs: [poll, deploy]
+    if: always() && vars.LIVE_CHAIN != 'off' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Wait until 5 minutes after this run started, then queue the next run
+        run: |
+          started=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" -q .run_started_at)
+          elapsed=$(( $(date -u +%s) - $(date -u -d "$started" +%s) ))
+          wait=$(( 300 - elapsed ))
+          if [ "$wait" -gt 0 ]; then echo "waiting ${wait}s"; sleep "$wait"; fi
+          others=$(gh run list -R "$GITHUB_REPOSITORY" -w live.yml --json databaseId,status \
+                   -q "[.[] | select(.databaseId != $GITHUB_RUN_ID) | select(.status == \"queued\" or .status == \"in_progress\" or .status == \"pending\" or .status == \"waiting\")] | length")
+          if [ "$others" -gt 0 ]; then echo "another run is queued or running; not chaining"; exit 0; fi
+          gh workflow run live.yml -R "$GITHUB_REPOSITORY" --ref main
+          echo "queued the next run"

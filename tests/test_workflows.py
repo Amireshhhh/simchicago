@@ -11,14 +11,16 @@ WF = Path(__file__).resolve().parent.parent / ".github" / "workflows"
 def test_live_schedule_and_polling_match_the_budget():
     y = (WF / "live.yml").read_text()
     cron = re.search(r'cron:\s*"([^"]+)"', y).group(1)
-    assert cron.split()[0].endswith("/5")                       # every 5 minutes at most: <= 288 runs/day
+    assert cron.split()[1] == "*" and cron.split()[0].isdigit()      # hourly restarter: <= 24 runs/day
     assert "--polls 3 --interval 60" in y
+    # the run-to-run chain waits until 5 minutes after the run started and never forks
+    assert "wait=$(( 300 - elapsed ))" in y and "not chaining" in y and "vars.LIVE_CHAIN != 'off'" in y
+    runs = 288 + 24
     assert live.REQUEST_CAP == {"bus": 60, "train": 36}
     # worst case at the cap stays under 50% of the documented limits (100,000 bus; 50,000 train)
-    assert 288 * live.REQUEST_CAP["bus"] <= 0.5 * 100_000
-    assert 288 * live.REQUEST_CAP["train"] <= 0.5 * 50_000
-    # normal use: 13 bus requests (124 routes / 10) and at most 8 train requests per poll
-    assert 288 * 3 * 13 <= 288 * live.REQUEST_CAP["bus"] and 288 * 3 * 8 <= 288 * live.REQUEST_CAP["train"]
+    assert runs * live.REQUEST_CAP["bus"] <= 0.5 * 100_000
+    assert runs * live.REQUEST_CAP["train"] <= 0.5 * 50_000
+    assert runs * 3 * 13 <= runs * live.REQUEST_CAP["bus"] and runs * 3 * 8 <= runs * live.REQUEST_CAP["train"]
 
 
 def test_workflows_share_a_concurrency_group():
