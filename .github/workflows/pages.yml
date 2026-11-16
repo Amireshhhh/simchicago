@@ -13,9 +13,11 @@ permissions:
   pages: write
   id-token: write
 
-# Shared with live.yml: the two workflows never deploy at the same time.
+# One build at a time. Only the deploy jobs of pages.yml and live.yml share a group
+# (pages-deploy), so a queued poll can no longer replace a queued site build; live.yml always
+# publishes the most recently built site (actions/cache restore-keys site-).
 concurrency:
-  group: pages
+  group: pages-build
   cancel-in-progress: false
 
 jobs:
@@ -91,6 +93,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

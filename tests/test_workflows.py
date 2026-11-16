@@ -23,10 +23,16 @@ def test_live_schedule_and_polling_match_the_budget():
     assert runs * 3 * 13 <= runs * live.REQUEST_CAP["bus"] and runs * 3 * 8 <= runs * live.REQUEST_CAP["train"]
 
 
-def test_workflows_share_a_concurrency_group():
+def test_builds_and_polls_do_not_cancel_each_other():
+    """Each workflow queues only behind itself; only the deploy jobs share a group."""
+    groups = {}
     for name in ("live.yml", "pages.yml"):
         y = (WF / name).read_text()
-        assert re.search(r"concurrency:\s*\n\s*group: pages\s*\n\s*cancel-in-progress: false", y), name
+        top = re.search(r"^concurrency:\s*\n\s*group: ([\w-]+)\s*\n\s*cancel-in-progress: false", y, re.M)
+        assert top, name
+        groups[name] = top.group(1)
+        assert re.search(r"  deploy:\n(?:    .*\n)*?    concurrency:\n      group: pages-deploy\n      cancel-in-progress: false", y), name
+    assert groups["live.yml"] != groups["pages.yml"]
 
 
 def test_keys_only_from_secrets_and_never_echoed():

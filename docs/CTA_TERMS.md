@@ -129,6 +129,14 @@ or 5xx; never in a loop. When a run reaches its cap, or CTA returns a limit or k
 run stops polling, writes what it has, and exits successfully, so the next run starts fresh.
 The measured daily use is reported from workflow logs (each run prints its request counts).
 
+### Measured use
+
+Summed from the `REQUESTS` lines of every `live.yml` run log on **15 November 2026 (UTC)**, the
+first full day of the run-to-run chain: **191 runs, 4,420 Bus Tracker requests (4.4% of the
+100,000 daily limit) and 573 Train Tracker requests (1.1% of 50,000)**, retries included. Fewer
+than 288 runs because each run, waiting included, takes just over 5 minutes, and fewer bus requests
+per poll than the worst case because only routes with scheduled service are polled.
+
 ## Deleting CTA data
 
 1. Disable `live.yml`; delete the workflow artifacts named `vehicles-*` and the caches named
