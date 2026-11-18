@@ -24,6 +24,22 @@ TRAIN_LIKE = re.compile(r"(?<![0-9a-fA-F])[0-9a-f]{32}(?![0-9a-fA-F])")
 VENDOR = {ln.strip() for ln in (Path(__file__).parent / "vendor_tokens.txt").read_text().splitlines() if ln.strip() and not ln.startswith("#")}
 
 
+def _portal_column_names():
+    """Column names and field names of City of Chicago datasets (public metadata in the committed
+    catalog snapshot) that merely have a key's shape, e.g. relHumidAmbient24HourMean."""
+    import gzip
+    import json
+    p = ROOT / "data" / "portal" / "catalog.json.gz"
+    if not p.exists():
+        return set()
+    with gzip.open(p, "rt") as f:
+        cat = json.load(f)
+    return {t for d in cat["datasets"] for c in d["columns"] for t in (c["name"], c["field"])}
+
+
+VENDOR |= {t for t in _portal_column_names() if BUS_LIKE.fullmatch(t) or TRAIN_LIKE.fullmatch(t)}
+
+
 def files():
     for root in SCAN:
         if root.exists():
