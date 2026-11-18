@@ -239,3 +239,52 @@ export function trackPosition(times, track, legs, t) {
   const f = times[k + 1] > times[k] ? (t - times[k]) / (times[k + 1] - times[k]) : 1;
   return alongShape(legs[k], track[k], track[k + 1], f);
 }
+
+// ---- "Where's my bus?": a vehicle's place on a stop pattern, distance and scheduled time to a stop
+/** Compass bearing (degrees, 0 = north, 90 = east) of a step (dx, dz) in the local frame, where +x
+ *  is east and -z is north. */
+export function bearingDeg(dx, dz) { return ((Math.atan2(dx, -dz) * 180 / Math.PI) % 360 + 360) % 360; }
+const angDiff = (a, b) => { const d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
+
+/** Timetable band for a Chicago-local hour (the GTFS extract's bands; 0-3 h belongs to "night"). */
+export function bandForHour(h) {
+  if (h >= 4 && h < 6) return 'early'; if (h >= 6 && h < 9) return 'am_peak'; if (h >= 9 && h < 15) return 'midday';
+  if (h >= 15 && h < 19) return 'pm_peak'; if (h >= 19 && h < 23) return 'evening'; return 'night';
+}
+
+/** Where a vehicle is on a pattern (shape in local metres). `track` is its observed [x, z] points,
+ *  oldest first; `hdg` its reported heading (0 is treated as unreported). Returns null when it is
+ *  farther than maxOffset from the shape or travels against it, else {s, how}: s = distance along
+ *  the shape of its latest position; how = 'moved' (it advanced >= 30 m along the shape), 'heading'
+ *  (stationary, reported heading within 60 degrees of the shape's direction there) or 'unconfirmed'. */
+export function patternPosition(shape, track, hdg, maxOffset = 200) {
+  const cum = cumulative(shape), last = track[track.length - 1], first = track[0];
+  const [s1, d1] = projectOnShape(shape, cum, last);
+  if (d1 > maxOffset) return null;
+  const [s0, d0] = projectOnShape(shape, cum, first);
+  if (d0 <= maxOffset && s1 - s0 >= 30) return { s: s1, how: 'moved' };
+  if (d0 <= maxOffset && s0 - s1 >= 30) return null;
+  if (hdg) {
+    const a = pointAtDistance(shape, cum, Math.max(0, s1 - 25)), b = pointAtDistance(shape, cum, s1 + 25);
+    return angDiff(bearingDeg(b[0] - a[0], b[1] - a[1]), hdg) <= 60 ? { s: s1, how: 'heading' } : null;
+  }
+  return { s: s1, how: 'unconfirmed' };
+}
+
+/** Distance along the shape (m) of each stop of a pattern ([id, name, x, z, ...]), forced to be
+ *  non-decreasing (a stop never projects behind the previous one). */
+export function stopDistances(shape, stops) {
+  const cum = cumulative(shape), out = [];
+  let prev = 0;
+  for (const st of stops) { const s = Math.max(prev, projectOnShape(shape, cum, [st[2], st[3]])[0]); out.push(s); prev = s; }
+  return out;
+}
+
+/** Scheduled minutes from the first stop at distance s, interpolated between stops (clamped). */
+export function offsetAt(stopS, offsets, s) {
+  if (s <= stopS[0]) return offsets[0];
+  for (let i = 1; i < stopS.length; i++) {
+    if (s <= stopS[i]) { const L = stopS[i] - stopS[i - 1]; return offsets[i - 1] + (L > 0 ? (s - stopS[i - 1]) / L : 1) * (offsets[i] - offsets[i - 1]); }
+  }
+  return offsets[offsets.length - 1];
+}

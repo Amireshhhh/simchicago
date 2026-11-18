@@ -157,6 +157,29 @@ def labels_fc(streets: dict, areas: dict) -> dict:
     return {"type": "FeatureCollection", "features": feats}
 
 
+def route_stops() -> dict:
+    """Per route: its GTFS stop patterns (direction, share of trips, shape and stops in the local
+    metric frame, plus lon/lat of the stops, and scheduled minutes from the first stop per period)
+    for the viewer's "Where's my bus?" panel. One file per route, fetched only when picked."""
+    from simchi.data.cds import load_cds
+    from simchi.transit.gtfs import load_extract
+    frame = load_cds().frame
+    shapes = load_extract("shapes")
+    stops = {s["id"]: s for s in load_extract("stops")}
+    out: dict = {}
+    for p in load_extract("patterns"):
+        sh = LineString(np.asarray(shapes[p["shape"]], float)).simplify(2.0)
+        st = [stops[i] for i in p["stops"]]
+        lon, lat = frame.to_lonlat(np.array([s["x"] for s in st]), np.array([s["z"] for s in st]))
+        out.setdefault(p["route"], []).append({
+            "dir": p["direction"], "share": p["share_of_trips"],
+            "shape": [[round(x, 1), round(z, 1)] for x, z in sh.coords],
+            "stops": [[s["id"], s["name"], round(s["x"], 1), round(s["z"], 1), round(float(lo), ROUND), round(float(la), ROUND)]
+                      for s, lo, la in zip(st, lon, lat, strict=True)],
+            "off": {k: v for k, v in p["offsets_min"].items() if v and len(v) == len(st)}})
+    return out
+
+
 def export_map(out_dir: Path | None = None) -> Path:
     out_dir = Path(out_dir) if out_dir else VIEWER / "dist" / "data" / "map"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -166,7 +189,11 @@ def export_map(out_dir: Path | None = None) -> Path:
     for k, v in files.items():
         with open(out_dir / f"{k}.json", "w") as fh:
             json.dump(v, fh, separators=(",", ":"))
+    (out_dir / "stops").mkdir(exist_ok=True)
+    for route, pats in route_stops().items():
+        with open(out_dir / "stops" / f"{route}.json", "w") as fh:
+            json.dump({"route": route, "patterns": pats}, fh, separators=(",", ":"), allow_nan=False)
     return out_dir
 
 
-__all__ = ["build_streets", "export_map", "load_streets"]
+__all__ = ["build_streets", "export_map", "load_streets", "route_stops"]

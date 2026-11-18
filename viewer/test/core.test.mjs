@@ -124,3 +124,23 @@ test('delayed-live playback loops the observed window at real speed', async () =
   assert.deepEqual(trackPosition(times, track, [shape], -5), [0, 0]);
   assert.deepEqual(trackPosition(times, track, [shape], 99_000), [600, 0]);
 });
+
+import { bearingDeg, bandForHour, patternPosition, stopDistances, offsetAt } from '../src/core.js';
+test('wheres my bus geometry', () => {
+  assert.equal(bearingDeg(0, -1), 0); assert.equal(bearingDeg(1, 0), 90); assert.equal(bearingDeg(0, 1), 180); assert.equal(bearingDeg(-1, 0), 270);
+  assert.deepEqual([3, 4, 7, 12, 16, 20, 23, 0].map(bandForHour), ['night', 'early', 'am_peak', 'midday', 'pm_peak', 'evening', 'night', 'night']);
+  const shape = [[0, 0], [0, -1000], [1000, -1000]];                       // north 1 km, then east 1 km
+  assert.deepEqual(patternPosition(shape, [[5, -100], [5, -400]], 0), { s: 400, how: 'moved' });
+  assert.equal(patternPosition(shape, [[5, -400], [5, -100]], 0), null);   // travelling against the pattern
+  assert.equal(patternPosition(shape, [[500, -500]], 0), null);            // 500 m off the shape
+  assert.deepEqual(patternPosition(shape, [[3, -300]], 2), { s: 300, how: 'heading' });   // stationary, heading ~north
+  assert.equal(patternPosition(shape, [[3, -300]], 180), null);            // stationary, heading south
+  assert.deepEqual(patternPosition(shape, [[3, -300]], 0), { s: 300, how: 'unconfirmed' });
+  assert.deepEqual(patternPosition(shape, [[500, -1004], [800, -1004]], 0), { s: 1800, how: 'moved' });
+  const stops = [['a', 'A', 0, 0], ['b', 'B', 0, -1000], ['c', 'C', 1000, -1000]];
+  const S = stopDistances(shape, stops);
+  assert.deepEqual(S, [0, 1000, 2000]);
+  assert.equal(offsetAt(S, [0, 4, 10], 500), 2);
+  assert.equal(offsetAt(S, [0, 4, 10], 1500), 7);
+  assert.equal(offsetAt(S, [0, 4, 10], 2600), 10);
+});

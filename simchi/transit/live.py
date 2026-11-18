@@ -19,6 +19,7 @@ import argparse
 import csv
 import gzip
 import json
+import math
 import os
 import random
 import sys
@@ -200,12 +201,34 @@ def poll_train(client: Client, now_utc: datetime) -> list:
     return _train_rows(data, now_utc)
 
 
+# CTA service area with margin (Wilmette/Evanston to the north, Oak Park/Forest Park to the west,
+# 130th St to the south). Positions outside it are feed errors: Train Tracker has reported trains
+# at lat 0, lon 0 (seen in the 18 Nov 2026 19:02 UTC snapshot), which projects to +-infinity.
+SERVICE_BOX = {"lat": (41.55, 42.15), "lon": (-88.05, -87.45)}
+
+
+def valid_position(r: dict) -> bool:
+    try:
+        lat, lon = float(r["lat"]), float(r["lon"])
+    except (TypeError, ValueError, KeyError):
+        return False
+    return (math.isfinite(lat) and math.isfinite(lon) and SERVICE_BOX["lat"][0] <= lat <= SERVICE_BOX["lat"][1]
+            and SERVICE_BOX["lon"][0] <= lon <= SERVICE_BOX["lon"][1])
+
+
 def build_snapshot(polls: list, frame, requests: dict, notes: list) -> dict:
-    """polls: [(poll_time_utc, rows)]. Latest position per vehicle plus its track over the run."""
+    """polls: [(poll_time_utc, rows)]. Latest position per vehicle plus its track over the run.
+    Rows with a position outside SERVICE_BOX are dropped and counted in the notes."""
     tracks: dict = {}
+    dropped = 0
     for t_poll, rows in polls:
         for r in rows:
+            if not valid_position(r):
+                dropped += 1
+                continue
             tracks.setdefault(r["id"], []).append((t_poll, r))
+    if dropped:
+        notes = notes + [f"{dropped} reported positions outside the CTA service area (e.g. lat 0, lon 0) were dropped"]
     vehicles = []
     for vid, items in tracks.items():
         last = items[-1][1]
@@ -234,7 +257,7 @@ HISTORY_FIELDS = ["poll_utc", "mode", "id", "route", "lat", "lon", "hdg", "t_utc
 def write_outputs(out: Path, snapshot: dict, polls: list):
     out.mkdir(parents=True, exist_ok=True)
     with open(out / "latest.json", "w") as f:
-        json.dump(snapshot, f, separators=(",", ":"))
+        json.dump(snapshot, f, separators=(",", ":"), allow_nan=False)   # NaN/Infinity are not JSON: browsers reject the file
     with gzip.open(out / "history.csv.gz", "wt", newline="") as f:
         w = csv.DictWriter(f, fieldnames=HISTORY_FIELDS, extrasaction="ignore")
         w.writeheader()

@@ -3,8 +3,9 @@
 // network, near-live vehicles (observed), simulated residents (simulated), benches (observed,
 // mixed sources). Labels are an HTML overlay (no glyph server needed).
 import * as maplibregl from 'maplibre-gl';
-import { bestShape, playbackTime, trackPosition, snapshotAge } from './core.js';
+import { bestShape, playbackTime, trackPosition, snapshotAge, bearingDeg } from './core.js';
 
+const fmtClock = iso => { try { return new Date(iso).toLocaleTimeString('en-US', { timeZone: 'America/Chicago', hour: 'numeric', minute: '2-digit', second: '2-digit' }); } catch { return ''; } };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 export const THEMES = {
@@ -30,6 +31,8 @@ function style(t) {
       live: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
       residents: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
       benches: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+      rstops: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+      mystop: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
     },
     layers: [
       { id: 'water', type: 'background', paint: { 'background-color': t.water } },
@@ -55,12 +58,70 @@ function style(t) {
       { id: 'benches', type: 'circle', source: 'benches', minzoom: 12, paint: { 'circle-radius': w(12, 1.8, 18, 6), 'circle-color': ['get', 'color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 0.8 } },
       { id: 'residents', type: 'circle', source: 'residents', paint: { 'circle-radius': w(10, 2, 17, 6), 'circle-color': ['get', 'color'], 'circle-opacity': t.resident,
         'circle-stroke-color': '#ffffff', 'circle-stroke-width': 0.6 } },
-      { id: 'live-follow', type: 'circle', source: 'live', filter: ['==', ['get', 'f'], 1], paint: { 'circle-radius': w(10, 11, 17, 22), 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': '#00b3ff', 'circle-stroke-width': 3 } },
-      { id: 'live-halo', type: 'circle', source: 'live', paint: { 'circle-radius': w(10, 6, 17, 16), 'circle-color': ['get', 'color'], 'circle-opacity': 0.22 } },
-      { id: 'live', type: 'circle', source: 'live', paint: { 'circle-radius': ['interpolate', ['exponential', 1.6], ['zoom'], 10, ['case', ['==', ['get', 'mode'], 'train'], 4.5, 3], 17, ['case', ['==', ['get', 'mode'], 'train'], 9, 7]],
-        'circle-color': ['get', 'color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.4 } },
+      { id: 'rstops', type: 'circle', source: 'rstops', minzoom: 11, paint: { 'circle-radius': w(11, 2.5, 17, 7), 'circle-color': '#ffffff',
+        'circle-stroke-color': ['get', 'color'], 'circle-stroke-width': w(11, 1.2, 17, 3) } },
+      { id: 'mystop', type: 'circle', source: 'mystop', paint: { 'circle-radius': w(10, 7, 17, 14), 'circle-color': '#111827', 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 3 } },
+      { id: 'live-follow', type: 'circle', source: 'live', filter: ['==', ['get', 'f'], 1], paint: { 'circle-radius': w(10, 13, 17, 26), 'circle-color': 'rgba(0,179,255,0.12)', 'circle-stroke-color': '#00b3ff', 'circle-stroke-width': 3 } },
+      // vehicle icons, drawn on demand (styleimagemissing): a round pictogram below zoom 13, a badge
+      // with the route or line and a direction arrow from zoom 13
+      { id: 'live-arrow', type: 'symbol', source: 'live', minzoom: 13, filter: ['>=', ['get', 'brg'], 0],
+        layout: { 'icon-image': ['get', 'arrow'], 'icon-rotate': ['get', 'brg'], 'icon-rotation-alignment': 'map', 'icon-offset': [0, -15],
+          'icon-allow-overlap': true, 'icon-ignore-placement': true, 'icon-size': w(13, 0.8, 17, 1.1) } },
+      { id: 'live', type: 'symbol', source: 'live', maxzoom: 13,
+        layout: { 'icon-image': ['get', 'glyph'], 'icon-allow-overlap': true, 'icon-ignore-placement': true, 'symbol-sort-key': ['get', 'f'],
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 9, 0.45, 11, 0.62, 13, 0.85] } },
+      { id: 'live-badge', type: 'symbol', source: 'live', minzoom: 13,
+        layout: { 'icon-image': ['get', 'badge'], 'icon-allow-overlap': true, 'icon-ignore-placement': true, 'symbol-sort-key': ['get', 'f'],
+          'icon-size': w(13, 0.85, 17, 1.15) } },
     ],
   };
+}
+
+const LINE_NAME = { Red: 'Red', Blue: 'Blue', Brn: 'Brown', G: 'Green', Org: 'Orange', P: 'Purple', Pink: 'Pink', Y: 'Yellow' };
+function lum(hex) { const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+/** Pictogram of a bus (side view) or a train (front view), fg colour, in a box of size u at (x, y). */
+function pictogram(g, mode, x, y, u, fg, bg) {
+  g.fillStyle = fg; g.strokeStyle = fg;
+  const rr = (a, b, w, h, r) => { g.beginPath(); g.roundRect(a, b, w, h, r); g.fill(); };
+  if (mode === 'train') {
+    rr(x + u * 0.2, y + u * 0.08, u * 0.6, u * 0.72, u * 0.14);
+    g.fillStyle = bg; rr(x + u * 0.29, y + u * 0.18, u * 0.42, u * 0.24, u * 0.05);
+    g.beginPath(); g.arc(x + u * 0.35, y + u * 0.6, u * 0.055, 0, 7); g.arc(x + u * 0.65, y + u * 0.6, u * 0.055, 0, 7); g.fill();
+    g.lineWidth = u * 0.07; g.beginPath(); g.moveTo(x + u * 0.3, y + u * 0.95); g.lineTo(x + u * 0.38, y + u * 0.8); g.moveTo(x + u * 0.7, y + u * 0.95); g.lineTo(x + u * 0.62, y + u * 0.8); g.stroke();
+  } else {
+    rr(x + u * 0.08, y + u * 0.2, u * 0.84, u * 0.56, u * 0.12);
+    g.fillStyle = bg; for (let i = 0; i < 3; i++) rr(x + u * (0.16 + i * 0.22), y + u * 0.29, u * 0.17, u * 0.17, u * 0.03);
+    g.fillStyle = fg; g.beginPath(); g.arc(x + u * 0.28, y + u * 0.8, u * 0.1, 0, 7); g.arc(x + u * 0.72, y + u * 0.8, u * 0.1, 0, 7); g.fill();
+    g.fillStyle = bg; g.beginPath(); g.arc(x + u * 0.28, y + u * 0.8, u * 0.045, 0, 7); g.arc(x + u * 0.72, y + u * 0.8, u * 0.045, 0, 7); g.fill();
+  }
+}
+/** Draw a vehicle image for an id "glyph|mode|color", "badge|mode|label|color" or "arrow|color". */
+export function vehicleImage(id, R = 2) {
+  const [kind, a, b, c] = id.split('|');
+  const cv = document.createElement('canvas'), g = cv.getContext('2d');
+  if (kind === 'arrow') {
+    cv.width = cv.height = 14 * R; g.scale(R, R); g.fillStyle = a; g.strokeStyle = '#ffffff'; g.lineWidth = 1.5;
+    g.beginPath(); g.moveTo(7, 1); g.lineTo(13, 12); g.lineTo(7, 9); g.lineTo(1, 12); g.closePath(); g.fill(); g.stroke();
+  } else if (kind === 'glyph') {
+    const color = b, S = 26; cv.width = cv.height = S * R; g.scale(R, R);
+    g.fillStyle = color; g.strokeStyle = '#ffffff'; g.lineWidth = 2.2;
+    g.beginPath(); g.arc(S / 2, S / 2, S / 2 - 1.5, 0, 7); g.fill(); g.stroke();
+    const fg = lum(color) > 0.45 ? '#111827' : '#ffffff';
+    pictogram(g, a, S * 0.2, S * 0.2, S * 0.6, fg, color);
+  } else {
+    const mode = a, label = b, color = c, H = 24;
+    g.font = '700 13px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+    const tw = Math.ceil(g.measureText(label).width), W = H + tw + 10;
+    cv.width = W * R; cv.height = H * R; g.scale(R, R);
+    g.font = '700 13px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+    g.fillStyle = color; g.strokeStyle = '#ffffff'; g.lineWidth = 2;
+    g.beginPath(); g.roundRect(1, 1, W - 2, H - 2, mode === 'train' ? 6 : 11); g.fill(); g.stroke();
+    const fg = lum(color) > 0.45 ? '#111827' : '#ffffff';
+    pictogram(g, mode, 4, 4, H - 8, fg, color);
+    g.fillStyle = fg; g.textBaseline = 'middle'; g.fillText(label, H - 1, H / 2 + 0.5);
+  }
+  return { width: cv.width, height: cv.height, data: new Uint8Array(g.getImageData(0, 0, cv.width, cv.height).data.buffer) };
 }
 
 export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } = {}) {
@@ -98,6 +159,7 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
   }
   map.on('move', drawLabels); map.on('resize', drawLabels);
 
+  map.on('styleimagemissing', e => { if (!map.hasImage(e.id) && /^(glyph|badge|arrow)\|/.test(e.id)) map.addImage(e.id, vehicleImage(e.id), { pixelRatio: 2 }); });
   // popups
   const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: true, maxWidth: '280px', className: 'mpop' });
   const tip = (layer, html) => {
@@ -105,18 +167,25 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
     map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
   };
-  map.on('click', 'live', e => {
+  const vehicleClick = e => {
     const p = e.features[0].properties, isF = followed.has(p.id);
     const el = document.createElement('div');
-    el.innerHTML = `<b>${p.mode === 'train' ? 'Train' : 'Bus'} · route ${esc(p.route)}</b><br>${esc(p.dest ? 'to ' + p.dest : '')}<br><span class="fine">Observed position${p.dly === 'true' || p.dly === true ? ' · flagged delayed by CTA' : ''}</span><br>`;
+    el.innerHTML = `<b>${p.mode === 'train' ? 'Train' : 'Bus'} · route ${esc(p.route)}</b><br>${esc(p.dest ? 'to ' + p.dest : '')}<br><span class="fine">Position reported ${esc(fmtClock(p.t))} Chicago time${p.dly === 'true' || p.dly === true ? ' · flagged delayed by CTA' : ''}</span><br>`;
     const b = document.createElement('button'); b.className = 'ghost small'; b.textContent = isF ? 'Stop following' : (followed.size >= 10 ? 'Following 10 already' : 'Follow');
     b.disabled = !isF && followed.size >= 10;
     b.onclick = () => { isF ? unfollow(p.id) : follow(p.id); popup.remove(); };
     el.appendChild(b);
     popup.setLngLat(e.lngLat).setDOMContent(el).addTo(map);
-  });
-  map.on('mouseenter', 'live', () => { map.getCanvas().style.cursor = 'pointer'; });
-  map.on('mouseleave', 'live', () => { map.getCanvas().style.cursor = ''; });
+  };
+  for (const id of ['live', 'live-badge']) {
+    map.on('click', id, vehicleClick);
+    map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
+  }
+  let onStop = () => {};
+  map.on('click', 'rstops', e => { const p = e.features[0].properties; onStop(p.id); });
+  map.on('mouseenter', 'rstops', () => { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'rstops', () => { map.getCanvas().style.cursor = ''; });
   tip('stations', p => `<b>${esc(p.name)}</b><br><span class="fine">'L' station · scheduled (GTFS)</span>`);
   tip('residents', p => `<b>Synthetic resident</b><br>${esc(p.kind)}${p.mode ? ' · ' + esc(p.mode) : ''}<br><span class="fine">Simulated, not a real person</span>`);
   tip('benches', p => `<b>${esc(p.kind || 'Bench')}</b><br><span class="fine">Source: ${esc(p.source)}${p.note ? ' · ' + esc(p.note) : ''}</span>`);
@@ -142,7 +211,7 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
   setTheme(theme);
 
   function setVisible(id, on) {
-    const ids = { bus: ['cta-bus'], rail: ['cta-rail', 'cta-rail-case', 'stations'], live: ['live', 'live-halo', 'live-follow'], residents: ['residents'],
+    const ids = { bus: ['cta-bus'], rail: ['cta-rail', 'cta-rail-case', 'stations'], live: ['live', 'live-badge', 'live-arrow', 'live-follow'], residents: ['residents'],
       streets: ['st-minor', 'st-minor-case', 'st-coll', 'st-art', 'st-art-case', 'st-exp', 'st-ramp'], areas: ['areas-line'], benches: ['benches'] }[id] || [id];
     const go = () => ids.forEach(l => map.getLayer(l) && map.setLayoutProperty(l, 'visibility', on ? 'visible' : 'none'));
     ready ? go() : map.once('load', go);
@@ -160,7 +229,9 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
     prepared = (s.vehicles || []).map(v => {
       const track = v.track.map(q => [q[1], q[2]]), shapes = routeShapes[v.route] || [];
       const legs = []; for (let k = 0; k < track.length - 1; k++) legs.push(bestShape(shapes, track[k], track[k + 1]));
-      return { v, track, legs, times: v.track.map(q => Date.parse(q[0])) };
+      const brg = []; for (let k = 0; k < track.length - 1; k++) { const dx = track[k + 1][0] - track[k][0], dz = track[k + 1][1] - track[k][1]; brg.push(Math.hypot(dx, dz) > 10 ? bearingDeg(dx, dz) : -1); }
+      const label = v.mode === 'train' ? (LINE_NAME[v.route] || v.route) : v.route;
+      return { v, track, legs, brg, label, times: v.track.map(q => Date.parse(q[0])) };
     });
     tick(Date.now(), true);
     return prepared.length;
@@ -173,7 +244,7 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
     lastTick = nowMs;
     const polls = snap.poll_times_utc.map(x => Date.parse(x)), t0 = polls[0], t1 = polls[polls.length - 1];
     const stale = snapshotAge(snap.generated_utc, nowMs, 30).stale;
-    const pb = !stale && t1 > t0 ? playbackTime(t0, t1, loadedMs, nowMs, speed) : { t: t1, delayMs: nowMs - t1 };
+    const pb = !stale && t1 > t0 && speed > 0 ? playbackTime(t0, t1, loadedMs, nowMs, speed) : { t: t1, delayMs: nowMs - t1 };
     const feats = [];
     for (const p of prepared) {
       const v = p.v, f = followed.has(v.id);
@@ -181,8 +252,13 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
       if (!f && routeFilter && !routeFilter.has(v.route)) continue;
       const [x, z] = trackPosition(p.times, p.track, p.legs, pb.t);
       const [lon, lat] = toLonLat(x, z);
-      if (f) followed.set(v.id, { id: v.id, mode: v.mode, route: v.route, dest: v.dest, dly: v.dly, lon, lat, color: colorOf(v) });
-      feats.push({ type: 'Feature', properties: { id: v.id, mode: v.mode, route: v.route, dest: v.dest, t: v.t_utc, dly: v.dly, color: colorOf(v), f: f ? 1 : 0 },
+      const color = colorOf(v);
+      let k = 0; while (k < p.times.length - 2 && p.times[k + 1] <= pb.t) k++;
+      let brg = p.brg.length ? p.brg[Math.min(k, p.brg.length - 1)] : -1;
+      if (brg < 0) { const mv = p.brg.filter(b => b >= 0); brg = mv.length ? mv[mv.length - 1] : (v.hdg ? v.hdg : -1); }
+      if (f) followed.set(v.id, { id: v.id, mode: v.mode, route: v.route, dest: v.dest, dly: v.dly, lon, lat, color, t: v.t_utc });
+      feats.push({ type: 'Feature', properties: { id: v.id, mode: v.mode, route: v.route, dest: v.dest, t: v.t_utc, dly: v.dly, color, f: f ? 1 : 0, brg,
+        glyph: `glyph|${v.mode}|${color}`, badge: `badge|${v.mode}|${p.label}|${color}`, arrow: `arrow|${color}` },
         geometry: { type: 'Point', coordinates: [lon, lat] } });
     }
     map.getSource('live').setData({ type: 'FeatureCollection', features: feats });
@@ -210,8 +286,25 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
     map.getSource('residents').setData({ type: 'FeatureCollection', features: feats });
   }
 
+  /** "Where's my bus?": draw a route's stops (lon/lat) and the chosen stop; fit the view to them. */
+  function showRouteStops(stops, color, fit = true) {
+    const go = () => {
+      map.getSource('rstops').setData({ type: 'FeatureCollection', features: stops.map(st => ({ type: 'Feature', properties: { id: st.id, name: st.name, color },
+        geometry: { type: 'Point', coordinates: [st.lon, st.lat] } })) });
+      if (fit && stops.length) {
+        const lo = stops.map(x => x.lon), la = stops.map(x => x.lat);
+        map.fitBounds([[Math.min(...lo), Math.min(...la)], [Math.max(...lo), Math.max(...la)]], { padding: 60, maxZoom: 15, duration: 800 });
+      }
+    };
+    ready ? go() : map.once('load', go);
+  }
+  function setMyStop(st) {
+    const go = () => map.getSource('mystop').setData({ type: 'FeatureCollection', features: st ? [{ type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [st.lon, st.lat] } }] : [] });
+    ready ? go() : map.once('load', go);
+  }
   function setBenches(fc) { const go = () => map.getSource('benches').setData(fc); ready ? go() : map.once('load', go); }
 
-  return { map, setTheme, setVisible, setLive, tick, follow, unfollow, flyToVehicle, setRouteFilter, setOnlyFollowed, setSpeed: v => { const now = Date.now(); if (snap) { const pl = snap.poll_times_utc.map(x => Date.parse(x)); const cur = playbackTime(pl[0], pl[pl.length - 1], loadedMs, now, speed).t; loadedMs = now - (cur - pl[0]) / v; } speed = v; }, onFollowChange: fn => { onFollow = fn; },
+  return { map, setTheme, setVisible, setLive, tick, showRouteStops, setMyStop, onStopClick: fn => { onStop = fn; }, liveVehicles: () => (snap ? snap.vehicles : []), liveSnapshot: () => snap,
+    flyTo: (lon, lat, z = 15) => map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), z), speed: 1.4 }), follow, unfollow, flyToVehicle, setRouteFilter, setOnlyFollowed, setSpeed: v => { const now = Date.now(); if (snap && v > 0 && speed > 0) { const pl = snap.poll_times_utc.map(x => Date.parse(x)); const cur = playbackTime(pl[0], pl[pl.length - 1], loadedMs, now, speed).t; loadedMs = now - (cur - pl[0]) / v; } if (v > 0 && speed === 0) loadedMs = now; speed = v; tick(now, true); }, onFollowChange: fn => { onFollow = fn; },
     routes: () => Object.keys(lineColor), setResidents, setBenches, resize: () => map.resize(), drawLabels, originUtm };
 }

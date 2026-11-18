@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { KINDS, sunPosition, clockLabel, utcMs, utmForward, parseFootprint, REL_METRICS, localToLonLat } from './core.js';
+import { KINDS, sunPosition, clockLabel, utcMs, utmForward, parseFootprint, REL_METRICS, localToLonLat, stopDistances, patternPosition, offsetAt, bandForHour } from './core.js';
 import { createScene, sunVector } from './scene.js';
 import { createCity } from './city.js';
 import { createAgents, ACT_COLOR, MODE_COLOR } from './agents.js';
@@ -415,7 +415,7 @@ async function refreshMapLive() {
     if (!r.ok) throw new Error('no snapshot');
     const s = await r.json();
     if (!mapLiveSnap || s.generated_utc !== mapLiveSnap.generated_utc) { mapLiveSnap = s; await mapApi.setLive(s); }
-  } catch { $('#mapStatus').textContent = 'Live: no snapshot published.'; }
+  } catch (e) { $('#mapStatus').textContent = e.message === 'no snapshot' ? 'Live: no snapshot published.' : `Live: the snapshot could not be read (${e.message}).`; }
   mapSnapAt = performance.now();
 }
 // route picker and followed vehicles (Map tab)
@@ -424,11 +424,82 @@ async function setupRoutePicker() {
   let T;
   try { T = await (await fetch('data/transit.json')).json(); } catch { return; }
   const rail = T.routes.filter(r => r.type === 1), bus = T.routes.filter(r => r.type === 3);
+  allRoutes = T.routes;
+  $('#wmbRoutes').innerHTML = [...rail.map(r => `<option value="${esc(LINE_NAME[r.id] || r.id)}">${esc(LINE_NAME[r.id] || r.id)} Line</option>`), ...bus.map(r => `<option value="${esc(r.id)}">${esc(r.id)} ${esc(r.long)}</option>`)].join('');
+  const go = () => { const q = $('#wmbRoute').value.trim(), id = q.split(/\s+/)[0];
+    const r = T.routes.find(x => x.id.toLowerCase() === id.toLowerCase() || (LINE_NAME[x.id] || '').toLowerCase() === q.replace(/\s+line$/i, '').toLowerCase());
+    r ? wmbShow(r) : q && toast(`No CTA route or line "${esc(q)}"`); };
+  $('#wmbGo').onclick = go; $('#wmbRoute').onkeydown = e => { if (e.key === 'Enter') go(); };
+  $('#wmbStop').onchange = e => wmbPick(e.target.value);
+  mapApi.onStopClick(id => wmbPick(id));
   $('#railChips').innerHTML = rail.map(r => `<button class="chip" data-r="${esc(r.id)}" aria-pressed="false"><i style="background:${r.color}"></i>${esc(LINE_NAME[r.id] || r.id)}</button>`).join('');
   $('#busList').innerHTML = bus.map(r => `<option value="${esc(r.id)}">${esc(r.id)} ${esc(r.long)}</option>`).join('');
   document.querySelectorAll('#railChips .chip').forEach(b => b.onclick = () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); on ? pickedRail.add(b.dataset.r) : pickedRail.delete(b.dataset.r); applyRoutes(); });
   const add = () => { const v = $('#busPick').value.trim().split(/\s+/)[0]; if (bus.some(r => r.id === v)) { pickedBus.add(v); $('#busPick').value = ''; drawBusChips(bus); applyRoutes(); } else if (v) toast(`No CTA bus route "${esc(v)}"`); };
   $('#busAdd').onclick = add; $('#busPick').onkeydown = e => { if (e.key === 'Enter') add(); };
+}
+// ---- Where's my bus? Distances along the route and scheduled running times come from the GTFS
+// stop patterns; positions are the latest ones CTA reported in the published snapshot.
+let allRoutes = [], wmb = null, wmbAt = 0;
+async function wmbShow(route) {
+  let d;
+  try { const r = await fetch(`data/map/stops/${encodeURIComponent(route.id)}.json`); if (!r.ok) throw new Error(`HTTP ${r.status}`); d = await r.json(); }
+  catch (e) { toast(`No stop list for route ${esc(route.id)}`); return; }
+  for (const p of d.patterns) { p.S = stopDistances(p.shape, p.stops); p.toward = p.stops[p.stops.length - 1][1]; }
+  const opts = [], seen = new Set();
+  for (const p of d.patterns) for (const st of p.stops) { const k = st[0]; if (seen.has(k)) continue; seen.add(k); opts.push({ id: k, name: st[1], lon: st[4], lat: st[5], toward: p.toward }); }
+  wmb = { route, d, stops: opts, stop: null };
+  mapApi.showRouteStops(opts, route.color);
+  mapApi.setMyStop(null);
+  if (route.type === 1) { pickedRail.add(route.id); const c = document.querySelector(`#railChips .chip[data-r="${route.id}"]`); if (c) c.setAttribute('aria-pressed', 'true'); }
+  else { pickedBus.add(route.id); drawBusChips(allRoutes.filter(r => r.type === 3)); }
+  applyRoutes();
+  const sel = $('#wmbStop'); sel.hidden = false;
+  sel.innerHTML = `<option value="">Choose your stop…</option>` + [...new Set(opts.map(o => o.toward))].map(tw =>
+    `<optgroup label="Toward ${esc(tw)}">${opts.filter(o => o.toward === tw).map(o => `<option value="${esc(o.id)}">${esc(o.name)}</option>`).join('')}</optgroup>`).join('');
+  $('#wmbHint').textContent = `${route.type === 1 ? (LINE_NAME[route.id] || route.id) + ' Line' : 'Route ' + route.id}: ${opts.length} stops. Choose yours, or click it on the map.`;
+  $('#wmbOut').innerHTML = '';
+}
+function wmbPick(id) {
+  if (!wmb) return;
+  const st = wmb.stops.find(s => s.id === id); if (!st) return;
+  wmb.stop = st; $('#wmbStop').value = id;
+  mapApi.setMyStop(st); mapApi.flyTo(st.lon, st.lat, 14);
+  wmbRender();
+}
+function chicagoHour(ms) { return parseInt(new Date(ms).toLocaleString('en-US', { timeZone: 'America/Chicago', hour: 'numeric', hourCycle: 'h23' }), 10) % 24; }
+const BAND_LABEL = { early: 'early-morning', am_peak: 'morning-peak', midday: 'midday', pm_peak: 'evening-peak', evening: 'evening', night: 'night' };
+function wmbRender() {
+  const st = wmb.stop, now = Date.now(), snap = mapApi.liveSnapshot();
+  if (!snap) { $('#wmbOut').innerHTML = '<p class="fine">No live snapshot is loaded yet.</p>'; return; }
+  const band = bandForHour(chicagoHour(now)), rows = [];
+  for (const v of snap.vehicles) {
+    if (v.route !== wmb.route.id) continue;
+    const track = v.track.map(q => [q[1], q[2]]);
+    let best = null;
+    for (const p of wmb.d.patterns) {
+      const i = p.stops.findIndex(s => s[0] === st.id); if (i < 0) continue;
+      const pos = patternPosition(p.shape, track, v.hdg); if (!pos) continue;
+      const ds = p.S[i] - pos.s; if (ds < -60) continue;                  // already past the stop
+      const useBand = p.off[band] ? band : Object.keys(p.off)[0];
+      const offs = useBand ? p.off[useBand] : null;
+      const sched = offs ? Math.max(0, offsetAt(p.S, offs, p.S[i]) - offsetAt(p.S, offs, pos.s)) : null;
+      const c = { v, dist: Math.max(0, ds), sched, band: useBand, how: pos.how, toward: p.toward, rank: (pos.how === 'unconfirmed' ? 1e7 : 0) + Math.max(0, ds) };
+      if (!best || c.rank < best.rank) best = c;
+    }
+    if (best) rows.push(best);
+  }
+  rows.sort((a, b) => a.rank - b.rank);
+  const km = m => m < 60 ? 'at your stop' : m < 1000 ? `${Math.round(m / 10) * 10} m before your stop` : `${(m / 1000).toFixed(1)} km before your stop`;
+  const ago = iso => { const m = (now - Date.parse(iso)) / 60000; return m < 1 ? 'under a minute ago' : `${Math.round(m)} min ago`; };
+  const name = v => v.mode === 'train' ? `${LINE_NAME[v.route] || v.route} Line run ${esc(v.id.split(':').pop())}` : `Bus ${esc(v.route)} #${esc(v.id.split(':').pop())}`;
+  $('#wmbOut').innerHTML = `<p class="fine"><b>${esc(st.name)}</b>${rows.length ? ` · ${rows.length} on the way, nearest first` : ''}</p>` + (rows.slice(0, 8).map(r => `<div class="fitem wmbrow"><i style="background:${esc(wmb.route.color)}"></i><div><b>${name(r.v)}</b>
+      <span>${esc(r.v.dest ? 'to ' + r.v.dest : 'toward ' + r.toward)} · ${km(r.dist)} along the route</span>
+      <span>${r.sched !== null && r.dist >= 60 ? `Timetable: ${Math.round(r.sched)} min from there (${BAND_LABEL[r.band] || r.band} schedule) · ` : ''}position reported ${ago(r.v.t_utc)}${r.how === 'unconfirmed' ? ' · not moving, direction unconfirmed' : ''}${r.v.dly ? ' · CTA flags it delayed' : ''}</span></div>
+      <button data-wf="${esc(r.v.id)}" title="Follow on the map">Follow</button></div>`).join('') ||
+    '<p class="fine">No vehicle on this route is heading to this stop in the latest snapshot.</p>') +
+    `<p class="fine">The timetable figure is CTA's scheduled running time from the vehicle's reported position to your stop, not a prediction. Positions are the latest reported in the published snapshot; the vehicle has moved since.</p>`;
+  document.querySelectorAll('[data-wf]').forEach(b => b.onclick = () => { if (mapApi.follow(b.dataset.wf)) mapApi.flyToVehicle(b.dataset.wf); });
 }
 function drawBusChips(bus) {
   $('#busChips').innerHTML = [...pickedBus].map(id => `<button class="chip" aria-pressed="true" data-b="${esc(id)}">${esc(id)} ${esc((bus.find(r => r.id === id) || {}).long || '')}<span class="x">×</span></button>`).join('');
@@ -578,7 +649,9 @@ function frame(now) {
       const st = mapApi.tick(Date.now());
       if (st && now - mapStatusAt > 1000) {
         mapStatusAt = now;
+        const clk = ms => new Date(ms).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', timeZone: 'America/Chicago' });
         $('#mapStatus').innerHTML = st.stale ? `Live: ${st.total} vehicles, snapshot too old to play back; shown at their last reported position.`
+          : st.speed === 0 ? `Live: ${st.shown} of ${st.total} vehicles at their latest reported position (latest poll ${clk(st.playbackMs)} Chicago time, <b>${st.delayMin.toFixed(1)} min ago</b>). Choose a replay speed to see them move.`
           : `Live: ${st.shown} of ${st.total} vehicles moving along their routes, replaying the ${st.windowMin.toFixed(0)} observed minutes ${st.speed > 1 ? `at ${st.speed}× speed` : 'at real speed'}, <b>${st.delayMin.toFixed(1)} min behind real time</b> (observed ${new Date(st.playbackMs).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', timeZone: 'America/Chicago' })} Chicago time).`;
       }
     }

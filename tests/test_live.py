@@ -152,3 +152,33 @@ def test_cli_refuses_settings_outside_the_budget():
         live.main(["--polls", "6"])
     with pytest.raises(SystemExit):
         live.main(["--interval", "5"])
+
+
+def test_positions_outside_the_service_area_are_dropped_and_output_is_strict_json(tmp_path):
+    """Regression: Train Tracker reported trains at lat 0, lon 0 (18 Nov 2026); projected, that is
+    +-infinity, json.dump wrote `Infinity`, and every browser rejected the whole snapshot."""
+    t = ["2026-11-18T18:58:30+00:00", "2026-11-18T18:59:32+00:00"]
+    good = {"mode": "train", "id": "train:G:1", "route": "G", "lat": 41.86, "lon": -87.626, "hdg": 90.0, "t_utc": t[0], "dly": False}
+    zero = {**good, "id": "train:Y:593", "route": "Y", "lat": 0.0, "lon": 0.0}
+    half = {**good, "id": "train:G:12"}                       # valid in the first poll, 0,0 in the second
+    polls = [(t[0], [good, zero, half]), (t[1], [{**good, "lon": -87.62}, zero, {**half, "lat": 0.0, "lon": 0.0}])]
+    snap = live.build_snapshot(polls, load_cds().frame, {}, [])
+    assert sorted(v["id"] for v in snap["vehicles"]) == ["train:G:1", "train:G:12"]
+    assert [len(v["track"]) for v in sorted(snap["vehicles"], key=lambda v: v["id"])] == [2, 1]
+    assert any("3 reported positions outside the CTA service area" in n for n in snap["notes"])
+    live.write_outputs(tmp_path, snap, polls)
+
+    def no_constants(c):
+        raise ValueError(f"non-JSON constant {c}")
+    json.loads((tmp_path / "latest.json").read_text(), parse_constant=no_constants)   # what a browser accepts
+
+
+def test_writer_refuses_non_finite_numbers(tmp_path):
+    with pytest.raises(ValueError):
+        live.write_outputs(tmp_path, {"requests": {}, "x": float("inf")}, [])
+
+
+@pytest.mark.parametrize("lat,lon,ok", [(41.88, -87.63, True), (42.06, -87.69, True), (0.0, 0.0, False),
+                                        (41.88, None, False), (float("nan"), -87.6, False), (40.7, -74.0, False)])
+def test_valid_position(lat, lon, ok):
+    assert live.valid_position({"lat": lat, "lon": lon}) is ok

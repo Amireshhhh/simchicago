@@ -89,7 +89,7 @@ jobs:
           if [ -f live/ops.json ]; then cp live/ops.json viewer/dist/live/; fi
 
       - name: Scan the site for anything key-like
-        run: python -m pytest -q -p no:cacheprovider tests/test_no_secrets.py
+        run: SIMCHI_LIVE_DIR=viewer/dist/live python -m pytest -q -p no:cacheprovider tests/test_no_secrets.py tests/test_published_json.py
 
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5

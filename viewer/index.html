@@ -45,6 +45,12 @@
   <aside class="map-panel glass" aria-label="Map layers">
     <h2>Map</h2>
     <p class="fine">Streets and areas: City of Chicago open data. Lighter than the 3D view: the 3D renderer is paused here.</p>
+    <div class="mp-group wmb"><h3>Where's my bus?</h3>
+      <div class="busadd"><input id="wmbRoute" list="wmbRoutes" placeholder="Route or line, e.g. 22 or Red" aria-label="Route or line"><datalist id="wmbRoutes"></datalist><button id="wmbGo" class="ghost small">Show</button></div>
+      <select id="wmbStop" aria-label="Your stop" hidden></select>
+      <p class="fine" id="wmbHint">Pick a route or line, then choose your stop here or click it on the map.</p>
+      <div id="wmbOut" class="follow-list"></div>
+    </div>
     <div class="mp-group"><h3>Real world</h3>
       <label class="tgl"><input type="checkbox" data-layer="live" checked><span></span>Live buses &amp; trains <span class="prov observed">observed</span></label>
       <label class="tgl"><input type="checkbox" data-layer="rail" checked><span></span>'L' lines &amp; stations <span class="prov scheduled">scheduled</span></label>
@@ -54,7 +60,8 @@
       <label class="tgl"><input type="checkbox" data-layer="areas" checked><span></span>Community areas</label>
     </div>
     <div class="mp-group"><h3>Playback speed</h3>
-      <div class="speeds mini" role="radiogroup" aria-label="Playback speed" data-speed-group><button data-pspeed="1" class="on">1× real time</button><button data-pspeed="4">4×</button><button data-pspeed="10">10×</button></div>
+      <div class="speeds mini" role="radiogroup" aria-label="Playback speed" data-speed-group><button data-pspeed="0">Latest</button><button data-pspeed="1" class="on">1× replay</button><button data-pspeed="4">4×</button><button data-pspeed="10">10×</button></div>
+      <p class="fine">“Latest” holds each vehicle at its last reported position; the replays loop the observed minutes along the route.</p>
     </div>
     <div class="mp-group"><h3>Routes to show</h3>
       <div id="railChips" class="chips"></div>
@@ -68,7 +75,7 @@
       <label class="tgl"><input type="checkbox" id="onlyFollowed"><span></span>Show only followed vehicles</label>
     </div>
     <div class="mp-group"><h3>Simulation</h3>
-      <label class="tgl"><input type="checkbox" data-layer="residents" checked><span></span>Synthetic residents out <span class="prov simulated">simulated</span></label>
+      <label class="tgl"><input type="checkbox" data-layer="residents"><span></span>Synthetic residents out <span class="prov simulated">simulated</span></label>
       <div class="mp-clock"><button id="mapPlay" class="ghost small">Play</button><span id="mapClock" class="mono"></span></div>
     </div>
     <div id="mapStatus" class="fine"></div>

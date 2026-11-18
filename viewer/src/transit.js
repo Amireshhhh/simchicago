@@ -145,7 +145,7 @@ export function createTransit(scene, T) {
     const polls = snap.poll_times_utc.map(t => Date.parse(t));
     const t0 = polls[0], t1 = polls[polls.length - 1];
     const moving = replay && !age.stale && t1 > t0;
-    const pb = moving ? playbackTime(t0, t1, loadedMs, nowMs, speed) : { t: t1, delayMs: nowMs - t1 };
+    const pb = moving && speed > 0 ? playbackTime(t0, t1, loadedMs, nowMs, speed) : { t: t1, delayMs: nowMs - t1 };
     const pos = vGeo.attributes.position?.array, size = vGeo.attributes.size?.array;
     let nb = 0, nt = 0;
     prepared.forEach((p, i) => {
@@ -157,7 +157,7 @@ export function createTransit(scene, T) {
     });
     if (pos) { vGeo.attributes.position.needsUpdate = true; vGeo.attributes.size.needsUpdate = true; }
     return { state: 'ok', ageMin: age.ageMin, stale: age.stale, bus: nb, train: nt, generated: snap.generated_utc,
-             empty: !(snap.vehicles || []).length, requests: snap.requests, notes: snap.notes || [], replaying: moving,
+             empty: !(snap.vehicles || []).length, requests: snap.requests, notes: snap.notes || [], replaying: moving && speed > 0,
              delayMin: pb.delayMs / 60000, windowMin: (t1 - t0) / 60000, playbackMs: pb.t, speed };
   }
 

@@ -492,3 +492,7 @@ pre.code { background: rgba(0, 0, 0, .3); border: 1px solid var(--line); border-
 .fitem span { color: var(--dim); display: block; font-size: 11px; }
 .fitem button { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; padding: 2px 4px; }
 .speeds.mini button { padding: 5px 10px; font-size: 12px; }
+.wmb select { width: 100%; margin: 6px 0; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel, transparent); color: var(--text); font-size: 13px; }
+.wmbrow > div span { display: block; }
+.wmbrow button { font-size: 12px; width: auto; padding: 4px 8px; }
+.wmbrow > div span { color: var(--text); opacity: .82; font-size: 12px; line-height: 1.35; }

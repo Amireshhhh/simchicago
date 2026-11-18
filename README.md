@@ -57,8 +57,8 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 93 tests
-cd viewer && npm test            # 13 tests
+python -m pytest tests           # 102 tests
+cd viewer && npm test            # 14 tests
 ```
 
 The first command that needs the city builds it (about 25 s) and caches it in
@@ -133,7 +133,12 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
   train in the latest snapshot moves along its route shape: the ~4 observed minutes are played
   back on a loop at 1×, 4× or 10× speed, several minutes behind real time (the delay is shown).
   Pick which 'L' lines and bus routes to show, click any vehicle to follow it (up to 10), and
-  optionally show only the followed ones.
+  optionally show only the followed ones. Each vehicle is an icon (bus or train pictogram in its
+  line colour; from zoom 13 a badge with the route or line and a direction arrow).
+- **Where's my bus?** (Map tab): pick a route or line and your stop. It lists the vehicles heading
+  to that stop, nearest first: distance along the route (GTFS stop pattern and shape), CTA's
+  scheduled running time from there in the current timetable band (a schedule, not a
+  prediction), and how long ago CTA reported the position. One click follows a vehicle.
 - **Data**: the City of Chicago data portal catalog with measured freshness (fresh, late,
   overdue against each dataset's declared schedule), search, and access snippets.
 - **Insights**: a dashboard of real data and validated results: CTA ridership 2024-2026,
@@ -161,7 +166,10 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
   site or the snapshot.
 - In the viewer, **Live** and **Map** play back the ~4 observed minutes along route shapes
   (real speed by default, 4× or 10× on request), say how far behind real time the playback is,
-  and show the snapshot age (older than 30 minutes: marked stale and not animated). This is
+  and show the snapshot age (older than 30 minutes: marked stale and not animated).
+- Positions outside the CTA service area (Train Tracker has reported trains at lat 0, lon 0)
+  are dropped and counted in the snapshot's notes; the snapshot is written as strict JSON, and
+  `tests/test_published_json.py` blocks a deploy whose JSON a browser could not parse. This is
   delayed playback of server-side snapshots, not real-time tracking: the browser never calls CTA,
   and GitHub's schedule allows a new snapshot about every 5 minutes at best.
 
