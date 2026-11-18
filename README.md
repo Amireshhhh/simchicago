@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 89 tests
+python -m pytest tests           # 93 tests
 cd viewer && npm test            # 12 tests
 ```
 
@@ -191,6 +191,14 @@ equity splits and job accessibility; results in `reports/interventions/`, summar
 from simchi.portal.client import Portal
 df = Portal().query("ijzp-q8t2", select="date, primary_type, community_area", where="date >= '2026-10-01'")
 ```
+
+## Benches and seating
+
+No public dataset of Chicago benches exists (the City portal has none). `python -m simchi.benches`
+(run on every site build) combines OpenStreetMap benches, picnic tables, bus stops and platforms
+with benches (Overpass API; © OpenStreetMap contributors, ODbL) with CTA's 2016 list of sheltered
+stops, and estimates OpenStreetMap's completeness for shelters by capture-recapture (Chapman
+estimator; method and assumptions in the module docstring). Map tab → "Benches & seating".
 
 ## Service design
 

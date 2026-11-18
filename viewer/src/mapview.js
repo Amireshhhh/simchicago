@@ -68,7 +68,7 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
     attributionControl: false, dragRotate: false, pitchWithRotate: false });
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
   map.addControl(new maplibregl.ScaleControl({ unit: 'imperial' }), 'bottom-left');
-  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: 'Streets, areas: City of Chicago · CTA GTFS & Bus/Train Tracker · not affiliated with CTA' }), 'bottom-right');
+  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: 'Streets, areas: City of Chicago · CTA GTFS & Bus/Train Tracker · not affiliated with CTA · Benches: © OpenStreetMap contributors (ODbL), CTA' }), 'bottom-right');
 
   // HTML label overlay
   const labelEl = document.createElement('div'); labelEl.className = 'map-labels'; el.appendChild(labelEl);

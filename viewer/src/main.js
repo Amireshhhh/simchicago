@@ -411,7 +411,14 @@ async function refreshMapLive() {
 let benchesLoaded = false;
 async function loadBenches() {
   if (benchesLoaded || !mapApi) return;
-  try { const r = await fetch('data/map/benches.json'); if (!r.ok) throw new Error(`HTTP ${r.status}`); mapApi.setBenches(await r.json()); benchesLoaded = true; }
+  try {
+    const r = await fetch('data/map/benches.json'); if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const fc = await r.json(); mapApi.setBenches(fc); benchesLoaded = true;
+    const s = await fetch('data/map/benches_summary.json').then(x => x.ok ? x.json() : null).catch(() => null);
+    const n = $('#benchNote'); n.hidden = false;
+    n.innerHTML = s ? `${s.features.toLocaleString('en-US')} places to sit (OpenStreetMap data as of ${esc((s.osm_base || '').slice(0, 10))}, plus CTA's 2016 shelter list). Coverage is partial: OpenStreetMap holds an estimated ${(s.shelter_capture_recapture.osm_share_of_shelters * 100).toFixed(0)}% of sheltered bus stops (capture-recapture, upper bound). © OpenStreetMap contributors, ODbL.`
+      : 'Benches: © OpenStreetMap contributors (ODbL), CTA shelter list.';
+  }
   catch { toast('No benches layer published yet.'); }
 }
 $('#mapPlay').onclick = () => { playing = !playing; $('#mapPlay').textContent = playing ? 'Pause' : 'Play'; $('#play').textContent = playing ? 'Pause' : 'Play'; };
