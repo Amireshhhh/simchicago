@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 87 tests
+python -m pytest tests           # 85 tests
 cd viewer && npm test            # 12 tests
 ```
 
