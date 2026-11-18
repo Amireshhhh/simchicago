@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 85 tests
+python -m pytest tests           # 89 tests
 cd viewer && npm test            # 12 tests
 ```
 
@@ -130,6 +130,8 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
   Chicago street centerlines, community areas and the CTA network, with near-live buses and
   trains, the simulated residents and optional layers. No third-party tiles or keys, and the 3D
   renderer is paused while it is open, so it runs on ordinary laptops and phones.
+- **Data**: the City of Chicago data portal catalog with measured freshness (fresh, late,
+  overdue against each dataset's declared schedule), search, and access snippets.
 - **Insights**: a dashboard of real data and validated results: CTA ridership 2024-2026,
   busiest routes and stations, every validation check with pass/fail, held-out ridership
   accuracy, the intervention ranking with 95% intervals and equity, crowding forecasts,
@@ -174,6 +176,21 @@ bus priority, reliability, late-night service, fares) by simulated transit trips
 added scheduled vehicle-hour (or per $1,000 of fare revenue), with paired 95% intervals,
 equity splits and job accessibility; results in `reports/interventions/`, summary in
 `docs/BRIEF.md`, chart in the viewer's Experiment Lab.
+
+## Chicago open-data research layer
+
+- `python -m simchi.portal.catalog --save` reads the City of Chicago data portal's catalog API
+  (928 datasets on 18 Nov 2026) and measures each dataset's freshness against the update
+  frequency the City declares for it (rules in the module docstring). The viewer's **Data** tab
+  is a searchable board of it; `pages.yml` refreshes it on every build.
+- `simchi.portal.client.Portal` fetches any dataset correctly: stable paging over any number of
+  rows, columns converted to their declared types, retries with backoff, an on-disk cache keyed
+  by the City's last-change time, and freshness next to every result.
+
+```python
+from simchi.portal.client import Portal
+df = Portal().query("ijzp-q8t2", select="date, primary_type, community_area", where="date >= '2026-10-01'")
+```
 
 ## Service design
 

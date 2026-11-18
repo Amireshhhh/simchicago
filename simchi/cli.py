@@ -87,6 +87,8 @@ def cmd_demo(args):
     print("insights:", export_insights())
     from simchi.export.mapdata import export_map
     print("2D map data:", export_map())
+    from simchi.portal.catalog import export_viewer as export_catalog
+    print("portal catalog:", export_catalog())
 
 
 def cmd_serve(args):
@@ -121,6 +123,8 @@ def cmd_export(args):
     print("insights:", export_insights())
     from simchi.export.mapdata import export_map
     print("2D map data:", export_map())
+    from simchi.portal.catalog import export_viewer as export_catalog
+    print("portal catalog:", export_catalog())
 
 
 def main(argv=None):

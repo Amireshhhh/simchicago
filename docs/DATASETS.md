@@ -15,6 +15,7 @@ access is needed to build or run anything.
 | `cta_bus_route_daily` | `data/raw/mirror/bus_route_daily.csv.gz` (0.6 MB) | City of Chicago data portal jyb9-n7fm, "CTA - Ridership - Bus Routes - Daily Totals by Route": 111,918 rows, 2024-01-01 to 2026-08-31 | ridership calibration and held-out validation (routes) |
 | `crimes_all_by_area`, `crimes_cta_by_area` | `data/raw/mirror/crimes_*_by_area.csv.gz` (13 kB) | City of Chicago data portal ijzp-q8t2 (CPD reported crimes), 12 months to 31 Oct 2026, **counts only**, by community area and primary type (and location description for locations starting with "CTA") | descriptive crime join of the reliability report (not causal) |
 | `street_centerlines` | not stored; derived `data/map/streets.json.gz` (1.2 MB) | City of Chicago Street Center Lines (pr57-gg9e): 56,338 segments with names, CLASS codes (City metadata PDF), node ids | 2D map basemap; future street-network routing |
+| portal catalog | `data/portal/catalog.json.gz` (0.4 MB, metadata only) | City of Chicago data portal catalog API: every dataset's name, category, columns and types, last data change, declared update frequency, page views | Data tab; `simchi.portal` client typing and freshness |
 | landmarks | `data/reference/landmarks.json` | 5 tallest buildings: name, height, coordinates | viewer only; copied from the v0.1 export (which cites Wikipedia, 2026-10-14), not re-verified |
 
 ## Checks on the data

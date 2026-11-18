@@ -51,6 +51,9 @@ jobs:
           npm run build
           npm test
 
+      - name: Refresh the City data portal catalog (freshness board); keeps the committed snapshot on failure
+        run: python -m simchi.portal.catalog --viewer || echo "catalog refresh failed; using data/portal/catalog.json.gz"
+
       - name: Reliability from the polled history (the latest 300 live.yml runs, about a day)
         env:
           GH_TOKEN: ${{ github.token }}

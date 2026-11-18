@@ -8,6 +8,7 @@ import { renderLab } from './lab.js';
 import { createTransit } from './transit.js';
 import { renderInsights } from './insights.js';
 import { renderOverview } from './overview.js';
+import { renderData } from './datapage.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -430,7 +431,9 @@ function applyModeLayers() {
     transit.setPulses(ov);                                   // decorative pulses only on the Overview: Live shows reported positions only
   }
 }
+let dataDone = false;
 function renderMode() {
+  if (mode === 'data' && !dataDone) { dataDone = true; fetch('data/portal/catalog.json').then(r => r.ok ? r.json() : null).then(c => renderData($('#dataBody'), c)).catch(() => renderData($('#dataBody'), null)); }
   if (mode === 'overview' && !overviewDone && insights) { renderOverview($('#overviewBody'), insights, D); overviewDone = true; wireCards(); }
   if (mode === 'insights' && !insightsDone && insights) { renderInsights($('#insightsBody'), insights); insightsDone = true; }
 }
@@ -439,7 +442,7 @@ function wireCards() {
 }
 const CAM = { overview: [5200, -6500, 30000, 0.95], live: [1800, -3200, 24000, 0.82], simulate: [2500, -2500, 26000, 1.0] };
 function setMode(m) {
-  if (!['overview', 'live', 'map', 'insights', 'simulate'].includes(m)) m = 'overview';
+  if (!['overview', 'live', 'map', 'insights', 'simulate', 'data'].includes(m)) m = 'overview';
   const prev = mode; mode = m;
   document.body.dataset.mode = m;
   document.querySelectorAll('.modes a').forEach(a => a.classList.toggle('on', a.dataset.mode === m));
@@ -515,7 +518,7 @@ function frame(now) {
   }
   controls.update();
   const camDist = camera.position.distanceTo(controls.target);
-  if (mode === 'insights' && ++skip % 6) { requestAnimationFrame(frame); return; }   // the page covers the city: draw rarely
+  if ((mode === 'insights' || mode === 'data') && ++skip % 6) { requestAnimationFrame(frame); return; }   // the page covers the city: draw rarely
   if (mode === 'map') {                       // the 3D renderer is paused; only the residents' positions are computed
     if (mapApi && now - mapLast > 200) {
       mapLast = now;
