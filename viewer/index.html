@@ -21,6 +21,7 @@
   <nav class="modes" aria-label="Mode">
     <a href="#overview" data-mode="overview"><i class="mi mi-ov"></i>Overview</a>
     <a href="#live" data-mode="live"><i class="mi mi-live"></i>Live</a>
+    <a href="#map" data-mode="map"><i class="mi mi-map"></i>Map</a>
     <a href="#insights" data-mode="insights"><i class="mi mi-ins"></i>Insights</a>
     <a href="#simulate" data-mode="simulate"><i class="mi mi-sim"></i>Simulate</a>
     <span class="mode-ink" aria-hidden="true"></span>
@@ -36,6 +37,27 @@
 
 <!-- OVERVIEW -->
 <section id="view-overview" class="view" aria-label="Overview"><div id="overviewBody"></div></section>
+
+<!-- MAP (2D, lightweight) -->
+<section id="view-map" class="view mapview" aria-label="Map">
+  <div id="mapCanvas"></div>
+  <aside class="map-panel glass" aria-label="Map layers">
+    <h2>Map</h2>
+    <p class="fine">Streets and areas: City of Chicago open data. Lighter than the 3D view: the 3D renderer is paused here.</p>
+    <div class="mp-group"><h3>Real world</h3>
+      <label class="tgl"><input type="checkbox" data-layer="live" checked><span></span>Live buses &amp; trains <span class="prov observed">observed</span></label>
+      <label class="tgl"><input type="checkbox" data-layer="rail" checked><span></span>'L' lines &amp; stations <span class="prov scheduled">scheduled</span></label>
+      <label class="tgl"><input type="checkbox" data-layer="bus"><span></span>Bus routes <span class="prov scheduled">scheduled</span></label>
+      <label class="tgl"><input type="checkbox" data-layer="benches"><span></span>Benches &amp; seating <span class="prov observed">observed</span></label>
+      <label class="tgl"><input type="checkbox" data-layer="areas" checked><span></span>Community areas</label>
+    </div>
+    <div class="mp-group"><h3>Simulation</h3>
+      <label class="tgl"><input type="checkbox" data-layer="residents" checked><span></span>Synthetic residents out <span class="prov simulated">simulated</span></label>
+      <div class="mp-clock"><button id="mapPlay" class="ghost small">Play</button><span id="mapClock" class="mono"></span></div>
+    </div>
+    <div id="mapStatus" class="fine"></div>
+  </aside>
+</section>
 
 <!-- INSIGHTS -->
 <section id="view-insights" class="view page" aria-label="Insights"><div id="insightsBody"></div></section>

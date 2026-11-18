@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { KINDS, sunPosition, clockLabel, utcMs, utmForward, parseFootprint, REL_METRICS } from './core.js';
+import { KINDS, sunPosition, clockLabel, utcMs, utmForward, parseFootprint, REL_METRICS, localToLonLat } from './core.js';
 import { createScene, sunVector } from './scene.js';
 import { createCity } from './city.js';
 import { createAgents, ACT_COLOR, MODE_COLOR } from './agents.js';
@@ -377,10 +377,43 @@ function setTheme(t) {
   city.outlineMat.color.set(n ? '#ff2bd6' : '#5fd4ff');
   city.lakeMat.color.set(n ? '#14062a' : '#0f3a55');
   if (transit) transit.setBusColor(n ? '#f5ff3b' : '#ffb547');
+  if (mapApi) mapApi.setTheme(theme);
 }
 document.querySelectorAll('.theme button').forEach(b => b.onclick = () => setTheme(b.dataset.theme));
 setTheme(theme);
 const NEON_SUN = new THREE.Vector3(-0.35, -0.42, -0.84).normalize();   // a fixed night sky for the neon look
+
+// ------------------------------------------------------------------------------------------ 2D map
+let mapApi = null, mapLoading = null, mapLast = 0, mapSnapAt = 0;
+async function ensureMap() {
+  if (mapApi || mapLoading) return mapLoading;
+  if (!document.querySelector('link[href="maplibre-gl.css"]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'maplibre-gl.css'; document.head.appendChild(l); }
+  const url = './map.js';
+  mapLoading = import(url).then(mod => {
+    mapApi = mod.createMap($('#mapCanvas'), { theme, originUtm: D.meta.origin_utm16n, toLonLat: (x, z) => localToLonLat(x, z, D.meta.origin_utm16n) });
+    document.querySelectorAll('.map-panel [data-layer]').forEach(cb => { mapApi.setVisible(cb.dataset.layer, cb.checked); cb.onchange = () => { mapApi.setVisible(cb.dataset.layer, cb.checked); if (cb.dataset.layer === 'benches' && cb.checked) loadBenches(); }; });
+    refreshMapLive();
+    return mapApi;
+  }).catch(e => { $('#mapStatus').textContent = `Could not load the map: ${e.message}`; });
+  return mapLoading;
+}
+async function refreshMapLive() {
+  if (!mapApi) return;
+  try {
+    const r = await fetch(`live/latest.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!r.ok) throw new Error('no snapshot');
+    const s = await r.json(), n = mapApi.setLive(s), age = (Date.now() - Date.parse(s.generated_utc)) / 60000;
+    $('#mapStatus').innerHTML = `Live: ${n} vehicles at their last reported position, snapshot ${age < 60 ? Math.round(age) + ' min' : (age / 60).toFixed(1) + ' h'} old.`;
+  } catch { $('#mapStatus').textContent = 'Live: no snapshot published.'; }
+  mapSnapAt = performance.now();
+}
+let benchesLoaded = false;
+async function loadBenches() {
+  if (benchesLoaded || !mapApi) return;
+  try { const r = await fetch('data/map/benches.json'); if (!r.ok) throw new Error(`HTTP ${r.status}`); mapApi.setBenches(await r.json()); benchesLoaded = true; }
+  catch { toast('No benches layer published yet.'); }
+}
+$('#mapPlay').onclick = () => { playing = !playing; $('#mapPlay').textContent = playing ? 'Pause' : 'Play'; $('#play').textContent = playing ? 'Pause' : 'Play'; };
 
 // ------------------------------------------------------------------------------------------ modes
 let simStarted = false, mode = 'overview', insights = null, overviewDone = false, insightsDone = false;
@@ -406,13 +439,14 @@ function wireCards() {
 }
 const CAM = { overview: [5200, -6500, 30000, 0.95], live: [1800, -3200, 24000, 0.82], simulate: [2500, -2500, 26000, 1.0] };
 function setMode(m) {
-  if (!['overview', 'live', 'insights', 'simulate'].includes(m)) m = 'overview';
+  if (!['overview', 'live', 'map', 'insights', 'simulate'].includes(m)) m = 'overview';
   const prev = mode; mode = m;
   document.body.dataset.mode = m;
   document.querySelectorAll('.modes a').forEach(a => a.classList.toggle('on', a.dataset.mode === m));
   moveInk();
   if (m === 'live' || m === 'overview') ensureTransit();
-  if (m !== 'simulate') { playing = false; $('#play').textContent = 'Play'; tourStep = -1; }
+  if (m === 'map') ensureMap().then(() => mapApi && mapApi.resize());
+  if (m !== 'simulate' && m !== 'map') { playing = false; $('#play').textContent = 'Play'; tourStep = -1; }
   else if (!simStarted) { simStarted = true; playing = true; $('#play').textContent = 'Pause'; }   // start the week moving on first visit
   if (CAM[m] && prev !== m && !(prev === 'insights' && m === 'overview')) flyTo(...CAM[m].slice(0, 3), CAM[m][3], 2400);
   applyModeLayers();
@@ -482,6 +516,16 @@ function frame(now) {
   controls.update();
   const camDist = camera.position.distanceTo(controls.target);
   if (mode === 'insights' && ++skip % 6) { requestAnimationFrame(frame); return; }   // the page covers the city: draw rarely
+  if (mode === 'map') {                       // the 3D renderer is paused; only the residents' positions are computed
+    if (mapApi && now - mapLast > 200) {
+      mapLast = now;
+      agents.update(simT, 1e9, opts);
+      mapApi.setResidents(agents.pos, agents.state, agents.N);
+      $('#mapClock').textContent = clockLabel(D.meta.start_date, simT) + ' · simulated week';
+      if (now - mapSnapAt > 60000) refreshMapLive();
+    }
+    requestAnimationFrame(frame); return;
+  }
 
   // the simulated week sets the sun in Simulate; Live and Overview show Chicago now
   const sunMs = mode === 'simulate' ? utcMs(D.meta.start_date, simT, UTC_OFFSET_H) : Date.now();

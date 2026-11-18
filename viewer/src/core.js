@@ -116,6 +116,29 @@ export function utmForward(lonDeg, latDeg, zone = 16) {
   return [500000 + k0 * A * x, k0 * A * y];
 }
 
+/** Inverse of utmForward (Krüger series, WGS84, northern hemisphere): [lon, lat] in degrees. */
+export function utmInverse(E, N, zone = 16) {
+  const a = 6378137, f = 1 / 298.257223563, k0 = 0.9996;
+  const n = f / (2 - f), A = a / (1 + n) * (1 + n * n / 4 + n ** 4 / 64);
+  const be = [0, n / 2 - 2 * n * n / 3 + 37 * n ** 3 / 96 - n ** 4 / 360, n * n / 48 + n ** 3 / 15 - 437 * n ** 4 / 1440,
+    17 * n ** 3 / 480 - 37 * n ** 4 / 840, 4397 * n ** 4 / 161280];
+  const de = [0, 2 * n - 2 * n * n / 3 - 2 * n ** 3 + 116 * n ** 4 / 45, 7 * n * n / 3 - 8 * n ** 3 / 5 - 227 * n ** 4 / 45,
+    56 * n ** 3 / 15 - 136 * n ** 4 / 35, 4279 * n ** 4 / 630];
+  const xi = N / (k0 * A), eta = (E - 500000) / (k0 * A);
+  let xp = xi, ep = eta;
+  for (let j = 1; j <= 4; j++) { xp -= be[j] * Math.sin(2 * j * xi) * Math.cosh(2 * j * eta); ep -= be[j] * Math.cos(2 * j * xi) * Math.sinh(2 * j * eta); }
+  const chi = Math.asin(Math.sin(xp) / Math.cosh(ep));
+  let lat = chi;
+  for (let j = 1; j <= 4; j++) lat += de[j] * Math.sin(2 * j * chi);
+  const lon0 = ((zone - 1) * 6 - 180 + 3) * Math.PI / 180;
+  return [(lon0 + Math.atan2(Math.sinh(ep), Math.cos(xp))) * 180 / Math.PI, lat * 180 / Math.PI];
+}
+
+/** Simulation-frame (x east, z south, metres from the frame origin) -> [lon, lat]. */
+export function localToLonLat(x, z, originUtm) {
+  return utmInverse(x + originUtm[0], originUtm[1] - z);
+}
+
 // ---- transit: positions along route shapes (same rule as simchi/transit/interp.py) ----------
 
 function cumulative(shape) {

@@ -94,3 +94,16 @@ test('reliability colours run from good to bad and clamp', async () => {
   assert.equal(relColor('service_delivered', null), null);
   assert.equal(relColor('nope', 0.1), null);
 });
+
+test('local frame -> lon/lat matches pyproj to centimetres', async () => {
+  const { localToLonLat, utmForward, utmInverse } = await import('../src/core.js');
+  const fx = JSON.parse((await import('node:fs')).readFileSync(new URL('./fixtures_lonlat.json', import.meta.url), 'utf8'));
+  for (const p of fx.pts) {
+    const [lon, lat] = localToLonLat(p.x, p.z, fx.origin);
+    // 1e-7 degrees is about 1 cm
+    assert.ok(Math.abs(lon - p.lon) < 1e-7 && Math.abs(lat - p.lat) < 1e-7, `${lon},${lat} vs ${p.lon},${p.lat}`);
+    const [E, N] = utmForward(p.lon, p.lat);
+    const [lo2, la2] = utmInverse(E, N);
+    assert.ok(Math.abs(lo2 - p.lon) < 1e-9 && Math.abs(la2 - p.lat) < 1e-9);
+  }
+});

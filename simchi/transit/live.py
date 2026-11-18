@@ -213,6 +213,7 @@ def build_snapshot(polls: list, frame, requests: dict, notes: list) -> dict:
         vehicles.append({
             "id": vid, "mode": last["mode"], "route": last["route"], "label": "observed",
             "x": round(float(xs[-1]), 1), "z": round(float(zs[-1]), 1), "hdg": last["hdg"],
+            "lon": round(float(last["lon"]), 5), "lat": round(float(last["lat"]), 5),
             "t_utc": last["t_utc"], "dly": last["dly"], "dest": last.get("dest", ""),
             "track": [[i[0], round(float(x), 1), round(float(z), 1)] for i, x, z in zip(items, xs, zs, strict=True)],
         })

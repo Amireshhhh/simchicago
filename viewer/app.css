@@ -209,8 +209,8 @@ code, .mono { font-family: var(--mono); font-size: 12px; }
 .live-tools { position: fixed; top: 82px; left: 14px; display: flex; gap: 10px; padding: 6px 8px; z-index: 5; align-items: center; }
 .tgl { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12.5px; color: var(--muted); padding: 0 6px; }
 .tgl input { display: none; }
-.tgl span { width: 30px; height: 17px; border-radius: 999px; background: var(--neutral); position: relative; transition: background .2s; }
-.tgl span::after { content: ""; position: absolute; left: 2px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: #fff; transition: transform .2s var(--ease); }
+.tgl input + span { flex: none; width: 30px; height: 17px; border-radius: 999px; background: var(--neutral); position: relative; transition: background .2s; }
+.tgl input + span::after { content: ""; position: absolute; left: 2px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: #fff; transition: transform .2s var(--ease); }
 .tgl input:checked + span { background: #2a8fc0; }
 .tgl input:checked + span::after { transform: translateX(13px); }
 .line-key { position: fixed; left: 14px; bottom: 34px; padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 6px 12px; max-width: 520px; z-index: 5; font-size: 12px; }
@@ -431,3 +431,31 @@ body[data-theme=neon] .theme button[aria-checked=true] { background: linear-grad
 /* a faint CRT scanline over the neon city (not on data pages) */
 body[data-theme=neon]:not([data-mode=insights]) #scrim::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .025) 0 1px, transparent 1px 3px); pointer-events: none; }
 body[data-theme=neon] #scrim { opacity: 1; }
+
+/* ---------------------------------------------------------------- 2D map mode */
+.mi-map { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1 3l4.5-1.5 5 1.5L15 1.5v11.5L10.5 14.5 5.5 13 1 14.5zM5.5 2v11M10.5 3v11.5' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E"); }
+.mapview { overflow: hidden; z-index: 4; }
+body[data-mode=map] #view-map { opacity: 1; visibility: visible; transform: none; transition: opacity .4s var(--ease), visibility 0s; }
+body[data-mode=map] canvas#gl, body[data-mode=map] #labels { visibility: hidden; }
+#mapCanvas { position: absolute; inset: 0; }
+.map-panel { position: absolute; top: 82px; right: 14px; width: 290px; padding: 16px; z-index: 5; display: grid; gap: 10px; max-height: calc(100vh - 120px); overflow: auto; }
+.map-panel h2 { font-size: 17px; }
+.map-panel h3 { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin: 2px 0 6px; }
+.mp-group { display: grid; gap: 8px; }
+.mp-group .tgl { padding: 0; }
+.mp-clock { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+.map-labels { position: absolute; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+.ml { position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 11px; font-weight: 600; color: #3c4250; text-shadow: 0 0 2px #fff, 0 0 3px #fff, 0 0 4px #fff; letter-spacing: .01em; }
+.ml.area { font-size: 12.5px; font-weight: 700; color: #6b6458; text-transform: uppercase; letter-spacing: .08em; }
+.ml.st.c1 { color: #8a4b00; }
+#view-map[data-theme=neon] .ml, body[data-theme=neon] .ml { color: #f2d9ff; text-shadow: 0 0 3px #12061f, 0 0 6px #12061f; }
+body[data-theme=neon] .ml.area { color: #ff8af0; }
+.maplibregl-ctrl-bottom-left, .maplibregl-ctrl-bottom-right { bottom: 22px !important; }
+.mpop .maplibregl-popup-content { background: var(--panel-solid); color: var(--text); border: 1px solid var(--line-strong); border-radius: 10px; font-size: 12.5px; padding: 8px 10px; }
+.mpop .maplibregl-popup-tip { display: none; }
+body[data-mode=map] .feed, body[data-mode=map] .theme { box-shadow: 0 6px 20px rgba(0, 0, 0, .25); }
+@media (max-width: 900px) { .map-panel { top: auto; bottom: 30px; right: 10px; left: 10px; width: auto; max-height: 38vh; } }
+
+body[data-mode=map] .brand { background: rgba(10, 17, 29, .82); border: 1px solid var(--line); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+body[data-theme=neon] .ml.st.c1 { color: #f5ff3b; }
+.map-panel .tgl { flex-wrap: wrap; row-gap: 2px; }

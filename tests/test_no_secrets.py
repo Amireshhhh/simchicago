@@ -20,6 +20,8 @@ TEXT = {".json", ".js", ".html", ".css", ".csv", ".txt", ".md", ".map"}
 KEY_PARAM = re.compile(r"[?&]key=([A-Za-z0-9]{8,})")
 BUS_LIKE = re.compile(r"(?<![A-Za-z0-9])(?=[A-Za-z0-9]*[A-Za-z])(?=[A-Za-z0-9]*[0-9])[A-Za-z0-9]{25}(?![A-Za-z0-9])")
 TRAIN_LIKE = re.compile(r"(?<![0-9a-fA-F])[0-9a-f]{32}(?![0-9a-fA-F])")
+# identifiers of the vendored map library that merely have a key's shape (check 3 only)
+VENDOR = {ln.strip() for ln in (Path(__file__).parent / "vendor_tokens.txt").read_text().splitlines() if ln.strip() and not ln.startswith("#")}
 
 
 def files():
@@ -37,9 +39,15 @@ def findings(text):
         if v and v in text:
             out.append(f"value of {name}")
     out += [f"key= parameter ({m[:4]}...)" for m in KEY_PARAM.findall(text)]
-    out += [f"bus-key-like token {m[:4]}..." for m in BUS_LIKE.findall(text)]
-    out += [f"train-key-like token {m[:4]}..." for m in TRAIN_LIKE.findall(text)]
+    out += [f"bus-key-like token {m[:4]}..." for m in BUS_LIKE.findall(text) if m not in VENDOR]
+    out += [f"train-key-like token {m[:4]}..." for m in TRAIN_LIKE.findall(text) if m not in VENDOR]
     return out
+
+
+def test_vendor_allowlist_never_hides_a_real_key_value(monkeypatch):
+    tok = sorted(VENDOR)[0]
+    monkeypatch.setenv("CTA_BUS_KEY", tok)
+    assert findings(f"x {tok} y") == ["value of CTA_BUS_KEY"]
 
 
 def test_detector_catches_key_shapes():

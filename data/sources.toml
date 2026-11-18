@@ -74,3 +74,14 @@ query = "date >= 2025-11-01 AND date < 2026-11-01; count(*) grouped by community
 downloaded = "2026-11-12"
 contents = "1,836 aggregated rows (no individual records), 12 months to 31 Oct 2026."
 license = "City of Chicago Data Terms of Use (see docs/DATASETS.md); data owner Chicago Police Department"
+
+[street_centerlines]
+# The raw download is not stored; data/map/streets.json.gz is a derived, simplified extract.
+source_url = "https://data.cityofchicago.org/resource/pr57-gg9e.geojson"
+query = "$select=the_geom,pre_dir,street_nam,street_typ,class,fnode_id,tnode_id,oneway_dir,length; $limit=60000; $order=objectid"
+raw_sha256 = "f917101d4d3e6431d7faaca2713e45ae33779109c50946613e826b94b066003c"
+downloaded = "2026-11-18"
+title = "Street Center Lines (City of Chicago data portal pr57-gg9e, 'transportation'; map view 6imu-meau)"
+contents = "56,338 street segments with names, CLASS codes (see the City's centerline metadata PDF) and node ids; 55,773 kept (classes 1,2,3,4,5,7,9,E,RIV), simplified to ~1 m."
+extract = "data/map/streets.json.gz"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"

@@ -3,6 +3,10 @@ import { cpSync, mkdirSync, existsSync, readFileSync, writeFileSync } from 'node
 
 mkdirSync('dist/data', { recursive: true });
 await build({ entryPoints: ['src/main.js'], bundle: true, format: 'esm', target: 'es2022', minify: true, outfile: 'dist/app.js', logLevel: 'info' });
+// 2D map: its own bundle, loaded only when the Map mode opens; MapLibre's worker and CSS next to it
+await build({ entryPoints: ['src/mapview.js'], bundle: true, format: 'esm', target: 'es2022', minify: true, outfile: 'dist/map.js', logLevel: 'info' });
+cpSync('node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs', 'dist/maplibre-gl-worker.mjs');
+cpSync('node_modules/maplibre-gl/dist/maplibre-gl.css', 'dist/maplibre-gl.css');
 cpSync('index.html', 'dist/index.html');
 cpSync('app.css', 'dist/app.css');
 if (!existsSync('dist/data/run.json')) console.warn('dist/data/run.json missing: run `python -m simchi.cli demo`');

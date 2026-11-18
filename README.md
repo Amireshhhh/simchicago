@@ -57,8 +57,8 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 83 tests
-cd viewer && npm test            # 11 tests
+python -m pytest tests           # 87 tests
+cd viewer && npm test            # 12 tests
 ```
 
 The first command that needs the city builds it (about 25 s) and caches it in
@@ -126,6 +126,10 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
   routes, stations) and the latest near-live snapshot: buses and trains reporting, trains by
   line, snapshot age, holding advice and feed flags, and the bus reliability lens. The sun and
   sky follow Chicago's current time.
+- **Map**: a light, Google-Maps-like 2D map (MapLibre GL, open source) drawn from City of
+  Chicago street centerlines, community areas and the CTA network, with near-live buses and
+  trains, the simulated residents and optional layers. No third-party tiles or keys, and the 3D
+  renderer is paused while it is open, so it runs on ordinary laptops and phones.
 - **Insights**: a dashboard of real data and validated results: CTA ridership 2024-2026,
   busiest routes and stations, every validation check with pass/fail, held-out ridership
   accuracy, the intervention ranking with 95% intervals and equity, crowding forecasts,

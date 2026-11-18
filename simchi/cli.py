@@ -85,6 +85,8 @@ def cmd_demo(args):
     print("transit layer:", export_layer())
     from simchi.export.insights import export_insights
     print("insights:", export_insights())
+    from simchi.export.mapdata import export_map
+    print("2D map data:", export_map())
 
 
 def cmd_serve(args):
@@ -117,6 +119,8 @@ def cmd_export(args):
     print("transit layer:", export_layer())
     from simchi.export.insights import export_insights
     print("insights:", export_insights())
+    from simchi.export.mapdata import export_map
+    print("2D map data:", export_map())
 
 
 def main(argv=None):

@@ -8,6 +8,7 @@
     "test": "node --test test/core.test.mjs"
   },
   "dependencies": {
+    "maplibre-gl": "6.15.0",
     "three": "^0.180.0"
   },
   "devDependencies": {
