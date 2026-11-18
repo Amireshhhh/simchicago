@@ -37,7 +37,7 @@ def _portal_column_names():
     return {t for d in cat["datasets"] for c in d["columns"] for t in (c["name"], c["field"])}
 
 
-VENDOR |= {t for t in _portal_column_names() if BUS_LIKE.fullmatch(t) or TRAIN_LIKE.fullmatch(t)}
+VENDOR |= {m for t in _portal_column_names() for rx in (BUS_LIKE, TRAIN_LIKE) for m in rx.findall(t)}
 
 
 def files():
