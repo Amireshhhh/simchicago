@@ -308,6 +308,13 @@ function ensureTransit() {
 const LINE_NAME = { Red: 'Red', Blue: 'Blue', Brn: 'Brown', G: 'Green', Org: 'Orange', P: 'Purple', Pink: 'Pink', Y: 'Yellow' };
 $('#lyrBusRoutes').onchange = e => { if (transit) { transit.setBusVisible(e.target.checked); transit.setBusMarkers(e.target.checked); } };
 $('#lyrReplay').onchange = e => { if (transit) transit.setReplay(e.target.checked); };
+let pSpeed = 1;
+document.querySelectorAll('[data-pspeed]').forEach(b => b.onclick = () => {
+  pSpeed = +b.dataset.pspeed;
+  document.querySelectorAll('[data-pspeed]').forEach(x => x.classList.toggle('on', +x.dataset.pspeed === pSpeed));
+  if (transit) transit.setSpeed(pSpeed);
+  if (mapApi) mapApi.setSpeed(pSpeed);
+});
 $('#lyrNetwork').onchange = () => applyModeLayers();
 let reliability;
 async function applyReliability() {
@@ -348,7 +355,7 @@ function renderLivePanel(st) {
   const lines = Object.entries(s.by).filter(([r]) => s.routes[r]?.type === 1).sort((a, b) => b[1] - a[1]);
   el.innerHTML = `${head}
     <div class="row2"><div class="stat"><div class="big">${fmtInt(st.bus)}</div><span>buses reporting</span></div><div class="stat"><div class="big">${fmtInt(st.train)}</div><span>trains reporting</span></div></div>
-    <p class="fine">Snapshot <span class="age ${st.stale ? 'stale' : ''}">${age} old</span>${st.stale ? ' · stale (dimmed)' : ''} · ${st.replaying ? 'replaying the ~2 observed minutes along route shapes (×10)' : 'each marker is the last reported position; nothing is interpolated'}</p>
+    <p class="fine">Snapshot <span class="age ${st.stale ? 'stale' : ''}">${age} old</span>${st.stale ? ' · stale (dimmed)' : ''} · ${st.replaying ? `playing back the ${st.windowMin.toFixed(0)} observed minutes ${st.speed > 1 ? `at ${st.speed}× speed` : 'at real speed'} along route shapes, ${st.delayMin.toFixed(0)} min behind real time` : 'each marker is the last reported position'}</p>
     ${(st.notes || []).length ? `<div class="empty" style="margin-top:8px"><b>Feed notes</b>${st.notes.map(n => esc(n)).join('<br>')}${st.notes.some(n => /Invalid API access key/.test(n)) ? '<br>CTA rejected a key: check the value of that repository secret.' : ''}</div>` : ''}
     <h3>Trains by line</h3><div class="linebars">${lines.map(([r, n]) => `<div><span>${esc(LINE_NAME[r] || r)}</span><i style="width:${n / max * 100}%;background:${s.routes[r].color}"></i><b>${n}</b></div>`).join('') || '<span class="fine">No trains in this snapshot.</span>'}</div>
     ${opsHtml(transit.ops)}${network}${foot}`;
@@ -385,7 +392,7 @@ setTheme(theme);
 const NEON_SUN = new THREE.Vector3(-0.35, -0.42, -0.84).normalize();   // a fixed night sky for the neon look
 
 // ------------------------------------------------------------------------------------------ 2D map
-let mapApi = null, mapLoading = null, mapLast = 0, mapSnapAt = 0;
+let mapApi = null, mapLoading = null, mapLast = 0, mapSnapAt = 0, mapLiveSnap = null, mapStatusAt = 0;
 async function ensureMap() {
   if (mapApi || mapLoading) return mapLoading;
   if (!document.querySelector('link[href="maplibre-gl.css"]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'maplibre-gl.css'; document.head.appendChild(l); }
@@ -393,6 +400,9 @@ async function ensureMap() {
   mapLoading = import(url).then(mod => {
     mapApi = mod.createMap($('#mapCanvas'), { theme, originUtm: D.meta.origin_utm16n, toLonLat: (x, z) => localToLonLat(x, z, D.meta.origin_utm16n) });
     document.querySelectorAll('.map-panel [data-layer]').forEach(cb => { mapApi.setVisible(cb.dataset.layer, cb.checked); cb.onchange = () => { mapApi.setVisible(cb.dataset.layer, cb.checked); if (cb.dataset.layer === 'benches' && cb.checked) loadBenches(); }; });
+    setupRoutePicker();
+    mapApi.onFollowChange(renderFollow);
+    $('#onlyFollowed').onchange = e => mapApi.setOnlyFollowed(e.target.checked);
     refreshMapLive();
     return mapApi;
   }).catch(e => { $('#mapStatus').textContent = `Could not load the map: ${e.message}`; });
@@ -403,11 +413,41 @@ async function refreshMapLive() {
   try {
     const r = await fetch(`live/latest.json?t=${Date.now()}`, { cache: 'no-store' });
     if (!r.ok) throw new Error('no snapshot');
-    const s = await r.json(), n = mapApi.setLive(s), age = (Date.now() - Date.parse(s.generated_utc)) / 60000;
-    $('#mapStatus').innerHTML = `Live: ${n} vehicles at their last reported position, snapshot ${age < 60 ? Math.round(age) + ' min' : (age / 60).toFixed(1) + ' h'} old.`;
+    const s = await r.json();
+    if (!mapLiveSnap || s.generated_utc !== mapLiveSnap.generated_utc) { mapLiveSnap = s; await mapApi.setLive(s); }
   } catch { $('#mapStatus').textContent = 'Live: no snapshot published.'; }
   mapSnapAt = performance.now();
 }
+// route picker and followed vehicles (Map tab)
+const pickedRail = new Set(), pickedBus = new Set();
+async function setupRoutePicker() {
+  let T;
+  try { T = await (await fetch('data/transit.json')).json(); } catch { return; }
+  const rail = T.routes.filter(r => r.type === 1), bus = T.routes.filter(r => r.type === 3);
+  $('#railChips').innerHTML = rail.map(r => `<button class="chip" data-r="${esc(r.id)}" aria-pressed="false"><i style="background:${r.color}"></i>${esc(LINE_NAME[r.id] || r.id)}</button>`).join('');
+  $('#busList').innerHTML = bus.map(r => `<option value="${esc(r.id)}">${esc(r.id)} ${esc(r.long)}</option>`).join('');
+  document.querySelectorAll('#railChips .chip').forEach(b => b.onclick = () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); on ? pickedRail.add(b.dataset.r) : pickedRail.delete(b.dataset.r); applyRoutes(); });
+  const add = () => { const v = $('#busPick').value.trim().split(/\s+/)[0]; if (bus.some(r => r.id === v)) { pickedBus.add(v); $('#busPick').value = ''; drawBusChips(bus); applyRoutes(); } else if (v) toast(`No CTA bus route "${esc(v)}"`); };
+  $('#busAdd').onclick = add; $('#busPick').onkeydown = e => { if (e.key === 'Enter') add(); };
+}
+function drawBusChips(bus) {
+  $('#busChips').innerHTML = [...pickedBus].map(id => `<button class="chip" aria-pressed="true" data-b="${esc(id)}">${esc(id)} ${esc((bus.find(r => r.id === id) || {}).long || '')}<span class="x">×</span></button>`).join('');
+  document.querySelectorAll('#busChips .chip').forEach(b => b.onclick = () => { pickedBus.delete(b.dataset.b); drawBusChips(bus); applyRoutes(); });
+}
+function applyRoutes() {
+  const set = new Set([...pickedRail, ...pickedBus]);
+  mapApi.setRouteFilter(set);
+  $('#routeHint').textContent = set.size ? `Showing ${set.size} route${set.size > 1 ? 's' : ''} (and anything you follow).` : 'Showing every route. Pick lines or bus routes to narrow it.';
+}
+function renderFollow(list) {
+  $('#followCount').textContent = `${list.length} / 10`;
+  $('#followHint').hidden = list.length > 0;
+  $('#followList').innerHTML = list.map(f => `<div class="fitem"><i style="background:${f.color || '#999'}"></i><div><b>${f.mode === 'train' ? (LINE_NAME[f.route] || f.route) + ' Line' : 'Bus ' + esc(f.route)}</b><span>${esc(f.dest ? 'to ' + f.dest : '')}${f.dly ? ' · delayed' : ''}</span></div>
+    <button data-go="${esc(f.id)}" title="Fly to">◎</button><button data-rm="${esc(f.id)}" title="Stop following">×</button></div>`).join('');
+  document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => mapApi.flyToVehicle(b.dataset.go));
+  document.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => mapApi.unfollow(b.dataset.rm));
+}
+
 let benchesLoaded = false;
 async function loadBenches() {
   if (benchesLoaded || !mapApi) return;
@@ -533,6 +573,14 @@ function frame(now) {
       mapApi.setResidents(agents.pos, agents.state, agents.N);
       $('#mapClock').textContent = clockLabel(D.meta.start_date, simT) + ' · simulated week';
       if (now - mapSnapAt > 60000) refreshMapLive();
+    }
+    if (mapApi) {
+      const st = mapApi.tick(Date.now());
+      if (st && now - mapStatusAt > 1000) {
+        mapStatusAt = now;
+        $('#mapStatus').innerHTML = st.stale ? `Live: ${st.total} vehicles, snapshot too old to play back; shown at their last reported position.`
+          : `Live: ${st.shown} of ${st.total} vehicles moving along their routes, replaying the ${st.windowMin.toFixed(0)} observed minutes ${st.speed > 1 ? `at ${st.speed}× speed` : 'at real speed'}, <b>${st.delayMin.toFixed(1)} min behind real time</b> (observed ${new Date(st.playbackMs).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', timeZone: 'America/Chicago' })} Chicago time).`;
+      }
     }
     requestAnimationFrame(frame); return;
   }

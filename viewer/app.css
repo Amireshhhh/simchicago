@@ -477,3 +477,18 @@ body[data-theme=neon] .ml.st.c1 { color: #f5ff3b; }
 .dbody { padding: 0 14px 12px; color: var(--muted); font-size: 13px; line-height: 1.5; }
 .dbody a { color: var(--cyan); }
 pre.code { background: rgba(0, 0, 0, .3); border: 1px solid var(--line); border-radius: 10px; padding: 12px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; color: var(--text); margin: 8px 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: rgba(255, 255, 255, .03); color: var(--muted); border-radius: 999px; padding: 4px 10px 4px 8px; font-size: 12px; cursor: pointer; }
+.chip i { width: 10px; height: 10px; border-radius: 50%; }
+.chip[aria-pressed=true] { color: var(--text); border-color: var(--line-strong); background: rgba(255, 255, 255, .1); }
+.chip .x { opacity: .6; margin-left: 2px; }
+.busadd { display: flex; gap: 6px; }
+.busadd input { flex: 1; min-width: 0; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; color: var(--text); font-size: 12.5px; }
+.follow-list { display: grid; gap: 6px; }
+.fitem { display: grid; grid-template-columns: 10px 1fr auto auto; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); font-size: 12px; }
+.fitem i { width: 10px; height: 10px; border-radius: 50%; }
+.fitem b { font-weight: 600; }
+.fitem span { color: var(--dim); display: block; font-size: 11px; }
+.fitem button { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; padding: 2px 4px; }
+.speeds.mini button { padding: 5px 10px; font-size: 12px; }

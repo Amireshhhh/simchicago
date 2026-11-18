@@ -3,6 +3,7 @@
 // network, near-live vehicles (observed), simulated residents (simulated), benches (observed,
 // mixed sources). Labels are an HTML overlay (no glyph server needed).
 import * as maplibregl from 'maplibre-gl';
+import { bestShape, playbackTime, trackPosition, snapshotAge } from './core.js';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -54,6 +55,7 @@ function style(t) {
       { id: 'benches', type: 'circle', source: 'benches', minzoom: 12, paint: { 'circle-radius': w(12, 1.8, 18, 6), 'circle-color': ['get', 'color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 0.8 } },
       { id: 'residents', type: 'circle', source: 'residents', paint: { 'circle-radius': w(10, 2, 17, 6), 'circle-color': ['get', 'color'], 'circle-opacity': t.resident,
         'circle-stroke-color': '#ffffff', 'circle-stroke-width': 0.6 } },
+      { id: 'live-follow', type: 'circle', source: 'live', filter: ['==', ['get', 'f'], 1], paint: { 'circle-radius': w(10, 11, 17, 22), 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': '#00b3ff', 'circle-stroke-width': 3 } },
       { id: 'live-halo', type: 'circle', source: 'live', paint: { 'circle-radius': w(10, 6, 17, 16), 'circle-color': ['get', 'color'], 'circle-opacity': 0.22 } },
       { id: 'live', type: 'circle', source: 'live', paint: { 'circle-radius': ['interpolate', ['exponential', 1.6], ['zoom'], 10, ['case', ['==', ['get', 'mode'], 'train'], 4.5, 3], 17, ['case', ['==', ['get', 'mode'], 'train'], 9, 7]],
         'circle-color': ['get', 'color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1.4 } },
@@ -103,7 +105,18 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
     map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
   };
-  tip('live', p => `<b>${p.mode === 'train' ? 'Train' : 'Bus'} · route ${esc(p.route)}</b><br>${esc(p.dest ? 'to ' + p.dest : '')}<br><span class="fine">Observed ${esc(p.t)}${p.dly === 'true' || p.dly === true ? ' · flagged delayed by CTA' : ''}</span>`);
+  map.on('click', 'live', e => {
+    const p = e.features[0].properties, isF = followed.has(p.id);
+    const el = document.createElement('div');
+    el.innerHTML = `<b>${p.mode === 'train' ? 'Train' : 'Bus'} · route ${esc(p.route)}</b><br>${esc(p.dest ? 'to ' + p.dest : '')}<br><span class="fine">Observed position${p.dly === 'true' || p.dly === true ? ' · flagged delayed by CTA' : ''}</span><br>`;
+    const b = document.createElement('button'); b.className = 'ghost small'; b.textContent = isF ? 'Stop following' : (followed.size >= 10 ? 'Following 10 already' : 'Follow');
+    b.disabled = !isF && followed.size >= 10;
+    b.onclick = () => { isF ? unfollow(p.id) : follow(p.id); popup.remove(); };
+    el.appendChild(b);
+    popup.setLngLat(e.lngLat).setDOMContent(el).addTo(map);
+  });
+  map.on('mouseenter', 'live', () => { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'live', () => { map.getCanvas().style.cursor = ''; });
   tip('stations', p => `<b>${esc(p.name)}</b><br><span class="fine">'L' station · scheduled (GTFS)</span>`);
   tip('residents', p => `<b>Synthetic resident</b><br>${esc(p.kind)}${p.mode ? ' · ' + esc(p.mode) : ''}<br><span class="fine">Simulated, not a real person</span>`);
   tip('benches', p => `<b>${esc(p.kind || 'Bench')}</b><br><span class="fine">Source: ${esc(p.source)}${p.note ? ' · ' + esc(p.note) : ''}</span>`);
@@ -129,24 +142,61 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
   setTheme(theme);
 
   function setVisible(id, on) {
-    const ids = { bus: ['cta-bus'], rail: ['cta-rail', 'cta-rail-case', 'stations'], live: ['live', 'live-halo'], residents: ['residents'],
+    const ids = { bus: ['cta-bus'], rail: ['cta-rail', 'cta-rail-case', 'stations'], live: ['live', 'live-halo', 'live-follow'], residents: ['residents'],
       streets: ['st-minor', 'st-minor-case', 'st-coll', 'st-art', 'st-art-case', 'st-exp', 'st-ramp'], areas: ['areas-line'], benches: ['benches'] }[id] || [id];
     const go = () => ids.forEach(l => map.getLayer(l) && map.setLayoutProperty(l, 'visibility', on ? 'visible' : 'none'));
     ready ? go() : map.once('load', go);
   }
 
-  function setLive(snap) {
-    if (!snap) return 0;
-    const feats = (snap.vehicles || []).map(v => {
-      const [lon, lat] = v.lon !== undefined ? [v.lon, v.lat] : toLonLat(v.x, v.z);
-      const color = v.mode === 'train' ? (lineColor[v.route] || '#c60c30') : (v.dly ? '#d6342c' : (t === THEMES.neon ? '#f5ff3b' : '#e8890b'));
-      return { type: 'Feature', properties: { mode: v.mode, route: v.route, dest: v.dest, t: v.t_utc, dly: v.dly, color },
-        geometry: { type: 'Point', coordinates: [lon, lat] } };
+  // ---- live vehicles: delayed-live playback of the observed polls along route shapes ----
+  let snap = null, prepared = [], loadedMs = 0, routeShapes = null, routeFilter = null, onlyFollowed = false, speed = 1;
+  const followed = new Map();                                  // vehicle id -> last computed info
+  let onFollow = () => {};
+  const shapesP = fetch('data/transit.json').then(r => r.json()).then(T => { routeShapes = Object.fromEntries(T.routes.map(r => [r.id, r.shapes])); }).catch(() => { routeShapes = {}; });
+  async function setLive(s) {
+    if (!s) return 0;
+    await shapesP;
+    snap = s; loadedMs = Date.now();
+    prepared = (s.vehicles || []).map(v => {
+      const track = v.track.map(q => [q[1], q[2]]), shapes = routeShapes[v.route] || [];
+      const legs = []; for (let k = 0; k < track.length - 1; k++) legs.push(bestShape(shapes, track[k], track[k + 1]));
+      return { v, track, legs, times: v.track.map(q => Date.parse(q[0])) };
     });
-    const go = () => map.getSource('live').setData({ type: 'FeatureCollection', features: feats });
-    ready ? go() : map.once('load', go);
-    return feats.length;
+    tick(Date.now(), true);
+    return prepared.length;
   }
+  function colorOf(v) { return v.mode === 'train' ? (lineColor[v.route] || '#c60c30') : (v.dly ? '#d6342c' : (t === THEMES.neon ? '#f5ff3b' : '#e8890b')); }
+  let lastTick = 0;
+  /** Recompute positions (at most ~8 times a second) and push them to the map. */
+  function tick(nowMs, force = false) {
+    if (!ready || !snap || (!force && nowMs - lastTick < 125)) return null;
+    lastTick = nowMs;
+    const polls = snap.poll_times_utc.map(x => Date.parse(x)), t0 = polls[0], t1 = polls[polls.length - 1];
+    const stale = snapshotAge(snap.generated_utc, nowMs, 30).stale;
+    const pb = !stale && t1 > t0 ? playbackTime(t0, t1, loadedMs, nowMs, speed) : { t: t1, delayMs: nowMs - t1 };
+    const feats = [];
+    for (const p of prepared) {
+      const v = p.v, f = followed.has(v.id);
+      if (onlyFollowed && !f) continue;
+      if (!f && routeFilter && !routeFilter.has(v.route)) continue;
+      const [x, z] = trackPosition(p.times, p.track, p.legs, pb.t);
+      const [lon, lat] = toLonLat(x, z);
+      if (f) followed.set(v.id, { id: v.id, mode: v.mode, route: v.route, dest: v.dest, dly: v.dly, lon, lat, color: colorOf(v) });
+      feats.push({ type: 'Feature', properties: { id: v.id, mode: v.mode, route: v.route, dest: v.dest, t: v.t_utc, dly: v.dly, color: colorOf(v), f: f ? 1 : 0 },
+        geometry: { type: 'Point', coordinates: [lon, lat] } });
+    }
+    map.getSource('live').setData({ type: 'FeatureCollection', features: feats });
+    if (followed.size) onFollow([...followed.values()]);
+    return { speed, shown: feats.length, total: prepared.length, delayMin: pb.delayMs / 60000, windowMin: (t1 - t0) / 60000, playbackMs: pb.t, stale };
+  }
+  function follow(id) {
+    if (followed.has(id) || followed.size >= 10) return followed.size < 10 || followed.has(id);
+    followed.set(id, { id }); tick(Date.now(), true); onFollow([...followed.values()]); return true;
+  }
+  function unfollow(id) { followed.delete(id); tick(Date.now(), true); onFollow([...followed.values()]); }
+  function setRouteFilter(set) { routeFilter = set && set.size ? set : null; tick(Date.now(), true); }
+  function setOnlyFollowed(v) { onlyFollowed = v; tick(Date.now(), true); }
+  function flyToVehicle(id) { const f = followed.get(id); if (f && f.lon) map.flyTo({ center: [f.lon, f.lat], zoom: Math.max(map.getZoom(), 15), speed: 1.4 }); }
 
   function setResidents(pos, state, N) {
     if (!ready) return;
@@ -162,5 +212,6 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
 
   function setBenches(fc) { const go = () => map.getSource('benches').setData(fc); ready ? go() : map.once('load', go); }
 
-  return { map, setTheme, setVisible, setLive, setResidents, setBenches, resize: () => map.resize(), drawLabels, originUtm };
+  return { map, setTheme, setVisible, setLive, tick, follow, unfollow, flyToVehicle, setRouteFilter, setOnlyFollowed, setSpeed: v => { const now = Date.now(); if (snap) { const pl = snap.poll_times_utc.map(x => Date.parse(x)); const cur = playbackTime(pl[0], pl[pl.length - 1], loadedMs, now, speed).t; loadedMs = now - (cur - pl[0]) / v; } speed = v; }, onFollowChange: fn => { onFollow = fn; },
+    routes: () => Object.keys(lineColor), setResidents, setBenches, resize: () => map.resize(), drawLabels, originUtm };
 }

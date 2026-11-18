@@ -105,7 +105,8 @@ each `live.yml` run queues the next one with `workflow_dispatch` (GitHub: "workf
 repository_dispatch events always create workflow runs" even from the workflow's own token),
 never sooner than 5 minutes after it started and only when no other run of the workflow is
 queued or running, and an hourly cron restarts the chain if it breaks. At most **288 chained
-runs plus 24 hourly runs = 312 runs per day**. Each run takes **3 polls**, 60 s apart.
+runs plus 24 hourly runs = 312 runs per day**. Each run takes **5 polls**, 60 s apart (3 until 18 Nov
+2026; raised so the viewer can replay about 4 minutes of observed movement per run).
 
 Requests per poll (worst case, every route in service):
 
@@ -119,9 +120,9 @@ Requests per poll (worst case, every route in service):
 |---|---|---|
 | documented daily limit | 100,000 | 50,000 (lower of the two stated) |
 | 50% target | 50,000 | 25,000 |
-| normal: requests/poll × polls/run × runs/day | 13 × 3 × 312 = **12,168** (12.2%) | 8 × 3 × 312 = **7,488** (15.0%) |
-| hard cap per run, incl. retries (code: `REQUEST_CAP`) | 60 | 36 |
-| worst case at the cap: cap × 312 | **18,720** (18.7%) | **11,232** (22.5%) |
+| normal: requests/poll × polls/run × runs/day | 13 × 5 × 312 = **20,280** (20.3%) | 8 × 5 × 312 = **12,480** (25.0%) |
+| hard cap per run, incl. retries (code: `REQUEST_CAP`) | 100 | 45 |
+| worst case at the cap: cap × 312 | **31,200** (31.2%) | **14,040** (28.1%) |
 
 The worst case is under the 50% target even if every run hits its cap. Retries: at most 2 per
 request, with exponential backoff of 2 s then 4 s plus jitter, only after a timeout, HTTP 429

@@ -53,6 +53,20 @@
       <p class="fine" id="benchNote" hidden></p>
       <label class="tgl"><input type="checkbox" data-layer="areas" checked><span></span>Community areas</label>
     </div>
+    <div class="mp-group"><h3>Playback speed</h3>
+      <div class="speeds mini" role="radiogroup" aria-label="Playback speed" data-speed-group><button data-pspeed="1" class="on">1× real time</button><button data-pspeed="4">4×</button><button data-pspeed="10">10×</button></div>
+    </div>
+    <div class="mp-group"><h3>Routes to show</h3>
+      <div id="railChips" class="chips"></div>
+      <div class="busadd"><input id="busPick" list="busList" placeholder="Add a bus route (e.g. 9, 66)…" aria-label="Add a bus route"><datalist id="busList"></datalist><button id="busAdd" class="ghost small">Add</button></div>
+      <div id="busChips" class="chips"></div>
+      <p class="fine" id="routeHint">Showing every route. Pick lines or bus routes to narrow it.</p>
+    </div>
+    <div class="mp-group"><h3>Following <span id="followCount" class="fine">0 / 10</span></h3>
+      <p class="fine" id="followHint">Click a bus or train, then “Follow” (up to 10).</p>
+      <div id="followList" class="follow-list"></div>
+      <label class="tgl"><input type="checkbox" id="onlyFollowed"><span></span>Show only followed vehicles</label>
+    </div>
     <div class="mp-group"><h3>Simulation</h3>
       <label class="tgl"><input type="checkbox" data-layer="residents" checked><span></span>Synthetic residents out <span class="prov simulated">simulated</span></label>
       <div class="mp-clock"><button id="mapPlay" class="ghost small">Play</button><span id="mapClock" class="mono"></span></div>
@@ -71,7 +85,8 @@
 <aside id="livePanel" class="dock right glass only-live" aria-live="polite"></aside>
 <div class="only-live live-tools glass">
   <label class="tgl"><input type="checkbox" id="lyrBusRoutes" checked><span></span>Bus routes</label>
-  <label class="tgl" title="Replay the ~2 minutes this snapshot observed (3 polls), along route shapes, 10x faster. Off: every vehicle sits at its last reported position."><input type="checkbox" id="lyrReplay"><span></span>Replay last 2 min</label>
+  <label class="tgl" title="Play back the ~4 minutes each snapshot observed (5 polls, 60 s apart) at real speed, along route shapes, a few minutes behind real time. Off: every vehicle sits at its last reported position."><input type="checkbox" id="lyrReplay" checked><span></span>Play observed movement</label>
+  <div class="speeds mini" role="radiogroup" aria-label="Playback speed" data-speed-group><button data-pspeed="1" class="on">1×</button><button data-pspeed="4">4×</button><button data-pspeed="10">10×</button></div>
   <label class="select">Reliability lens
     <select id="relMetric">
       <option value="">Off</option>

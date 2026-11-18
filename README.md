@@ -58,7 +58,7 @@ python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
 python -m pytest tests           # 93 tests
-cd viewer && npm test            # 12 tests
+cd viewer && npm test            # 13 tests
 ```
 
 The first command that needs the city builds it (about 25 s) and caches it in
@@ -129,7 +129,11 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
 - **Map**: a light, Google-Maps-like 2D map (MapLibre GL, open source) drawn from City of
   Chicago street centerlines, community areas and the CTA network, with near-live buses and
   trains, the simulated residents and optional layers. No third-party tiles or keys, and the 3D
-  renderer is paused while it is open, so it runs on ordinary laptops and phones.
+  renderer is paused while it is open, so it runs on ordinary laptops and phones. Every bus and
+  train in the latest snapshot moves along its route shape: the ~4 observed minutes are played
+  back on a loop at 1×, 4× or 10× speed, several minutes behind real time (the delay is shown).
+  Pick which 'L' lines and bus routes to show, click any vehicle to follow it (up to 10), and
+  optionally show only the followed ones.
 - **Data**: the City of Chicago data portal catalog with measured freshness (fresh, late,
   overdue against each dataset's declared schedule), search, and access snippets.
 - **Insights**: a dashboard of real data and validated results: CTA ridership 2024-2026,
@@ -147,7 +151,7 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
   headways per route, direction, day type and hour) in the simulation's coordinate frame.
   Refresh: `python scripts/fetch_gtfs.py --refresh` (see `docs/DATASETS.md`).
 - `.github/workflows/live.yml` runs about every 5 minutes (each run queues the next, at most one per 5 minutes; an hourly schedule restarts the chain): `python -m simchi.transit.live` takes
-  3 polls, 60 s apart (Bus Tracker `getvehicles`, 10 routes per request, only routes with
+  5 polls, 60 s apart (Bus Tracker `getvehicles`, 10 routes per request, only routes with
   scheduled service in the current hour; Train Tracker `ttpositions`), stops at a hard
   per-run request cap, writes `latest.json` (labelled `observed`) and redeploys the site.
   Each run's vehicle history is kept for 14 days as the workflow artifact `vehicles-<run id>`;
@@ -155,9 +159,11 @@ bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
 - The keys come only from the `CTA_BUS_KEY` and `CTA_TRAIN_KEY` Actions secrets; the browser
   never calls CTA. `tests/test_no_secrets.py` fails the deploy if anything key-like is in the
   site or the snapshot.
-- In the viewer, **Live CTA** draws the network and the latest snapshot, replays the observed
-  ~2 minutes along route shapes, and shows the snapshot age (older than 30 minutes: marked
-  stale and not animated).
+- In the viewer, **Live** and **Map** play back the ~4 observed minutes along route shapes
+  (real speed by default, 4× or 10× on request), say how far behind real time the playback is,
+  and show the snapshot age (older than 30 minutes: marked stale and not animated). This is
+  delayed playback of server-side snapshots, not real-time tracking: the browser never calls CTA,
+  and GitHub's schedule allows a new snapshot about every 5 minutes at best.
 
 ## Reliability (scheduled vs observed)
 

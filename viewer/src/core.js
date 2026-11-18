@@ -216,3 +216,26 @@ export function relColor(metric, value) {
   const a = [0.2, 0.85, 0.75], b = [1.0, 0.25, 0.2];
   return a.map((x, i) => x * (1 - t) + b[i] * t);
 }
+
+// ---- delayed-live playback of polled positions ------------------------------------------------
+/** Playback time for a snapshot whose polls span [t0, t1] (ms): the observed window is replayed at
+ *  `speed` times real speed (1 = real time), looping, starting when the snapshot was loaded.
+ *  Returns {t, delayMs}. */
+export function playbackTime(t0, t1, loadedMs, nowMs, speed = 1) {
+  if (!(t1 > t0)) return { t: t1, delayMs: nowMs - t1 };
+  const t = t0 + (((nowMs - loadedMs) * speed) % (t1 - t0) + (t1 - t0)) % (t1 - t0);
+  return { t, delayMs: nowMs - t };
+}
+
+/** Position of a vehicle at time t (ms) from its observed track [[isoTime, x, z], ...]: between two
+ *  polls it moves along the route shape chosen for that leg (alongShape), before the first poll it
+ *  waits at the first position, after the last it stays at the last. */
+export function trackPosition(times, track, legs, t) {
+  const n = track.length;
+  if (n === 1 || t <= times[0]) return [track[0][0], track[0][1]];
+  if (t >= times[n - 1]) return [track[n - 1][0], track[n - 1][1]];
+  let k = 0;
+  while (k < n - 2 && times[k + 1] <= t) k++;
+  const f = times[k + 1] > times[k] ? (t - times[k]) / (times[k + 1] - times[k]) : 1;
+  return alongShape(legs[k], track[k], track[k + 1], f);
+}

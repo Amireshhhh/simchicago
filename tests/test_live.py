@@ -149,6 +149,6 @@ def test_redact():
 
 def test_cli_refuses_settings_outside_the_budget():
     with pytest.raises(SystemExit):
-        live.main(["--polls", "5"])
+        live.main(["--polls", "6"])
     with pytest.raises(SystemExit):
         live.main(["--interval", "5"])

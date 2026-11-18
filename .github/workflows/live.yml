@@ -30,7 +30,7 @@ concurrency:
 jobs:
   poll:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v7
 
@@ -42,14 +42,14 @@ jobs:
       - name: Install simchi
         run: python -m pip install -e .
 
-      - name: Poll CTA (3 polls, 60 s apart, capped per run)
+      - name: Poll CTA (5 polls, 60 s apart, capped per run)
         env:
           CTA_BUS_KEY: ${{ secrets.CTA_BUS_KEY }}
           CTA_TRAIN_KEY: ${{ secrets.CTA_TRAIN_KEY }}
         run: |
           if [ -n "$CTA_BUS_KEY" ]; then echo "::add-mask::$CTA_BUS_KEY"; fi
           if [ -n "$CTA_TRAIN_KEY" ]; then echo "::add-mask::$CTA_TRAIN_KEY"; fi
-          python -m simchi.transit.live --polls 3 --interval 60 --out live
+          python -m simchi.transit.live --polls 5 --interval 60 --out live
 
       - name: Operations view of the snapshot (holding advice, anomaly flags; no CTA requests)
         run: python -m simchi.ops.live_ops --snapshot live/latest.json --out live/ops.json || echo "ops view failed; snapshot published without it"

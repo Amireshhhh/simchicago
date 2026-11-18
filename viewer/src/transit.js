@@ -3,10 +3,9 @@ import * as THREE from 'three';
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
-import { alongShape, bestShape, snapshotAge, relColor } from './core.js';
+import { alongShape, bestShape, snapshotAge, relColor, playbackTime, trackPosition } from './core.js';
 
 export const STALE_MIN = 30;           // snapshots older than this are shown as stale and not animated
-const REPLAY_SECONDS = 12;             // the observed window (about 2 min) is replayed in this many seconds
 const REFRESH_MS = 60000;
 
 function segmentsOf(shapes, y) {
@@ -100,7 +99,7 @@ export function createTransit(scene, T) {
     transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending });
   const vGeo = new THREE.BufferGeometry();
   const vPts = new THREE.Points(vGeo, vMat); vPts.frustumCulled = false; vPts.renderOrder = 9; group.add(vPts);
-  let snap = null, prepared = [], status = { state: 'loading' }, ops = null, replay = false, showBuses = true;
+  let snap = null, prepared = [], status = { state: 'loading' }, ops = null, replay = true, showBuses = true, loadedMs = 0, speed = 1;
   const BUS = new THREE.Color('#ffb547'), BUS_DLY = new THREE.Color('#ff4d6d');
   function setBusColor(hex) { BUS.set(hex); if (snap) prepare(snap); }
 
@@ -111,8 +110,9 @@ export function createTransit(scene, T) {
       const legs = [];
       for (let k = 0; k < track.length - 1; k++) legs.push(bestShape(shapes, track[k], track[k + 1]));
       const color = v.mode === 'train' && routes[v.route] ? new THREE.Color(routes[v.route].color) : (v.dly ? BUS_DLY : BUS);
-      return { v, track, legs, color };
+      return { v, track, legs, color, times: v.track.map(q => Date.parse(q[0])) };
     });
+    loadedMs = Date.now();
     const n = prepared.length;
     vGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
     vGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
@@ -145,19 +145,11 @@ export function createTransit(scene, T) {
     const polls = snap.poll_times_utc.map(t => Date.parse(t));
     const t0 = polls[0], t1 = polls[polls.length - 1];
     const moving = replay && !age.stale && t1 > t0;
-    const tRep = moving ? t0 + ((nowMs / 1000) % REPLAY_SECONDS) / REPLAY_SECONDS * (t1 - t0) : t1;
+    const pb = moving ? playbackTime(t0, t1, loadedMs, nowMs, speed) : { t: t1, delayMs: nowMs - t1 };
     const pos = vGeo.attributes.position?.array, size = vGeo.attributes.size?.array;
     let nb = 0, nt = 0;
     prepared.forEach((p, i) => {
-      const tr = p.v.track, track = p.track;
-      let x = track[track.length - 1][0], z = track[track.length - 1][1];
-      if (moving && track.length > 1) {
-        const times = tr.map(q => Date.parse(q[0]));
-        let k = 0;
-        while (k < times.length - 2 && times[k + 1] <= tRep) k++;
-        if (tRep < times[0]) { x = track[0][0]; z = track[0][1]; }
-        else { const f = times[k + 1] > times[k] ? (tRep - times[k]) / (times[k + 1] - times[k]) : 1; [x, z] = alongShape(p.legs[k], track[k], track[k + 1], f); }
-      }
+      const [x, z] = moving ? trackPosition(p.times, p.track, p.legs, pb.t) : p.track[p.track.length - 1];
       const bus = p.v.mode === 'bus';
       pos[i * 3] = x; pos[i * 3 + 1] = bus ? 8 : 14; pos[i * 3 + 2] = z;
       size[i] = bus ? (showBuses ? 9 : 0) : 17;
@@ -165,10 +157,11 @@ export function createTransit(scene, T) {
     });
     if (pos) { vGeo.attributes.position.needsUpdate = true; vGeo.attributes.size.needsUpdate = true; }
     return { state: 'ok', ageMin: age.ageMin, stale: age.stale, bus: nb, train: nt, generated: snap.generated_utc,
-             empty: !(snap.vehicles || []).length, requests: snap.requests, notes: snap.notes || [], replaying: moving };
+             empty: !(snap.vehicles || []).length, requests: snap.requests, notes: snap.notes || [], replaying: moving,
+             delayMin: pb.delayMs / 60000, windowMin: (t1 - t0) / 60000, playbackMs: pb.t, speed };
   }
 
   refresh();
   setInterval(refresh, REFRESH_MS);
-  return { group, update, refresh, animate, stats, setReliability, setReplay: v => { replay = v; }, setBusColor, setPulses: v => { flowObjs.forEach(o => { o.visible = v; }); }, setBusMarkers: v => { showBuses = v; }, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; }, get ops() { return ops; } };
+  return { group, update, refresh, animate, stats, setReliability, setReplay: v => { replay = v; }, setSpeed: v => { speed = v; }, setBusColor, setPulses: v => { flowObjs.forEach(o => { o.visible = v; }); }, setBusMarkers: v => { showBuses = v; }, setBusVisible: v => { busVisible = v; busLines.visible = v && !relLines; if (relLines) relLines.visible = v; }, get status() { return status; }, get ops() { return ops; } };
 }

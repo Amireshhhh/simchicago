@@ -107,3 +107,20 @@ test('local frame -> lon/lat matches pyproj to centimetres', async () => {
     assert.ok(Math.abs(lo2 - p.lon) < 1e-9 && Math.abs(la2 - p.lat) < 1e-9);
   }
 });
+
+test('delayed-live playback loops the observed window at real speed', async () => {
+  const { playbackTime, trackPosition } = await import('../src/core.js');
+  const t0 = 1_000_000, t1 = t0 + 240_000;                       // 5 polls over 4 minutes
+  assert.equal(playbackTime(t0, t1, 5_000_000, 5_000_000).t, t0);
+  assert.equal(playbackTime(t0, t1, 5_000_000, 5_060_000).t, t0 + 60_000);   // 60 s later: 60 s into the window
+  assert.equal(playbackTime(t0, t1, 5_000_000, 5_250_000).t, t0 + 10_000);   // loops after 240 s
+  assert.equal(playbackTime(t0, t1, 5_000_000, 5_060_000).delayMs, 5_060_000 - t0 - 60_000);
+  assert.equal(playbackTime(t0, t1, 5_000_000, 5_015_000, 4).t, t0 + 60_000);   // 4x: 15 s of wall time = 60 s observed
+  // a straight east-west route: half-way between polls is half-way along the shape
+  const shape = [[0, 0], [1000, 0]];
+  const track = [[0, 0], [600, 0]], times = [0, 60_000];
+  const [x, z] = trackPosition(times, track, [shape], 30_000);
+  assert.ok(Math.abs(x - 300) < 1e-6 && Math.abs(z) < 1e-6);
+  assert.deepEqual(trackPosition(times, track, [shape], -5), [0, 0]);
+  assert.deepEqual(trackPosition(times, track, [shape], 99_000), [600, 0]);
+});

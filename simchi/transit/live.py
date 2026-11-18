@@ -1,6 +1,6 @@
 """Near-live CTA vehicle positions, polled server-side within a fixed request budget.
 
-Run in GitHub Actions (live.yml):  python -m simchi.transit.live --polls 3 --interval 60 --out live/
+Run in GitHub Actions (live.yml):  python -m simchi.transit.live --polls 5 --interval 60 --out live/
 
 Keys are read only from the environment variables CTA_BUS_KEY and CTA_TRAIN_KEY. They are
 placed in request URLs and nowhere else: never logged, never written, and redacted from any
@@ -37,7 +37,7 @@ TRAIN_URL = "https://lapi.transitchicago.com/api/1.0/ttpositions.aspx"
 TRAIN_LINES = ["red", "blue", "brn", "g", "org", "p", "pink", "y"]   # Train Tracker route ids
 TRAIN_LINE_TO_GTFS = {"red": "Red", "blue": "Blue", "brn": "Brn", "g": "G", "org": "Org", "p": "P", "pink": "Pink", "y": "Y"}
 BUS_ROUTES_PER_REQUEST = 10            # getvehicles: "A maximum of 10 identifiers can be specified"
-REQUEST_CAP = {"bus": 60, "train": 36}  # hard cap per run, retries included (docs/CTA_TERMS.md)
+REQUEST_CAP = {"bus": 100, "train": 45}  # hard cap per run, retries included (docs/CTA_TERMS.md)
 MAX_RETRIES = 2
 BACKOFF_S = (2.0, 4.0)
 TIMEOUT_S = 20
@@ -284,12 +284,12 @@ def main(argv=None):
     from simchi.data.cds import load_cds
     from simchi.transit.gtfs import load_extract
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--polls", type=int, default=3)
+    ap.add_argument("--polls", type=int, default=5)
     ap.add_argument("--interval", type=float, default=60.0)
     ap.add_argument("--out", type=Path, default=Path("live"))
     a = ap.parse_args(argv)
-    if a.polls < 1 or a.polls > 3 or a.interval < 30:
-        ap.error("the request budget assumes at most 3 polls per run, at least 30 s apart")
+    if a.polls < 1 or a.polls > 5 or a.interval < 30:
+        ap.error("the request budget assumes at most 5 polls per run, at least 30 s apart")
     routes = [r["id"] for r in load_extract("routes") if r["type"] == 3]
     snap = run(a.polls, a.interval, a.out, os.environ.get("CTA_BUS_KEY"), os.environ.get("CTA_TRAIN_KEY"),
                load_extract("service"), routes, load_cds().frame)
