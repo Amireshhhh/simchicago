@@ -1,17 +1,30 @@
 """Ridership calibration and held-out validation (python -m simchi.eval.ridership).
 
-PRE-REGISTERED DESIGN (fixed in this docstring before any 2025-2026 ridership was examined;
-the 2024 data of all routes and stations had been looked at during development, so 2024
-results are not out of sample in time):
+PRE-REGISTERED DESIGN, W1 RE-BASELINE (fixed in this docstring and committed as "W1
+pre-registration" before this design was run on any data).
+
+Why: CTA restated its ridership from 2025-01-01 (City of Chicago data portal note "Changes to
+CTA Ridership Datasets - 3/20/2026", https://data.cityofchicago.org/stories/s/dw8r-nrdk, read
+2026-11-23): recorded cash-farebox counts replaced estimates, an automatic passenger counter
+(APC) factoring process replaced video-based factoring, and underpaid rail rides were added at
+station level. Rides before 2025-01-01 use the old method. The mirrors (downloaded 2026-11-12)
+postdate the restatement. Counts from the two methods are never compared with each other.
+
+Honesty about what has been seen: 2025-2026 ridership was the test period of the previous design
+(train 2024, test 2025-01-01..2026-08-31), whose results were examined; they are kept as
+reports/ridership_validation_superseded_mixed_methods.json, labelled "superseded: mixed counting
+methods". The model and its features have not been changed since, and nothing in this design was
+chosen by looking at those results: periods, units, folds, baselines and the criterion are the
+previous ones with only the periods moved to the restated method.
 
 Units
   bus   CTA bus routes present in the GTFS extract and with positive mean weekday rides in
         both periods
   rail  'L' stations inside the City of Chicago (station point in a community area) with
         positive mean weekday entries in both periods
-Periods
-  training  2024-01-01 .. 2024-12-31 (mean weekday rides per unit)
-  test      2025-01-01 .. 2026-08-31 (mean weekday rides per unit)
+Periods (both entirely after the 2025-01-01 method break)
+  training  2025-01-01 .. 2025-12-31 (mean weekday rides per unit)
+  test      2026-01-01 .. 2026-08-31 (mean weekday rides per unit)
 Features
   m = log(1 + model weekday commute boardings/entries), from the simulation's network assignment
       (simchi.transit.ridership.predict)
@@ -24,10 +37,13 @@ Predictors of log(rides), each fitted by least squares on the training units' tr
 Held-out evaluation (primary): 5 folds of units (fixed shuffle, seed 0); for each fold, fit on
   the other folds' training-period means, predict the fold's test-period means.
   Metric: mean absolute log error (MALE) over all units.
-Pass criteria (per mode, bus and rail):
+Pass criteria (per mode, bus and rail), unchanged:
   ridership_<mode>: MALE(M_cal) < MALE(B_service) and MALE(M_cal) < MALE(B_mean)
-Also reported, not criteria: MALE(M_sim); a period-only holdout (fit on all units' 2024 means,
-  test on all units' 2025-26 means) with the persistence reference (each unit's own 2024 mean).
+Persistence reference (reported, not a criterion): each unit's own 2025 weekday mean as the
+  prediction of its 2026 mean, MALE over the same units. It uses each unit's own history, which
+  the cross-sectional predictors are not given, so it bounds what forecasting a known unit can do.
+Also reported, not criteria: MALE(M_sim); a period-only holdout (fit on all units' 2025 means,
+  test on all units' 2026 means).
 Replicate variance (replicates()): the simulation's agent-based commute OD for several build
   seeds (different synthetic populations) instead of the expected OD; coefficient of variation
   of the predictions per unit, and MALE of M_cal per seed.
@@ -45,8 +61,9 @@ from simchi.paths import REPORTS
 from simchi.transit import network as N
 from simchi.transit import ridership as R
 
-TRAIN = ("2024-01-01", "2024-12-31")
-TEST = ("2025-01-01", "2026-08-31")
+TRAIN = ("2025-01-01", "2025-12-31")
+TEST = ("2026-01-01", "2026-08-31")
+METHOD_BREAK = "2025-01-01"           # CTA ridership restatement (APC method); see docstring
 FOLDS = 5
 
 
@@ -110,9 +127,10 @@ def evaluate(obs_train: pd.Series, obs_test: pd.Series, model: pd.Series, servic
     for k, X in D.items():
         pred, beta = _fit_predict(k, X, ytr, m, X, m)
         period[k] = float(np.abs(yte - pred).mean())
-    period["persistence (own 2024 mean)"] = float(np.abs(yte - ytr).mean())
+    period["persistence (own training-period mean)"] = float(np.abs(yte - ytr).mean())
     male = {k: float(v.mean()) for k, v in err.items()}
     return {"units": len(ids), "male_heldout_units_and_period": male,
+            "persistence_reference_male": float(np.abs(yte - ytr).mean()),
             "pass": bool(male["M_cal"] < male["B_service"] and male["M_cal"] < male["B_mean"]),
             "male_period_only": period, "fold_coefficients": coefs,
             "corr_log_model_vs_log_obs_train": float(np.corrcoef(m, ytr)[0, 1]),
@@ -135,8 +153,10 @@ def run(built=None) -> dict:
     graph, bus, rail, T = model_predictions(built)
     sb, ss = R.scheduled_service(graph)
     obs = _units(graph, bus, rail)
-    out = {"design": __doc__.split("PRE-REGISTERED DESIGN")[1].strip().split("\n")[0],
-           "train_period": TRAIN, "test_period": TEST,
+    assert TRAIN[0] >= METHOD_BREAK, "never compare counts from before and after the method break"
+    out = {"design": "W1 re-baseline: train 2025, test 2026-01..08, both after CTA's 2025-01-01 ridership restatement (APC method); "
+                     "criteria in the docstring of simchi/eval/ridership.py",
+           "train_period": TRAIN, "test_period": TEST, "method_break": METHOD_BREAK,
            "model_commute_transit_trips_per_weekday": float(T.sum())}
     for kind, model, service in (("bus", bus, sb), ("rail", rail, ss)):
         tr, te = obs[kind]
