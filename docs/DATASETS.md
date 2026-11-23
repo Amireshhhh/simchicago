@@ -10,13 +10,32 @@ access is needed to build or run anything.
 | `carjackings_2020` | `data/raw/mirror/Chi_Carjackings.geojson` | 1,412 CPD vehicular-hijacking records of 2020: IUCR 0325 (481) and 0326 (931), block-level location, community area | replayed incidents; intensity-model fit and out-of-sample test |
 | `sdoh_tracts_2014` | `data/raw/mirror/Chi-SDOH.geojson` | 791 census tracts (2010) with 2014 indicators, including population and the 2015 violent-crime rate | home placement within areas (by tract population); baseline perceived safety (hypothesis) |
 | `gtfs_cta` | not stored; derived extract in `data/transit/` | CTA GTFS static feed (zip, ~51 MB, sha256 `ddbf306e…72b4`, last modified 10 Nov 2026): 132 routes (124 bus, 8 rail), stops, trips, stop times, shapes, calendar | real network for the viewer; network transit times for mode choice and trip durations; scheduled headways |
-| CTA live positions | not stored in git; workflow artifacts | Bus Tracker `getvehicles` and Train Tracker `ttpositions`, 3 polls per scheduled run | live layer; reliability and operations analyses |
-| `cta_l_station_daily` | `data/raw/mirror/l_station_daily.csv.gz` (0.9 MB) | City of Chicago data portal 5neh-572f, "CTA - Ridership - 'L' Station Entries - Daily Totals": 140,074 rows, 2024-01-01 to 2026-08-31 (station id, name, date, day type, entries) | ridership calibration and held-out validation (stations) |
-| `cta_bus_route_daily` | `data/raw/mirror/bus_route_daily.csv.gz` (0.6 MB) | City of Chicago data portal jyb9-n7fm, "CTA - Ridership - Bus Routes - Daily Totals by Route": 111,918 rows, 2024-01-01 to 2026-08-31 | ridership calibration and held-out validation (routes) |
+| CTA live positions | not stored in git; workflow artifacts | Bus Tracker `getvehicles` and Train Tracker `ttpositions`, 5 polls per scheduled run | live layer; reliability and operations analyses |
+| `cta_l_station_daily` | `data/raw/mirror/l_station_daily.csv.gz` (0.9 MB) | City of Chicago data portal 5neh-572f, "CTA - Ridership - 'L' Station Entries - Daily Totals": 140,074 rows, 2024-01-01 to 2026-08-31 (station id, name, date, day type, entries) | ridership calibration and held-out validation (stations); method break 2025-01-01, see below |
+| `cta_bus_route_daily` | `data/raw/mirror/bus_route_daily.csv.gz` (0.6 MB) | City of Chicago data portal jyb9-n7fm, "CTA - Ridership - Bus Routes - Daily Totals by Route": 111,918 rows, 2024-01-01 to 2026-08-31 | ridership calibration and held-out validation (routes); method break 2025-01-01, see below |
 | `crimes_all_by_area`, `crimes_cta_by_area` | `data/raw/mirror/crimes_*_by_area.csv.gz` (13 kB) | City of Chicago data portal ijzp-q8t2 (CPD reported crimes), 12 months to 31 Oct 2026, **counts only**, by community area and primary type (and location description for locations starting with "CTA") | descriptive crime join of the reliability report (not causal) |
 | `street_centerlines` | not stored; derived `data/map/streets.json.gz` (1.2 MB) | City of Chicago Street Center Lines (pr57-gg9e): 56,338 segments with names, CLASS codes (City metadata PDF), node ids | 2D map basemap; future street-network routing |
 | portal catalog | `data/portal/catalog.json.gz` (0.4 MB, metadata only) | City of Chicago data portal catalog API: every dataset's name, category, columns and types, last data change, declared update frequency, page views | Data tab; `simchi.portal` client typing and freshness |
 | landmarks | `data/reference/landmarks.json` | 5 tallest buildings: name, height, coordinates | viewer only; copied from the v0.1 export (which cites Wikipedia, 2026-10-14), not re-verified |
+
+## Method break in CTA ridership (2025-01-01)
+
+CTA restated its ridership back to 2025-01-01 (City of Chicago data portal note "Changes to CTA
+Ridership Datasets - 3/20/2026", https://data.cityofchicago.org/stories/s/dw8r-nrdk, read
+2026-11-23): recorded counts from the new cash fareboxes replaced estimates, an automatic
+passenger counter (APC) factoring process replaced video-based factoring, and underpaid rail
+rides were added at station level. CTA's stated effect on the 2025 totals: bus 184.0m to
+199.6m rides (+8.5%), rail 135.2m to 138.4m (+2.4%). Values from 2024 and earlier use the old
+method. **Never compare ridership before 2025-01-01 with later ridership**: the validation trains
+on 2025 and tests on 2026, the viewer marks the break on every ridership chart, and no
+year-over-year figure is shown when its earlier window starts before the break.
+
+Checked on 2026-11-23: the two mirrors equal what the portal serves after the restatement
+(2025 and Jan-Aug 2026 ride sums and row counts identical for both datasets). The bus mirror's
+2025 sum, 198.59m, matches CTA's restated bus total (199.6m) and not the original one (184.0m).
+The 'L' station-entry sum, 117.49m, matches neither the original (135.2m) nor the restated
+(138.4m) rail total; station entries are a different count from CTA's system rail rides, and the
+difference is not explained by the published note.
 
 ## Checks on the data
 

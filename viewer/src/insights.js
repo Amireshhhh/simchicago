@@ -15,30 +15,40 @@ const status = p => p === null || p === undefined ? '<span class="st info"><b>i<
   : p ? '<span class="st good"><b>✓</b>Pass</span>' : '<span class="st bad"><b>✕</b>Fail</span>';
 
 const shortIv = n => n.startsWith('Frequent network') ? 'Top-10 bus routes, headways ×0.75' : n.startsWith('All buses') ? 'All buses, headways ×0.8' : n.startsWith("All 'L'") ? "All 'L' lines, headways ×0.8" : n;
-const SECTIONS = [['ridership', 'Ridership'], ['validation', 'Model vs reality'], ['design', 'Service design'], ['interventions', 'Interventions'], ['operations', 'Operations'], ['reliability', 'Reliability']];
+const SECTIONS = [['ridership', 'Ridership'], ['validation', 'Model vs reality'], ['operations', 'Operations'], ['reliability', 'Reliability']];
+// Internal / not validated: simulated analyses whose effects have no held-out test (intervention
+// ranking, fare scenarios, the response of trips to service, service-design scenarios). Off by
+// default; the code and reports are kept. A per-browser switch shows them, each with a banner.
+const INTERNAL_SECTIONS = [['design', 'Service design'], ['interventions', 'Interventions'], ['response', 'Response to service']];
+export function internalOn() { try { return localStorage.getItem('simchi-internal') === '1'; } catch { return false; } }
+function setInternal(v) { try { localStorage.setItem('simchi-internal', v ? '1' : '0'); } catch { /* storage unavailable */ } }
+const banner = why => `<div class="internal-banner" role="note"><b>Internal · not validated.</b> ${why}</div>`;
 
 export function renderInsights(root, I) {
   if (!I) { root.innerHTML = '<div class="page-inner"><h1>Insights</h1><p>No insights export found (data/insights.json). Run <code>python -m simchi.cli demo</code>.</p></div>'; return; }
-  const R = I.ridership, V = I.validation || [], M = I.models || {}, IV = I.interventions, O = I.ops || {}, SD = I.service_design;
+  const internal = internalOn();
+  const R = I.ridership, V = I.validation || [], M = I.models || {}, O = I.ops || {};
+  const IV = internal ? I.interventions : null, SD = internal ? I.service_design : null;
+  const NAV = internal ? [...SECTIONS.slice(0, 2), ...INTERNAL_SECTIONS, ...SECTIONS.slice(2)] : SECTIONS;
   const nPass = V.filter(c => c.pass === true).length, nFail = V.filter(c => c.pass === false).length;
   const rv = M.ridership_validation || {};
   root.innerHTML = `<div class="page-inner">
   <header class="page-head">
     <div><p class="eyebrow">Insights</p><h1>What the data say, and how well the model holds up</h1>
-    <p class="lede">Real CTA ridership and schedules, the model's held-out validation, and the intervention ranking. Every number carries its source: ${chip('observed')} ${chip('scheduled')} ${chip('simulated')} ${chip('hypothesis')}</p></div>
+    <p class="lede">Real CTA ridership and schedules, and how well the model holds up on data it was not fitted to. Every number carries its source: ${chip('observed')} ${chip('scheduled')} ${chip('simulated')} ${chip('hypothesis')}</p></div>
   </header>
-  <nav class="subnav" aria-label="Insights sections">${SECTIONS.map(([id, l]) => `<a href="#insights/${id}" data-sec="${id}">${l}</a>`).join('')}</nav>
+  <nav class="subnav" aria-label="Insights sections">${NAV.map(([id, l]) => `<a href="#insights/${id}" data-sec="${id}">${l}</a>`).join('')}</nav>
 
   <div class="kpis">
-    <div class="kpi"><span class="k">Bus rides, last 12 months ${chip('observed')}</span><b data-count="${R.bus_last12_total}">0</b><span class="d ${R.bus_yoy >= 0 ? 'up' : 'down'}">${sgn(R.bus_yoy)} vs the year before</span></div>
-    <div class="kpi"><span class="k">'L' entries, last 12 months ${chip('observed')}</span><b data-count="${R.rail_last12_total}">0</b><span class="d ${R.rail_yoy >= 0 ? 'up' : 'down'}">${sgn(R.rail_yoy)} vs the year before</span></div>
+    <div class="kpi"><span class="k">Bus rides, last 12 months ${chip('observed')}</span><b data-count="${R.bus_last12_total}">0</b><span class="d ${R.bus_yoy == null ? '' : R.bus_yoy >= 0 ? 'up' : 'down'}">${R.bus_yoy == null ? 'No year-over-year: the year before used the old counting method' : sgn(R.bus_yoy) + ' vs the year before'}</span></div>
+    <div class="kpi"><span class="k">'L' entries, last 12 months ${chip('observed')}</span><b data-count="${R.rail_last12_total}">0</b><span class="d ${R.rail_yoy == null ? '' : R.rail_yoy >= 0 ? 'up' : 'down'}">${R.rail_yoy == null ? 'No year-over-year: the year before used the old counting method' : sgn(R.rail_yoy) + ' vs the year before'}</span></div>
     <div class="kpi"><span class="k">Scheduled weekday trips ${chip('scheduled')}</span><b data-count="${I.network.counts.weekday_trips}">0</b><span class="d">${I.network.counts.routes} routes · ${fmt(I.network.counts.stops)} stops</span></div>
     <div class="kpi"><span class="k">Validation checks</span><b>${nPass}<small>/${V.length}</small></b><span class="d">${nFail} fail, reported as failures</span></div>
   </div>
 
   <section id="sec-ridership" class="sec">
     <h2>Ridership ${chip('observed')}</h2>
-    <p class="sub">Average daily rides per week, ${esc(R.period[0])} to ${esc(R.period[1])}. Source: CTA ridership on the City of Chicago data portal.</p>
+    <p class="sub">Average daily rides per week, ${esc(R.period[0])} to ${esc(R.period[1])}. Source: CTA ridership on the City of Chicago data portal.${R.method_break ? ` <b>Counts from ${esc(R.method_break.date)} on use CTA's restated method</b> (automatic passenger counters, recorded cash-farebox counts, underpaid rail rides added); earlier weeks use the old method, so the two sides of the dashed line are not comparable (<a href="${esc(R.method_break.source)}" target="_blank" rel="noopener">CTA notice</a>).` : ''}</p>
     <div class="card wide"><div class="legend-row"><span><i style="background:var(--s1)"></i>Bus boardings</span><span><i style="background:var(--s2)"></i>'L' station entries</span></div><div id="chRidership"></div></div>
     <div class="grid2">
       <div class="card"><h3>Busiest bus routes</h3><p class="sub">Average weekday boardings, last 12 months</p><div id="chTopBus"></div></div>
@@ -50,10 +60,14 @@ export function renderInsights(root, I) {
     <h2>Model vs reality</h2>
     <p class="sub">Each check compares the model with a simple baseline on data it was not fitted to. Pass criteria were fixed (and for the newest checks, committed) before the results were seen.</p>
     <div class="card wide"><h3>Ridership on held-out routes and stations ${chip('observed')} ${chip('simulated')}</h3>
-      <p class="sub">Trained on 2024, tested on 2025 to Aug 2026 on routes and stations left out of the fit. Mean absolute log error (lower is better; 0.45 ≈ a typical factor of 1.57).</p>
+      <p class="sub">Trained on 2025, tested on Jan to Aug 2026 (both after CTA's 2025 counting-method change) on routes and stations left out of the fit. Mean absolute log error (lower is better; 0.45 ≈ a typical factor of 1.57).</p>
       <div class="grid2"><div id="chRvBus"></div><div id="chRvRail"></div></div>
-      <p class="note">Simulation + schedule beats the schedule alone on bus routes (pass) but not on 'L' stations (fail). Each unit's own past ridership predicts next year far better (${rv.bus ? rv.bus.persistence.toFixed(3) : '–'} bus, ${rv.rail ? rv.rail.persistence.toFixed(3) : '–'} 'L'): the model is for routes, places and scenarios without history.</p></div>
+      <p class="note">Simulation + schedule beats the schedule alone on bus routes (pass) but not on 'L' stations (fail). Each unit's own 2025 ridership predicts its 2026 ridership far better (${rv.bus ? rv.bus.persistence.toFixed(3) : '–'} bus, ${rv.rail ? rv.rail.persistence.toFixed(3) : '–'} 'L'): the model is for routes, places and scenarios without history.</p></div>
     <div class="scorecard">${V.map(c => `<div class="sc ${c.pass === false ? 'fail' : ''}"><div class="sch">${status(c.pass)}<span class="grp">${esc(c.group)}</span></div><h4>${esc(c.label)}</h4><p>${esc(c.summary)}</p></div>`).join('')}</div>
+  </section>
+  ${internal ? `<section id="sec-response" class="sec internal">
+    <h2>Response to service ${chip('simulated')}</h2>
+    ${banner('How simulated trips respond to slower or faster service, and the fare and time sensitivities. The time sensitivity is estimated from differences between community areas, not measured as a causal effect, and no response has been tested against an observed service change.')}
     <div class="grid2">
       <div class="card"><h3>Riders respond to service, not to a dial ${chip('simulated')}</h3><p class="sub">Change in simulated transit trips when CTA service changes; no manual mode shift. 95% intervals over 10 replicates.</p><div id="chDisruption"></div></div>
       <div class="card"><h3>Sensitivities of the fitted mode choice ${chip('simulated')}</h3><div class="tiles">
@@ -63,10 +77,11 @@ export function renderInsights(root, I) {
         <div class="tile"><b>${M.elasticity ? pct(M.elasticity.transit_share_model) : '–'}</b><span>model transit commute share (ACS ${M.elasticity ? pct(M.elasticity.transit_share_acs) : '–'})</span></div></div>
         <p class="note">Estimated from differences between community areas, so the time sensitivity is not a measured causal effect.</p></div>
     </div>
-  </section>
+  </section>` : ''}
 
-  ${SD ? `<section id="sec-design" class="sec">
+  ${SD ? `<section id="sec-design" class="sec internal">
     <h2>Service design: same budget, better allocation ${chip('observed')} ${chip('scheduled')} ${chip('simulated')}</h2>
+    ${banner('Ridership effects here are simulated, and stop balancing assumes 20 s saved per skipped stop; that assumption is being replaced by a measured value (W3). No design here has been tested against an observed change.')}
     <p class="sub">Two tested ways to get more riders per bus-hour or the same riders for fewer bus-hours. Each design is simulated on ${SD.replicates} synthetic populations against today's schedule (95% intervals); costs are scheduled vehicle-hours from GTFS; demand is observed CTA ridership.</p>
     <div class="grid2">
       <div class="card"><h3>Re-allocate bus frequency (square-root rule)</h3>
@@ -84,15 +99,16 @@ export function renderInsights(root, I) {
     <p class="note">These lists are what the formula implies, not an operational recommendation: it has no crowding limit (cutting route 66 by 30% would crowd it) and assumes riders wait half a headway even on hourly routes, where they time their arrival. The simulation finds no measurable ridership gain from it at today's budget; cutting hours loses riders. Stop balancing is the design that saves hours and gains riders, under its 20 s assumption.</p>
   </section>` : ''}
 
-  <section id="sec-interventions" class="sec">
+  ${IV ? `<section id="sec-interventions" class="sec internal">
     <h2>Interventions ${chip('simulated')} ${chip('scheduled')}</h2>
+    ${banner('The ranking, the fare scenarios and the equity split are simulated. Effects rest on the cross-sectional mode choice and assumed parameters (bus priority 0.85, value of time $15/h); none has been tested against an observed intervention.')}
     <p class="sub">${IV ? `Each change runs on ${IV.replicates} synthetic populations against today's schedule; behaviour is simulated, cost is scheduled vehicle-hours from GTFS. Bus and train vehicle-hours are not equally costly: compare within a mode.` : 'No intervention report.'}</p>
     <div class="grid2">
       <div class="card"><h3>Transit trips per 1,000 added vehicle-hours</h3><div id="chIvService"></div></div>
       <div class="card"><h3>Transit trips per $1,000 of fare revenue forgone ${chip('hypothesis')}</h3><div id="chIvFare"></div><p class="note">Fare response follows from an assumed $15/h value of time.</p></div>
     </div>
     <div class="card wide"><h3>Who benefits</h3><p class="sub">Lowest-income community areas hold ${IV ? pct(IV.low_income_population_share) : '–'} of residents. Jobs reachable by transit within 45 min (60 min at night).</p><div id="tbEquity" class="tablewrap"></div></div>
-  </section>
+  </section>` : ''}
 
   <section id="sec-operations" class="sec">
     <h2>Operations tools</h2>
@@ -110,13 +126,15 @@ export function renderInsights(root, I) {
       '<div class="empty"><b>Waiting for live history.</b> Bunching, gaps and service delivered are computed from polled CTA positions against the GTFS schedule. No polls with positions exist yet; this fills in after the live workflow runs with the CTA keys.</div>'}
     <div class="card wide"><h3>What 5-minute polling can recover ${chip('simulated')}</h3><p class="sub">True vs estimated, on a simulated line. Gaps are undercounted (censored), bunching slightly overcounted.</p><div id="tbBias" class="tablewrap"></div></div>
   </section>
-  <footer class="page-foot">SimChicago is not affiliated with or endorsed by CTA. Sources and methods: docs/EVALUATION.md, docs/BRIEF.md in the repository.</footer>
+  <div class="internal-switch"><label class="tgl"><input type="checkbox" id="internalSwitch" ${internal ? 'checked' : ''}><span></span>Show internal analyses (not validated): intervention ranking, fare scenarios, response to service, service design</label></div>
+  <footer class="page-foot">SimChicago is not affiliated with or endorsed by CTA. Sources and methods: docs/EVALUATION.md and generated briefs in docs/briefs/ in the repository.</footer>
   </div>`;
 
   root.querySelectorAll('[data-count]').forEach(el => countUp(el, +el.dataset.count));
   const draw = () => {
     lineChart(root.querySelector('#chRidership'), { x: R.weekly.week_start, label: 'Average daily rides per week',
-      series: [{ name: 'Bus', color: 'var(--s1)', values: R.weekly.bus }, { name: "'L'", color: 'var(--s2)', values: R.weekly.rail }] });
+      series: [{ name: 'Bus', color: 'var(--s1)', values: R.weekly.bus }, { name: "'L'", color: 'var(--s2)', values: R.weekly.rail }],
+      marks: R.method_break ? [{ x: R.method_break.date, label: 'Counting method changed' }] : [] });
     barList(root.querySelector('#chTopBus'), { rows: R.top_bus.map(r => ({ label: `${r.id} ${r.name}`, value: r.weekday_rides })), color: 'var(--s1)' });
     barList(root.querySelector('#chTopRail'), { rows: R.top_rail.map(r => ({ label: r.name, value: r.weekday_rides })), color: 'var(--s2)' });
     const names = { B_mean: 'Constant', B_service: 'Scheduled service', M_sim: 'Simulation alone', M_cal: 'Simulation + schedule' };
@@ -126,7 +144,7 @@ export function renderInsights(root, I) {
       groupedBars(root.querySelector(id), { groups: [{ label: `${lbl} (${rv[kind].units})`, items: Object.keys(names).map(k => ({ name: names[k], value: m[k], best: k === best,
         color: k === 'M_cal' ? 'var(--s1)' : k === 'M_sim' ? 'var(--s3)' : 'var(--neutral)' })) }] });
     }
-    if (M.transit_disruption) intervalChart(root.querySelector('#chDisruption'), { rows: M.transit_disruption.map(r => ({ label: r.scenario, mean: r.rel, lo: r.ci_low, hi: r.ci_high })), valueFmt: v => sgn(v, 1), color: 'var(--s2)', zero: true });
+    if (internal && M.transit_disruption) intervalChart(root.querySelector('#chDisruption'), { rows: M.transit_disruption.map(r => ({ label: r.scenario, mean: r.rel, lo: r.ci_low, hi: r.ci_high })), valueFmt: v => sgn(v, 1), color: 'var(--s2)', zero: true });
     if (IV) {
       const rk = IV.ranking;
       intervalChart(root.querySelector('#chIvService'), { rows: rk.filter(r => r.ranked_by.includes('vehicle-hours') && Number.isFinite(r.value)).map(r => ({ label: shortIv(r.intervention), mean: r.value, lo: r.ci_low, hi: r.ci_high, tip: `${fmt(r.vehicle_hours_per_weekday)} added vehicle-hours, +${fmt(r.transit_trips)} trips/weekday` })) });
@@ -147,6 +165,7 @@ export function renderInsights(root, I) {
     if (O.reliability) root.querySelector('#tbBias').innerHTML = `<table class="tb"><thead><tr><th>Simulated line</th><th>Bunching true → est.</th><th>Gaps true → est.</th><th>Headway CV true → est.</th></tr></thead><tbody>${O.reliability.polling_bias.map(b => `<tr><td>headway CV ${b.inputs.cv}, speed CV ${b.inputs.speed_cv}, ${Math.round(b.inputs.skip * 100)}% runs skipped</td><td class="n">${b.truth.bunching_share.toFixed(3)} → ${b.estimate.bunching_share.toFixed(3)}</td><td class="n">${b.truth.gap_share.toFixed(3)} → ${b.estimate.gap_share.toFixed(3)}</td><td class="n">${b.truth.headway_cv.toFixed(2)} → ${b.estimate.headway_cv.toFixed(2)}</td></tr>`).join('')}</tbody></table>`;
   };
   requestAnimationFrame(draw);
+  root.querySelector('#internalSwitch').addEventListener('change', e => { setInternal(e.target.checked); renderInsights(root, I); });
   let to; addEventListener('resize', () => { clearTimeout(to); to = setTimeout(draw, 200); });
   // sub-navigation: smooth scroll and active section highlight
   const scroller = root.closest('.view');

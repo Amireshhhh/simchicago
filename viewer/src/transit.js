@@ -1,3 +1,5 @@
+// FROZEN (W7, 2026-11-23): the 3D renderer gets no new work; fixes for breakage only. New views go in
+// the 2D map (mapview.js) or the Insights/Data pages. See docs/DESIGN.md, "Frozen: 3D renderer".
 // Real CTA network (GTFS) and near-live vehicles (published snapshots; the browser never calls CTA).
 import * as THREE from 'three';
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';

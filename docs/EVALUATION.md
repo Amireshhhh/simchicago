@@ -5,9 +5,10 @@ and the experiment runs in `reports/experiments/*/experiment.json`, on the defau
 2,000 requested agents (1,944 drawn, standing for 2,589,487 household residents), seed 1.
 
 Every model check is **out of sample** and compares against a **simple baseline**, with the
-pass criterion fixed before the results were seen. Three checks fail their criterion (commute
-destinations; 'L' station ridership; the simulated holding test); they are reported as failures,
-not re-defined. v0.3 workstream 2 replaced the
+pass criterion fixed before the results were seen. Two checks fail their criterion (commute
+destinations; the simulated holding test); they are reported as failures, not re-defined. The
+'L' ridership check failed under the superseded design (2024 vs 2025-26 counts, mixed counting
+methods) and passes narrowly under the W1 re-baseline; both results are kept below. v0.3 workstream 2 replaced the
 distance-based mode choice and travel times by CTA-network ones; the two checks that failed in
 v0.2 (mode choice 8/9 districts, commute time 3.74 vs 3.69 min) were re-run under the same
 criteria and now pass (numbers below).
@@ -24,8 +25,9 @@ criteria and now pass (numbers below).
 | Commute time (network transit times), leave one district out | mean absolute error 3.51 min against 3.69 min for predicting the city mean; lower in only 2 of 9 districts; in-sample correlation 0.47 | lower error than the city mean | **pass** (v0.2: 3.74 min, fail) |
 | CTA GTFS extract | built from the pinned feed; 132 routes (8 rail), 143 stations, 357 patterns covering on average 95.8% of each route-direction's weekday trips | matches pinned sha256 | **pass** |
 | Incident forecast (train Jan-Sep 2020, test Oct-Dec) | weekly area counts (13 weeks, 508 incidents): log score −1976.1 (model) vs −2203.1 (population-proportional) and −2206.7 (uniform) | beat both baselines | **pass** |
-| Ridership, bus routes (held-out routes and period; criteria pre-registered) | mean absolute log error 0.447 (simulation + scheduled service) vs 0.476 (scheduled service) and 1.000 (constant), 123 routes | below both baselines | **pass** |
-| Ridership, 'L' stations (same design) | 0.500 vs 0.496 (scheduled service) and 0.682 (constant), 121 stations | below both baselines | **fail** |
+| Ridership, bus routes (W1: train 2025, test Jan-Aug 2026, held-out routes; pre-registered ea4f406) | mean absolute log error 0.453 (simulation + scheduled service) vs 0.473 (scheduled service) and 1.007 (constant), 124 routes | below both baselines | **pass** |
+| Ridership, 'L' stations (W1, same design) | 0.517 vs 0.522 (scheduled service) and 0.678 (constant), 123 stations; fails in 2 of 5 replicate populations | below both baselines | **pass** (not robust) |
+| *Superseded: mixed counting methods* (train 2024 farebox method, test 2025-26 APC method) | bus 0.447 vs 0.476 (pass); 'L' 0.500 vs 0.496 (fail) | | superseded |
 | Crowding forecast, bus routes (one week ahead, Jan-Aug 2026) | log error 0.1339 vs 0.1569 (same day last week), 27,946 forecasts | below the baseline | **pass** |
 | Crowding forecast, 'L' stations | 0.1280 vs 0.1508, 34,992 forecasts | below the baseline | **pass** |
 | Holding rule (simulated, pre-registered) | mean passenger wait +2.58 min [+1.57, +3.59]; after a later start-up fix −0.94 [−1.80, −0.09] | 95% interval below 0 | **fail** |
@@ -87,9 +89,64 @@ From `reports/validation.json` and `python scripts/mode_identification.py`
   read with that in mind.
 - Model city transit share 29.87% vs ACS 29.76%.
 
-## Ridership (CTA bus routes and 'L' stations)
+## Ridership (CTA bus routes and 'L' stations), W1 re-baseline
 
 From `python -m simchi.eval.ridership --replicates` (→ `reports/ridership_validation.json`).
+Design and pass criteria: docstring of `simchi/eval/ridership.py`, committed as ea4f406 ("W1
+pre-registration") before this design was run.
+
+**Why it was re-run.** CTA restated its ridership from 2025-01-01 (portal note "Changes to CTA
+Ridership Datasets - 3/20/2026": automatic passenger counter factoring, recorded cash-farebox
+counts, underpaid rail rides added at station level; bus 2025 total 184.0m → 199.6m). The earlier
+design trained on 2024 (old method) and tested on 2025-26 (new method), so part of what it
+measured was the method change. W1 trains on 2025 and tests on 2026, both after the break. The
+mirrors equal the portal's post-restatement data (checked 2026-11-23; see `docs/DATASETS.md`).
+
+**What has been seen before.** 2025-26 ridership was the test period of the superseded design and
+its results were examined. Nothing in W1 was chosen from them: the units, folds, baselines,
+predictors and criterion are the earlier ones; only the periods moved. So W1 is held out in units
+(5 folds) and in time (2026 vs 2025), but the 2025-26 data are not unseen.
+
+**Units**: 124 bus routes and 123 'L' stations inside the city with positive ridership in both
+periods. Observed totals over the units: buses 618,318 → 625,643 rides per weekday, 'L'
+330,527 → 347,439 entries. The model's commute demand (752,452 weekday transit trips) and
+its features are unchanged.
+
+| Predictor of log rides | Bus routes | 'L' stations |
+|---|---|---|
+| B_mean: constant | 1.007 | 0.678 |
+| B_service: scheduled weekday trips (log-linear) | 0.473 | 0.522 |
+| M_sim: simulation, one scale factor | 1.076 | 0.989 |
+| **M_cal: simulation + scheduled trips (log-linear)** | **0.453** | **0.517** |
+| Criterion: M_cal below both baselines | **pass** | **pass** |
+| Persistence reference: each unit's own 2025 mean (not a criterion) | 0.072 | 0.064 |
+
+- **Buses**: the simulation calibrated with scheduled service lowers the held-out error from
+  0.473 to 0.453 (4%). Alone it is worse than a constant (1.076 vs 1.007).
+- **'L' stations**: passes by 0.005 (0.517 vs 0.522). The margin is within the replicate spread:
+  with the agent-based OD of 5 synthetic populations, M_cal is 0.5154, 0.5192, 0.5230, 0.5196,
+  0.5228, so 2 of 5 populations (0.5230, 0.5228) do **not** beat B_service (0.5222). The
+  pre-registered criterion is on the expected (analytic) OD and passes; the replicates say the
+  pass is not robust to the synthetic population.
+- **Persistence** is far better than any cross-sectional predictor (0.072 / 0.064): a route or
+  station with a year of history is best predicted by that history. The model's use is for
+  units or scenarios without history.
+- **Period-only holdout** (fit on all units' 2025, test on their 2026): M_cal 0.440 / 0.498,
+  B_service 0.460 / 0.503 (bus / 'L').
+- **Replicate variance** (build seeds 1-5, 2,000 requested agents): median coefficient of
+  variation of a unit's prediction 0.27 (bus) and 0.36 ('L'), 90th percentile 0.71 and 0.73;
+  bus M_cal 0.445-0.461, all below B_service 0.473.
+- Units with no predicted model demand: 5 bus routes, 2 stations.
+
+### Superseded: mixed counting methods (WS3, train 2024 / test 2025-26)
+
+Kept as recorded; its file is `reports/ridership_validation_superseded_mixed_methods.json`.
+Labelled superseded because its training period (2024, old farebox method) and test period
+(2025-26, restated APC method) count rides differently. Its numbers are not to be compared with
+W1's.
+
+
+From `python -m simchi.eval.ridership --replicates` (then → `reports/ridership_validation.json`, now `reports/ridership_validation_superseded_mixed_methods.json`).
 The design and pass criteria are in the docstring of `simchi/eval/ridership.py`, committed
 (3c66780, "WS3 pre-registration") before any 2025-2026 ridership was examined. The 2024 data
 of all units had been looked at during development, so the training period is not out of

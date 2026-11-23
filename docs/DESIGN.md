@@ -139,7 +139,9 @@ tree is Σ_j M^j q, with q the destination demands and M the child-to-parent map
 ⌈log₂ depth⌉ vectorised rounds. Boardings of a pattern are the flows on its boarding edges; an
 'L' entry is a rail boarding reached on foot from the origin or from a bus (rail-to-rail
 transfers are assumed to stay in the paid area). The tests check that total assigned boardings
-equal Σ trips × path boardings. The level is calibrated (`docs/EVALUATION.md`, Ridership).
+equal Σ trips × path boardings. The level is calibrated (`docs/EVALUATION.md`, Ridership) on
+2025 weekday means and tested on January-August 2026: CTA restated ridership from 2025-01-01
+(automatic passenger counters), so no fit or comparison spans that date.
 
 ## 6. Daily plans
 
@@ -242,7 +244,15 @@ work-from-home share); `mode_shift.{transit,walk,other}` (utility shifts); `time
 (travel-time multipliers per mode); `simulated_incident_multiplier`; schedule parameters
 (e.g. `schedule.discretionary_multiplier`); `local_trip_share`; `n_days`, `start_date`.
 
-## 10a. Interventions and their ranking
+## 10a. Interventions and their ranking (internal / not validated)
+
+Status (W7): internal. No effect below has been tested against an observed change, and the
+effects rest on the cross-sectional mode choice and assumed parameters. The code and
+`reports/interventions/` are kept; the viewer shows the ranking, the fare scenarios and the
+response-to-service results only behind the Insights switch "Show internal analyses (not
+validated)", each with a banner. The same applies to the safety-response experiments
+(`reports/experiments/`), the commute-time model's scenario outputs and service design (10c)
+until W3 replaces the assumed 20 s per skipped stop.
 
 `simchi/interventions.py` runs each intervention (a network scenario: headway, in-vehicle-time
 and wait multipliers by mode or route, fares) on R synthetic populations (build seeds 1..R)
@@ -294,6 +304,12 @@ stop; the network model removes boarding and alighting at the others and subtrac
 (§10a): same synthetic populations, paired intervals, same metrics.
 
 ## 11. Viewer
+
+**Frozen: 3D renderer (W7, 2026-11-23).** The three.js views (city.js, scene.js, agents.js,
+overlays.js, transit.js, lab.js) get no new work, only fixes for breakage. New views go in the
+2D map (MapLibre, `mapview.js`) or the Insights and Data pages. Public modes (Overview,
+Insights) show only observed data and results with a passed, pre-registered test; simulated
+analyses without one are behind the internal switch.
 
 three.js r180 with a post-processing chain (render → bloom → FXAA → output with ACES tone
 mapping). The sky is the Preetham model lit by the sun position of the simulated time

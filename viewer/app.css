@@ -496,3 +496,6 @@ pre.code { background: rgba(0, 0, 0, .3); border: 1px solid var(--line); border-
 .wmbrow > div span { display: block; }
 .wmbrow button { font-size: 12px; width: auto; padding: 4px 8px; }
 .wmbrow > div span { color: var(--text); opacity: .82; font-size: 12px; line-height: 1.35; }
+.internal-banner { margin: 6px 0 14px; padding: 10px 14px; border-radius: 10px; border: 1px dashed var(--s2, #e0559a); background: rgba(224, 85, 154, .08); font-size: 13px; line-height: 1.45; }
+.sec.internal h2::after { content: 'internal'; margin-left: 10px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; border: 1px dashed currentColor; opacity: .7; vertical-align: middle; }
+.internal-switch { margin: 28px 0 8px; opacity: .85; }

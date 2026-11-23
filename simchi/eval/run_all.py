@@ -200,7 +200,7 @@ def ridership(built):
         x = r[kind]
         m = x["male_heldout_units_and_period"]
         out[f"ridership_{kind}"] = _check(
-            x["pass"], f"{x['units']} {label}, held-out units and period (train 2024, test 2025-01..2026-08): mean absolute log error "
+            x["pass"], f"{x['units']} {label}, held-out units and period (train {RV.TRAIN[0][:7]}..{RV.TRAIN[1][:7]}, test {RV.TEST[0][:7]}..{RV.TEST[1][:7]}): mean absolute log error "
                        f"{m['M_cal']:.3f} (simulation + scheduled service) vs {m['B_service']:.3f} (scheduled service) and "
                        f"{m['B_mean']:.3f} (constant); simulation alone {m['M_sim']:.3f}", **x)
     return out

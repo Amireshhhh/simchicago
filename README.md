@@ -120,8 +120,8 @@ TOML), and `GET /experiments/<name>` returns its results.
 (`run.json`, `transit.json`, `insights.json`). The viewer has four modes, switched in the top
 bar (or by URL: `#overview`, `#live`, `#insights`, `#simulate`):
 
-- **Overview**: what SimChicago does and what is new, each claim with its real number and its
-  source (observed, scheduled, simulated, assumed), over a slowly orbiting 3D city.
+- **Overview**: what SimChicago does, each claim with its real number and its source (observed,
+  scheduled, simulated), over a slowly orbiting 3D city; only results with a passed test.
 - **Live**: the real CTA network (rail lines in their colours with travelling light pulses, bus
   routes, stations) and the latest near-live snapshot: buses and trains reporting, trains by
   line, snapshot age, holding advice and feed flags, and the bus reliability lens. The sun and
@@ -183,13 +183,29 @@ quantifies what 5-minute polling can recover (gaps undercounted, bunching slight
 `docs/EVALUATION.md`). No observed reliability numbers exist yet: the polling workflow had not
 run when this was written.
 
-## Interventions
+## Internal / not validated
+
+Simulated analyses without a passed, pre-registered test are kept (code and `reports/`) but are
+not shown in the public modes: the intervention ranking, the fare scenarios, the response of
+trips to service (and the safety-response experiments), and service design until W3 measures the
+time saved per skipped stop. In the viewer they appear only after switching on **Insights →
+Show internal analyses (not validated)**, each with a banner. The 3D renderer is frozen (fixes
+only); new views go in the 2D map.
+
+## Decision briefs
+
+`python -m simchi.briefs` writes `docs/briefs/<finding>.md` (finding, evidence, what we don't
+know, cost, and a pilot proposal with a success criterion fixed in advance) for each finding
+whose test passed, reading every number from `reports/`. It refuses a brief whose test failed or
+whose report is missing (`python -m simchi.briefs <finding>` exits non-zero then).
+
+## Interventions (internal)
 
 `python -m simchi.interventions --replicates 10` ranks eight CTA interventions (frequency,
 bus priority, reliability, late-night service, fares) by simulated transit trips gained per
 added scheduled vehicle-hour (or per $1,000 of fare revenue), with paired 95% intervals,
 equity splits and job accessibility; results in `reports/interventions/`, summary in
-`docs/BRIEF.md`, chart in the viewer's Experiment Lab.
+`docs/BRIEF.md` (marked internal / not validated), chart in the viewer's Experiment Lab.
 
 ## Chicago open-data research layer
 
@@ -214,7 +230,7 @@ with benches (Overpass API; © OpenStreetMap contributors, ODbL) with CTA's 2016
 stops, and estimates OpenStreetMap's completeness for shelters by capture-recapture (Chapman
 estimator; method and assumptions in the module docstring). Map tab → "Benches & seating".
 
-## Service design
+## Service design (internal until W3)
 
 `python -m simchi.service_design --replicates 10` tests cost-saving service designs in the
 simulation: re-allocating bus frequencies by the square-root rule (f ∝ √(ridership / round-trip
@@ -241,9 +257,12 @@ beats its baseline in 8 of 9 held-out districts (a failure of its every-district
 the network-based mode model beats city-wide shares in 9 of 9; held-out commute-time error is
 3.51 min against 3.69 min for the city mean (lower overall, but in only 2 of 9 districts); the
 incident model's spatial forecast beats population and uniform baselines on held-out months.
-Calibrated with scheduled service, the simulation's assigned boardings improve held-out bus-route
-ridership predictions (mean absolute log error 0.447 vs 0.476 for scheduled service alone) but
-not 'L' station entries (0.500 vs 0.496: fails its criterion).
+Ridership is validated on CTA's restated counts only (train 2025, test Jan-Aug 2026; CTA changed
+its counting method on 2025-01-01): calibrated with scheduled service, the simulation's assigned
+boardings improve held-out bus-route predictions (mean absolute log error 0.453 vs 0.473 for
+scheduled service alone) and, narrowly, 'L' station entries (0.517 vs 0.522; not robust: 2 of 5
+synthetic populations miss). Each unit's own 2025 ridership predicts 2026 far better (0.072 /
+0.064). The earlier 2024-trained result is kept, labelled superseded (mixed counting methods).
 Slowing CTA buses and trains 1.5× cuts simulated transit trips by 21% with no manual mode shift
 (the time sensitivity is estimated cross-sectionally and probably overstated; see EVALUATION). Engine
 invariants (day plans partition the day, safety stays in [0, 1], no response ≡ no incidents,

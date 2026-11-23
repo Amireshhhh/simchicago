@@ -8,6 +8,9 @@ const ST = { fresh: ['Fresh', 'st good', 'Updated within its declared period (+7
   overdue: ['Overdue', 'st bad', 'Older than max(2 x its declared period, 30 days)'],
   static: ['No schedule', 'st info', 'No update frequency declared, older than 30 days (many are historical by design)'],
   unknown: ['Unknown', 'st info', 'No update timestamp'] };
+// Known breaks in how a dataset counts, which make values before and after not comparable.
+const RIDERSHIP_BREAK = "CTA restated ridership from 2025-01-01 (automatic passenger counter factoring, recorded cash-farebox counts, underpaid rail rides added at station level; portal note 'Changes to CTA Ridership Datasets - 3/20/2026'). Do not compare values before 2025-01-01 with later ones.";
+const METHOD_BREAKS = { 'jyb9-n7fm': RIDERSHIP_BREAK, '5neh-572f': RIDERSHIP_BREAK, '6iiy-9s97': RIDERSHIP_BREAK, 't2rn-p8d7': RIDERSHIP_BREAK, 'bynn-gwxy': RIDERSHIP_BREAK, 'w8km-9pzd': RIDERSHIP_BREAK };
 const ageTxt = d => d === null || d === undefined ? '–' : d < 1 ? 'today' : d < 60 ? `${Math.round(d)} d` : d < 730 ? `${Math.round(d / 30.4)} mo` : `${(d / 365.25).toFixed(1)} y`;
 
 export function renderData(root, C) {
@@ -66,7 +69,7 @@ df = p.query("ijzp-q8t2", select="date, primary_type, community_area",
     root.querySelector('#dcount').textContent = `${rows.length} datasets${rows.length > 80 ? ', showing the first 80' : ''}`;
     list.innerHTML = rows.slice(0, 80).map(d => `<details class="ditem"><summary><span class="${ST[d.status][1]}" title="${esc(ST[d.status][2])}"><b>${d.status === 'fresh' ? '✓' : d.status === 'overdue' ? '!' : d.status === 'late' ? '~' : 'i'}</b>${ST[d.status][0]}</span>
         <span class="dn">${esc(d.name)}</span><span class="dm">${esc(d.category || '')} · changed ${ageTxt(d.age_days)} ago${d.declared ? ` · declares “${esc(d.declared.slice(0, 40))}”` : ''} · ${fmt(d.views_month || 0)} views/mo</span></summary>
-        <div class="dbody"><p>${esc(d.description)}</p>
+        <div class="dbody">${METHOD_BREAKS[d.id] ? `<p class="note"><b>Method break:</b> ${esc(METHOD_BREAKS[d.id])}</p>` : ''}<p>${esc(d.description)}</p>
         <p class="fine">${d.columns.length} columns: ${d.columns.slice(0, 18).map(c => `<code>${esc(c.field)}</code> ${esc(c.type)}`).join(', ')}${d.columns.length > 18 ? ' …' : ''}</p>
         <pre class="code">df = Portal().query("${esc(d.id)}", limit=10_000)</pre>
         <p class="fine">API: <code>https://data.cityofchicago.org/resource/${esc(d.id)}.json?$limit=100</code> · <a href="${esc(d.link)}" target="_blank" rel="noopener">portal page</a> · owner: ${esc(d.owner || '–')}</p></div></details>`).join('');

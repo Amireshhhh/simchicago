@@ -20,6 +20,9 @@ def _load(path: Path):
     return json.loads(path.read_text()) if path.exists() else None
 
 
+METHOD_BREAK = "2025-01-01"   # CTA ridership restatement; see simchi/eval/ridership.py
+
+
 def ridership_block() -> dict:
     from simchi.transit.gtfs import load_extract
     from simchi.transit.ridership import load_observed
@@ -45,12 +48,17 @@ def ridership_block() -> dict:
         yr = df[df["date"] > last - pd.Timedelta(days=365)]["rides"].sum()
         prev = df[(df["date"] <= last - pd.Timedelta(days=365)) & (df["date"] > last - pd.Timedelta(days=730))]["rides"].sum()
         out[f"{kind}_last12_total"] = float(yr)
-        out[f"{kind}_yoy"] = float(yr / prev - 1) if prev > 0 else None
+        # never compare counts across CTA's 2025-01-01 counting-method change (APC restatement)
+        same_method = last - pd.Timedelta(days=730) >= pd.Timestamp(METHOD_BREAK) - pd.Timedelta(days=1)
+        out[f"{kind}_yoy"] = float(yr / prev - 1) if prev > 0 and same_method else None
     idx = weekly["bus"].index.intersection(weekly["rail"].index)
     out["weekly"] = {"week_start": [str(p.start_time.date()) for p in idx],
                      "bus": [round(float(weekly["bus"][p])) for p in idx],
                      "rail": [round(float(weekly["rail"][p])) for p in idx]}
     out["period"] = [out["weekly"]["week_start"][0], str(last.date())]
+    out["method_break"] = {"date": METHOD_BREAK, "label": "CTA counting method changed (2025 restated with automatic passenger counters)",
+                           "source": "https://data.cityofchicago.org/stories/s/dw8r-nrdk"}
+    out["yoy_note"] = "Year-over-year change is shown only when both 12-month windows are after the 2025-01-01 method change."
     return out
 
 
@@ -125,7 +133,7 @@ def models_block() -> dict:
     rv = _load(REPORTS / "ridership_validation.json")
     if rv:
         out["ridership_validation"] = {k: {"units": rv[k]["units"], "male": rv[k]["male_heldout_units_and_period"],
-                                           "persistence": rv[k]["male_period_only"]["persistence (own 2024 mean)"]} for k in ("bus", "rail")}
+                                           "persistence": rv[k].get("persistence_reference_male", rv[k]["male_period_only"].get("persistence (own 2024 mean)"))} for k in ("bus", "rail")}
     td = _load(REPORTS / "experiments" / "transit_disruption" / "experiment.json")
     if td:
         out["transit_disruption"] = [{"scenario": e["scenario"], "rel": e["rel_diff"], "ci_low": e["ci_low"] / e["baseline_mean"],

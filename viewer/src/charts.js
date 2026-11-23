@@ -32,7 +32,7 @@ function showTip(html, x, y) {
 const hideTip = () => { if (tipEl) tipEl.style.opacity = 0; };
 
 /** Multi-series line chart with a crosshair tooltip. series: [{name, color, values}], x: labels. */
-export function lineChart(el, { x, series, yFmt = fmt, height = 240, label }) {
+export function lineChart(el, { x, series, yFmt = fmt, height = 240, label, marks = [] }) {
   const W = el.clientWidth || 640, H = height, pl = 52, pr = 14, pt = 12, pb = 26;
   const all = series.flatMap(s => s.values).filter(Number.isFinite);
   const lo = 0, hi = Math.max(...all) * 1.08;
@@ -42,6 +42,9 @@ export function lineChart(el, { x, series, yFmt = fmt, height = 240, label }) {
   let s = `<svg viewBox="0 0 ${W} ${H}" class="cv" role="img" aria-label="${esc(label)}">`;
   for (const t of ticks) s += `<line class="grid" x1="${pl}" x2="${W - pr}" y1="${Y(t)}" y2="${Y(t)}"/><text class="ax" x="${pl - 8}" y="${Y(t) + 4}" text-anchor="end">${yFmt(t)}</text>`;
   for (const [yr, i] of years) s += `<line class="tick" x1="${X(i)}" x2="${X(i)}" y1="${H - pb}" y2="${H - pb + 4}"/><text class="ax" x="${X(i) + 3}" y="${H - 8}">${yr}</text>`;
+  // marks: [{x: 'YYYY-MM-DD', label}] drawn as a dashed vertical line at the first x >= mark
+  const mk = marks.map(m => ({ ...m, i: x.findIndex(d => d >= m.x) })).filter(m => m.i > 0);
+  for (const m of mk) s += `<line class="mark" x1="${X(m.i)}" x2="${X(m.i)}" y1="${pt}" y2="${H - pb}" stroke="var(--muted)" stroke-dasharray="4 3" stroke-width="1.4"/><text class="ax mark-l" x="${X(m.i) + 5}" y="${pt + 11}">${esc(m.label)}</text>`;
   for (const sr of series) {
     const d = sr.values.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join('');
     s += `<path d="${d}" fill="none" stroke="${sr.color}" stroke-width="2" stroke-linejoin="round" class="draw"/>`;
@@ -58,7 +61,8 @@ export function lineChart(el, { x, series, yFmt = fmt, height = 240, label }) {
     const i = Math.max(0, Math.min(x.length - 1, Math.round((px - pl) / (W - pl - pr) * (x.length - 1))));
     xh.setAttribute('x1', X(i)); xh.setAttribute('x2', X(i)); xh.setAttribute('opacity', 1);
     dots.forEach(dn => { const v = series[+dn.dataset.k].values[i]; dn.setAttribute('cx', X(i)); dn.setAttribute('cy', Y(v)); dn.setAttribute('opacity', 1); });
-    showTip(`<b>Week of ${esc(x[i])}</b>${series.map(sr => `<div><i style="background:${sr.color}"></i>${esc(sr.name)} <b>${yFmt(sr.values[i])}</b></div>`).join('')}`, e.clientX, e.clientY);
+    const side = mk.length ? `<div class="fine">${x[i] >= mk[mk.length - 1].x ? 'After' : 'Before'} ${esc(mk[mk.length - 1].label.toLowerCase())}</div>` : '';
+    showTip(`<b>Week of ${esc(x[i])}</b>${side}${series.map(sr => `<div><i style="background:${sr.color}"></i>${esc(sr.name)} <b>${yFmt(sr.values[i])}</b></div>`).join('')}`, e.clientX, e.clientY);
   });
   svg.querySelector('.hit').addEventListener('pointerleave', () => { hideTip(); xh.setAttribute('opacity', 0); dots.forEach(dn => dn.setAttribute('opacity', 0)); });
 }
