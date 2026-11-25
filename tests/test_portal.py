@@ -78,3 +78,17 @@ def test_client_gives_up_on_client_errors(tmp_path):
     p = C.Portal(app_token="", cache_dir=tmp_path, opener=opener, catalog={})
     with pytest.raises(C.PortalError):
         p.query("x-1", cache=False)
+
+
+def test_client_retries_dropped_connections(tmp_path, monkeypatch):
+    import http.client
+    monkeypatch.setattr(C, "BACKOFF", (0.0, 0.0, 0.0))
+    calls = []
+
+    def opener(req, timeout=None):
+        calls.append(1)
+        if len(calls) <= 2:
+            raise http.client.RemoteDisconnected("Remote end closed connection without response")
+        return io.BytesIO(b"n\n7\n")
+    p = C.Portal(app_token="", cache_dir=tmp_path, opener=opener, catalog={})
+    assert p.count("x-1") == 7 and len(calls) == 3

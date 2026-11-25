@@ -12,7 +12,8 @@ What it does that a plain request does not:
     $order (":id" unless you order), so pages neither overlap nor skip rows;
   * converts each column to its portal datatype (number -> float, calendar_date -> datetime,
     checkbox -> bool, text -> string), using the dataset's own column metadata;
-  * retries timeouts, 429 and 5xx with exponential backoff (2, 4, 8 s), never in a tight loop;
+  * retries timeouts, dropped connections, 429 and 5xx with exponential backoff (2, 4, 8 s), never in
+    a tight loop;
   * caches each query on disk (Parquet when pyarrow is installed, else CSV) keyed by the query
     and the dataset's data_updated_at, so a re-run is instant until the City changes the data;
   * reports freshness from the catalog (simchi.portal.catalog) next to every result.
@@ -21,6 +22,7 @@ What it does that a plain request does not:
 from __future__ import annotations
 
 import hashlib
+import http.client
 import io
 import json
 import os
@@ -97,7 +99,7 @@ class Portal:
             except urllib.error.HTTPError as e:
                 if e.code not in (429, 500, 502, 503, 504) or attempt == len(BACKOFF):
                     raise PortalError(f"HTTP {e.code} for {url}") from e
-            except (urllib.error.URLError, TimeoutError) as e:
+            except (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException) as e:   # incl. dropped connections
                 if attempt == len(BACKOFF):
                     raise PortalError(f"{e} for {url}") from e
             time.sleep(BACKOFF[attempt])
