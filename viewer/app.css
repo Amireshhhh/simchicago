@@ -499,3 +499,11 @@ pre.code { background: rgba(0, 0, 0, .3); border: 1px solid var(--line); border-
 .internal-banner { margin: 6px 0 14px; padding: 10px 14px; border-radius: 10px; border: 1px dashed var(--s2, #e0559a); background: rgba(224, 85, 154, .08); font-size: 13px; line-height: 1.45; }
 .sec.internal h2::after { content: 'internal'; margin-left: 10px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; border: 1px dashed currentColor; opacity: .7; vertical-align: middle; }
 .internal-switch { margin: 28px 0 8px; opacity: .85; }
+.promises { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.promise { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--panel, transparent); }
+.promise blockquote { margin: 8px 0; font-size: 13.5px; line-height: 1.45; }
+.promise .ph { display: flex; justify-content: space-between; gap: 8px; align-items: center; font-size: 12px; }
+.pstat { font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 6px; border: 1px solid currentColor; }
+.st-met .pstat { color: #2fae6b; } .st-not-met .pstat, .st-missed .pstat { color: #e0484f; } .st-on-track .pstat { color: #3f7be0; }
+.st-insufficient-data .pstat, .st-not-measurable .pstat { color: var(--muted); }
+.corrections { margin-top: 12px; font-size: 13px; }

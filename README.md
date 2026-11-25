@@ -183,6 +183,23 @@ quantifies what 5-minute polling can recover (gaps undercounted, bunching slight
 `docs/EVALUATION.md`). No observed reliability numbers exist yet: the polling workflow had not
 run when this was written.
 
+## Crash safety layer
+
+`python -m simchi.safety.mirror` mirrors City of Chicago crash, Vision Zero, camera and traffic-count
+data as aggregates (no person-level records); `python -m simchi.safety.crashes` snaps serious
+crashes to street segments and intersections, fits a negative binomial model and ranks sites by
+an empirical-Bayes estimate. The pre-registered test (top 100 sites' share of 2025 serious crashes
+must beat raw counts and the 2024 counts) **fails**: 4.58% vs 4.64% (raw) and 3.66% (2024). Map tab
+→ **Serious crashes**: severity by site, expressways grey (not CPD jurisdiction), a bus-corridor
+filter, "crash concentration" where no traffic count exists, and source, age and method in each
+tooltip. Camera before/after slice: no detectable change around 24 speed cameras.
+
+## Promised vs delivered
+
+`python -m simchi.commitments` computes the status of each commitment in `data/commitments.toml`
+(CTA's Frequent Network standard; Vision Zero Chicago's goals) by fixed rules, never typed in;
+Insights → **Promised vs delivered** shows them with the last-checked date and a corrections log.
+
 ## Internal / not validated
 
 Simulated analyses without a passed, pre-registered test are kept (code and `reports/`) but are

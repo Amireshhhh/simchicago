@@ -1,0 +1,76 @@
+{
+ "crashes": 877921,
+ "crashes_unsnapped": 8227,
+ "crashes_no_location": 7130,
+ "crashes_on_expressway_sites": 11725,
+ "ka_crashes": 16017,
+ "ka_unsnapped": 117,
+ "vision_zero_deaths": 985,
+ "vision_zero_unsnapped": 2,
+ "cameras": {
+  "red_light": 300,
+  "speed": 209
+ },
+ "comparison_pool": 1647,
+ "adt_segments_counted": 661,
+ "sites_with_adt": 414,
+ "crash_date_range": [
+  "2018-01-01 00:00:00",
+  "2025-12-31 23:52:00"
+ ],
+ "vision_zero_date_range": [
+  "2019-01-03 15:01:00",
+  "2025-12-31 17:20:00"
+ ],
+ "downloaded": "2026-11-25",
+ "portal_requests": 38,
+ "queries": {
+  "crashes": {
+   "id": "85ca-t3if",
+   "select": "crash_record_id, crash_date, latitude, longitude, injuries_fatal, injuries_incapacitating, injuries_total",
+   "where": "crash_date >= '2018-01-01T00:00:00' AND crash_date <= '2025-12-31T23:59:59'"
+  },
+  "people": {
+   "id": "u6pd-qa9d",
+   "select": "crash_record_id, person_type, injury_classification, count(*) AS n",
+   "where": "crash_date >= '2018-01-01T00:00:00' AND crash_date <= '2025-12-31T23:59:59' AND injury_classification in ('FATAL', 'INCAPACITATING INJURY')",
+   "group": "crash_record_id, person_type, injury_classification",
+   "order": "crash_record_id, person_type, injury_classification"
+  },
+  "vision_zero": {
+   "id": "gzaz-isa6",
+   "select": "crash_date, latitude, longitude, victim",
+   "where": "crash_date >= '2018-01-01T00:00:00' AND crash_date <= '2025-12-31T23:59:59'"
+  },
+  "speed_cameras": {
+   "id": "4i42-qv3h",
+   "select": "id, address, go_live_date, latitude, longitude"
+  },
+  "red_light_cameras": {
+   "id": "thvf-6diy",
+   "select": "intersection, go_live_date, latitude, longitude"
+  },
+  "speed_violations": {
+   "id": "hhkd-xvj4",
+   "select": "camera_id, date_trunc_ym(violation_date) AS month, sum(violations) AS violations",
+   "where": "violation_date >= '2018-01-01T00:00:00' AND violation_date <= '2025-12-31T23:59:59'",
+   "group": "camera_id, month",
+   "order": "camera_id, month"
+  },
+  "red_light_violations": {
+   "id": "spqx-js37",
+   "select": "camera_id, intersection, date_trunc_ym(violation_date) AS month, sum(violations) AS violations",
+   "where": "violation_date >= '2018-01-01T00:00:00' AND violation_date <= '2025-12-31T23:59:59'",
+   "group": "camera_id, intersection, month",
+   "order": "camera_id, intersection, month"
+  },
+  "adt": {
+   "id": "gc7y-n4xa",
+   "select": "segmentid, direction, midpointlat, midpointlon, avg(vehiclecount) AS mean_count, count(*) AS days",
+   "where": "timestamp < '2025-01-01T00:00:00'",
+   "group": "segmentid, direction, midpointlat, midpointlon",
+   "order": "segmentid, direction, midpointlat, midpointlon"
+  }
+ },
+ "sites": 80077
+}

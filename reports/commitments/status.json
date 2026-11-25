@@ -1,0 +1,180 @@
+{
+ "generated": "2026-11-25",
+ "rules": "docstring of simchi/commitments.py (W5 pre-registration)",
+ "commitments": [
+  {
+   "id": "cta-frequent-network-scheduled",
+   "agency": "Chicago Transit Authority",
+   "quote": "Frequent Network bus routes provide service every 10 minutes or better between 6 a.m. and 9 p.m. on weekdays and 9 a.m. to 9 p.m. on weekends.",
+   "source": "https://www.transitchicago.com/frequent/",
+   "metric": "share of Frequent Network route-direction-hours inside the service windows scheduled at 10 minutes or better",
+   "measured": "CTA GTFS timetable: scheduled trips per route, direction, day type and hour (6 or more trips = 10 min or better)",
+   "measured_from": "data/transit/service.json (GTFS extract, data/sources.toml gtfs_cta); routes and join dates data/frequent_network.toml",
+   "rule": "frequent_scheduled",
+   "source_title": "",
+   "status": "not met",
+   "share_meeting": 0.9994425863991081,
+   "units": 1794,
+   "units_meeting": 1793,
+   "routes_short": {
+    "54": {
+     "meeting": 77,
+     "units": 78
+    }
+   },
+   "routes_checked": [
+    "12",
+    "20",
+    "34",
+    "35",
+    "4",
+    "47",
+    "49",
+    "53",
+    "54",
+    "55",
+    "60",
+    "63",
+    "66",
+    "72",
+    "74",
+    "77",
+    "79",
+    "81",
+    "82",
+    "85",
+    "9",
+    "95",
+    "J14"
+   ],
+   "reference_dates": {
+    "weekday": "2026-11-17",
+    "saturday": "2026-11-21",
+    "sunday": "2026-11-22"
+   },
+   "trips_needed_per_hour": 6.0,
+   "last_checked": "2026-11-25"
+  },
+  {
+   "id": "cta-frequent-network-delivered",
+   "agency": "Chicago Transit Authority",
+   "quote": "Frequent Network bus routes provide service every 10 minutes or better between 6 a.m. and 9 p.m. on weekdays and 9 a.m. to 9 p.m. on weekends.",
+   "source": "https://www.transitchicago.com/frequent/",
+   "metric": "share of eligible Frequent Network route-direction-hours whose delivered headway (from polled positions) is 10 minutes or better",
+   "measured": "CTA Bus Tracker positions polled about every 5 minutes, headways at the route's midpoint, against the same windows (W2)",
+   "measured_from": "reports/reliability/frequent_network.json (polling archive, W2)",
+   "rule": "frequent_delivered",
+   "source_title": "",
+   "status": "insufficient data",
+   "reason": "no polling-archive report yet (W2)",
+   "weeks_observed": null,
+   "last_checked": "2026-11-25"
+  },
+  {
+   "id": "vision-zero-zero-deaths-2026",
+   "agency": "City of Chicago (Vision Zero Chicago)",
+   "quote": "Vision Zero is Chicago's commitment to eliminating death and serious injury from traffic crashes by 2026.",
+   "source": "https://api.chicago.gov/filenet5/servlets/getDocumentContent?applicationId=CompleteStreets&documentId=%7B0031C690-0000-C016-92E9-31618D7320B1%7D",
+   "metric": "traffic deaths in 2026",
+   "measured": "count of Vision Zero fatality records with crash_date in 2026",
+   "measured_from": "City of Chicago data portal gzaz-isa6 (Vision Zero Chicago Traffic Fatalities), aggregate count",
+   "rule": "zero_by_year",
+   "source_title": "Vision Zero Chicago Action Plan 2017-2019 (published June 2017), PDF page 7",
+   "status": "missed",
+   "count": 82.0,
+   "year_complete_in_data": false,
+   "data_through": "2026-09-27",
+   "query": {
+    "dataset": "gzaz-isa6",
+    "count": "count(*)",
+    "year": 2026
+   },
+   "last_checked": "2026-11-25"
+  },
+  {
+   "id": "vision-zero-zero-serious-injuries-2026",
+   "agency": "City of Chicago (Vision Zero Chicago)",
+   "quote": "Vision Zero is Chicago's commitment to eliminating death and serious injury from traffic crashes by 2026.",
+   "source": "https://api.chicago.gov/filenet5/servlets/getDocumentContent?applicationId=CompleteStreets&documentId=%7B0031C690-0000-C016-92E9-31618D7320B1%7D",
+   "metric": "people seriously (incapacitating) injured in traffic crashes in 2026",
+   "measured": "sum of injuries_incapacitating over crash records with crash_date in 2026",
+   "measured_from": "City of Chicago data portal 85ca-t3if (Traffic Crashes - Crashes), aggregate sum",
+   "rule": "zero_by_year",
+   "source_title": "Vision Zero Chicago Action Plan 2017-2019 (published June 2017), PDF page 7",
+   "status": "missed",
+   "count": 1588.0,
+   "year_complete_in_data": false,
+   "data_through": "2026-11-25",
+   "query": {
+    "dataset": "85ca-t3if",
+    "count": "sum(injuries_incapacitating)",
+    "year": 2026
+   },
+   "last_checked": "2026-11-25"
+  },
+  {
+   "id": "vision-zero-deaths-minus-20-by-2020",
+   "agency": "City of Chicago (Vision Zero Chicago)",
+   "quote": "Reduce deaths from traffic crashes 20% citywide by 2020.",
+   "source": "https://api.chicago.gov/filenet5/servlets/getDocumentContent?applicationId=CompleteStreets&documentId=%7B0031C690-0000-C016-92E9-31618D7320B1%7D",
+   "metric": "traffic deaths in 2020 vs a baseline",
+   "measured": "count of Vision Zero fatality records; the plan states no baseline year",
+   "measured_from": "City of Chicago data portal gzaz-isa6",
+   "rule": "reduction_vs_baseline",
+   "source_title": "Vision Zero Chicago Action Plan 2017-2019, Action Plan Benchmarks, PDF pages 7 and 20",
+   "status": "not measurable",
+   "reason": "the source states no baseline year; none is chosen here",
+   "last_checked": "2026-11-25"
+  },
+  {
+   "id": "vision-zero-serious-injuries-minus-35-by-2020",
+   "agency": "City of Chicago (Vision Zero Chicago)",
+   "quote": "Reduce serious injuries from traffic crashes 35% by 2020.",
+   "source": "https://api.chicago.gov/filenet5/servlets/getDocumentContent?applicationId=CompleteStreets&documentId=%7B0031C690-0000-C016-92E9-31618D7320B1%7D",
+   "metric": "serious injuries in 2020 vs a baseline",
+   "measured": "sum of injuries_incapacitating; the plan states no baseline year",
+   "measured_from": "City of Chicago data portal 85ca-t3if",
+   "rule": "reduction_vs_baseline",
+   "source_title": "Vision Zero Chicago Action Plan 2017-2019, Action Plan Benchmarks, PDF pages 7 and 20",
+   "status": "not measurable",
+   "reason": "the source states no baseline year; none is chosen here",
+   "last_checked": "2026-11-25"
+  },
+  {
+   "id": "vision-zero-high-crash-areas-minus-40-by-2020",
+   "agency": "City of Chicago (Vision Zero Chicago)",
+   "quote": "By 2020, Chicago will: Reduce severe crashes in High Crash Areas and High Crash Corridors by 40%.",
+   "source": "https://api.chicago.gov/filenet5/servlets/getDocumentContent?applicationId=CompleteStreets&documentId=%7B0031C690-0000-C016-92E9-31618D7320B1%7D",
+   "metric": "severe crashes in the plan's High Crash Areas and Corridors, 2020 vs a baseline",
+   "measured": "needs the High Crash Area and Corridor boundaries and a baseline year",
+   "measured_from": "not mirrored",
+   "rule": "needs_unmirrored_data",
+   "source_title": "Vision Zero Chicago Action Plan 2017-2019, Goal 1, PDF page 27",
+   "status": "not measurable",
+   "reason": "needs data not in this repository: High Crash Area and High Crash Corridor boundaries (not mirrored); the plan states no baseline year",
+   "last_checked": "2026-11-25"
+  },
+  {
+   "id": "vision-zero-hardship-deaths-minus-25-by-2020",
+   "agency": "City of Chicago (Vision Zero Chicago)",
+   "quote": "By 2020, Chicago will: Reduce traffic crash fatalities for people living in high economic hardship communities by 25%.",
+   "source": "https://api.chicago.gov/filenet5/servlets/getDocumentContent?applicationId=CompleteStreets&documentId=%7B0031C690-0000-C016-92E9-31618D7320B1%7D",
+   "metric": "deaths of residents of high economic hardship communities, 2020 vs a baseline",
+   "measured": "needs each victim's home community, which the public fatality data do not contain",
+   "measured_from": "not available",
+   "rule": "needs_unmirrored_data",
+   "source_title": "Vision Zero Chicago Action Plan 2017-2019, Goal 1, PDF page 27",
+   "status": "not measurable",
+   "reason": "needs data not in this repository: victims' home community (not in the public data); hardship classification; a baseline year",
+   "last_checked": "2026-11-25"
+  }
+ ],
+ "corrections": [
+  {
+   "date": "2026-11-25",
+   "commitment": "(all)",
+   "change": "Log started.",
+   "reason": "Initial version."
+  }
+ ]
+}

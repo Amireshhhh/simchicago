@@ -303,6 +303,23 @@ stop; the network model removes boarding and alighting at the others and subtrac
 20 s of in-vehicle time per skipped stop. Both designs run through the intervention runner
 (§10a): same synthetic populations, paired intervals, same metrics.
 
+## 10d. Crash safety (W4)
+
+Sites are street-extract segments and intersections (end points shared by >= 3 segment ends);
+crashes snap to an intersection within 30 m, else the nearest segment within 50 m. Serious (KA)
+events are Vision Zero fatal crashes plus crash-table incapacitating-injury crashes. NB2 is fitted
+by maximum likelihood (IRLS for the coefficients at each dispersion, a bounded 1-D search for the
+dispersion); the empirical-Bayes estimate is w mu + (1 - w) y with w = 1 / (1 + alpha mu).
+Expressways (classes 1, 9) are not CPD jurisdiction and are excluded. Full design and the test:
+the docstring of `simchi/safety/crashes.py`.
+
+## 10e. Commitments (W5)
+
+Each commitment names a rule; `simchi/commitments.py` computes its status from the named data
+(GTFS extract, portal counts, the W2 report) and records the inputs and the date. A commitment
+whose source states no baseline, or whose data are not public, is "not measurable" rather than
+given an assumed baseline.
+
 ## 11. Viewer
 
 **Frozen: 3D renderer (W7, 2026-11-23).** The three.js views (city.js, scene.js, agents.js,

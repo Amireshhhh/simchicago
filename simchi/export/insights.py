@@ -158,7 +158,8 @@ def service_design_block():
 def build_insights() -> dict:
     return {"schema": "simchi.insights/1", "network": network_block(), "ridership": ridership_block(),
             "validation": validation_block(), "models": models_block(), "interventions": interventions_block(),
-            "ops": ops_block(), "service_design": service_design_block()}
+            "ops": ops_block(), "service_design": service_design_block(), "commitments": _load(REPORTS / "commitments" / "status.json"),
+            "safety": _load(REPORTS / "safety" / "crash_ranking.json")}
 
 
 def export_insights(out: Path | None = None) -> Path:

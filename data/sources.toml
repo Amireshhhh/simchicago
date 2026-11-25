@@ -85,3 +85,68 @@ title = "Street Center Lines (City of Chicago data portal pr57-gg9e, 'transporta
 contents = "56,338 street segments with names, CLASS codes (see the City's centerline metadata PDF) and node ids; 55,773 kept (classes 1,2,3,4,5,7,9,E,RIV), simplified to ~1 m."
 extract = "data/map/streets.json.gz"
 license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+# W4 crash safety layer: aggregates only (no person-level records), built by
+# `python -m simchi.safety.mirror` from the City of Chicago data portal; queries in
+# data/raw/mirror/safety/summary.json. License: City of Chicago Data Terms of Use.
+
+[safety_site_year]
+file = "data/raw/mirror/safety/site_year.csv.gz"
+sha256 = "4258a4196431642f16b3769133c92899b7e1890adf47edf68678dab0b4ba65be"
+title = "Crash-table crashes per snapped site and year (counts only): crashes, injury crashes, A crashes (incapacitating, no fatal), CPD-recorded fatal crashes, pedestrian/cyclist KA from u6pd-qa9d aggregated per crash"
+source = "City of Chicago data portal 85ca-t3if + u6pd-qa9d"
+downloaded = "2026-11-25"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_vz_site_year]
+file = "data/raw/mirror/safety/vz_site_year.csv.gz"
+sha256 = "cfcf28e5c13496c0c361143c6d5121f5bcec6f55d0798e6532cde01b3f16c941"
+title = "Vision Zero Chicago traffic fatalities (gzaz-isa6) per snapped site and year: deaths and fatal crashes (same minute and site = one crash); dataset begins 2019-01-03"
+source = "City of Chicago data portal gzaz-isa6"
+downloaded = "2026-11-25"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_radial_month]
+file = "data/raw/mirror/safety/radial_month.csv.gz"
+sha256 = "6fe95dbd55ea6a584f7abf92ab89f296ca116a82b240a530e66797af402ee025"
+title = "Crash-table crashes and KA crashes per month within 201.2 m (660 ft) of each camera and comparison-pool intersection (rows with no crash omitted)"
+source = "City of Chicago data portal 85ca-t3if"
+downloaded = "2026-11-25"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_comparison_pool]
+file = "data/raw/mirror/safety/comparison_pool.csv.gz"
+sha256 = "3c1c2963e0a553c6384dbe8cd76409022a42d4f7deb0ae62279558d3eea2cbb4"
+title = "Comparison-pool intersections for the camera slice (class-2 leg, no camera within 805 m)"
+source = "City of Chicago data portal derived (streets + cameras)"
+downloaded = "2026-11-25"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_cameras]
+file = "data/raw/mirror/safety/cameras.csv.gz"
+sha256 = "1d145da1fc22d242ca554603a6862148b2cf9d8b61b799fa1f23e7cb333cf467"
+title = "Speed (4i42-qv3h) and red-light (thvf-6diy) camera locations and go-live dates (public locations, no personal data)"
+source = "City of Chicago data portal 4i42-qv3h + thvf-6diy"
+downloaded = "2026-11-25"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_violations_month]
+file = "data/raw/mirror/safety/violations_month.csv.gz"
+sha256 = "10dc82d2c1735468fcb2475fe66d9b42e9464773bf4548d2e1f39196ff808638"
+title = "Camera violations per camera and month (hhkd-xvj4, spqx-js37), context only"
+source = "City of Chicago data portal hhkd-xvj4 + spqx-js37"
+downloaded = "2026-11-25"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_site_adt]
+file = "data/raw/mirror/safety/site_adt.csv.gz"
+sha256 = "f351282d836df95e764873998f1fc66af16b5269d50fb263ab3f403c7a073e95"
+title = "Mean daily vehicles per counted street segment (gc7y-n4xa, days before 2025-01-01, directions summed), snapped to sites"
+source = "City of Chicago data portal gc7y-n4xa"
+downloaded = "2026-11-25"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_summary]
+file = "data/raw/mirror/safety/summary.json"
+sha256 = "8f94190c25b78ad19a011a98939b229f88d87626b788e54b4bd0e9a55b5c0d10"
+title = "Row counts, unsnapped tallies, date ranges and the exact portal queries of the safety mirror"

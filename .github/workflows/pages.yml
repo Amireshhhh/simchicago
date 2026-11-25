@@ -37,6 +37,9 @@ jobs:
       - name: Tests
         run: python -m pytest -q -p no:cacheprovider
 
+      - name: Commitment statuses (computed by the rules in simchi/commitments.py; portal counts)
+        run: python -m simchi.commitments || echo "commitments refresh failed; using the committed reports/commitments/status.json"
+
       - name: Simulate (default week, comparison runs, experiments) and export
         run: python -m simchi.cli demo --replicates 5
 

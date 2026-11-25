@@ -15,7 +15,7 @@ const status = p => p === null || p === undefined ? '<span class="st info"><b>i<
   : p ? '<span class="st good"><b>✓</b>Pass</span>' : '<span class="st bad"><b>✕</b>Fail</span>';
 
 const shortIv = n => n.startsWith('Frequent network') ? 'Top-10 bus routes, headways ×0.75' : n.startsWith('All buses') ? 'All buses, headways ×0.8' : n.startsWith("All 'L'") ? "All 'L' lines, headways ×0.8" : n;
-const SECTIONS = [['ridership', 'Ridership'], ['validation', 'Model vs reality'], ['operations', 'Operations'], ['reliability', 'Reliability']];
+const SECTIONS = [['ridership', 'Ridership'], ['validation', 'Model vs reality'], ['promises', 'Promised vs delivered'], ['operations', 'Operations'], ['reliability', 'Reliability']];
 // Internal / not validated: simulated analyses whose effects have no held-out test (intervention
 // ranking, fare scenarios, the response of trips to service, service-design scenarios). Off by
 // default; the code and reports are kept. A per-browser switch shows them, each with a banner.
@@ -24,12 +24,20 @@ export function internalOn() { try { return localStorage.getItem('simchi-interna
 function setInternal(v) { try { localStorage.setItem('simchi-internal', v ? '1' : '0'); } catch { /* storage unavailable */ } }
 const banner = why => `<div class="internal-banner" role="note"><b>Internal · not validated.</b> ${why}</div>`;
 
+function promiseDetail(c) {
+  if (c.rule === 'frequent_scheduled') return `${c.units_meeting.toLocaleString('en-US')} of ${c.units.toLocaleString('en-US')} route-direction-hours in the service windows are scheduled at 10 minutes or better (${(c.share_meeting * 100).toFixed(1)}%), ${c.routes_checked.length} routes, CTA timetable for the week of ${esc(c.reference_dates.weekday)}.${Object.keys(c.routes_short).length ? ' Short: ' + Object.entries(c.routes_short).map(([r, v]) => `#${esc(r)} (${v.units - v.meeting} of ${v.units})`).join(', ') + '.' : ''}`;
+  if (c.rule === 'zero_by_year') return `${Math.round(c.count).toLocaleString('en-US')} in ${esc(String(c.query.year))} so far (data through ${esc(c.data_through)}).`;
+  if (c.reason) return esc(c.reason) + (c.weeks_observed != null ? ` (${c.weeks_observed} weeks observed)` : '');
+  return c.share_meeting != null ? `${(c.share_meeting * 100).toFixed(1)}% of ${c.units} units meet it.` : '';
+}
+
 export function renderInsights(root, I) {
   if (!I) { root.innerHTML = '<div class="page-inner"><h1>Insights</h1><p>No insights export found (data/insights.json). Run <code>python -m simchi.cli demo</code>.</p></div>'; return; }
   const internal = internalOn();
   const R = I.ridership, V = I.validation || [], M = I.models || {}, O = I.ops || {};
   const IV = internal ? I.interventions : null, SD = internal ? I.service_design : null;
-  const NAV = internal ? [...SECTIONS.slice(0, 2), ...INTERNAL_SECTIONS, ...SECTIONS.slice(2)] : SECTIONS;
+  const NAV = internal ? [...SECTIONS.slice(0, 3), ...INTERNAL_SECTIONS, ...SECTIONS.slice(3)] : SECTIONS;
+  const CM = I.commitments;
   const nPass = V.filter(c => c.pass === true).length, nFail = V.filter(c => c.pass === false).length;
   const rv = M.ridership_validation || {};
   root.innerHTML = `<div class="page-inner">
@@ -64,6 +72,17 @@ export function renderInsights(root, I) {
       <div class="grid2"><div id="chRvBus"></div><div id="chRvRail"></div></div>
       <p class="note">Simulation + schedule beats the schedule alone on bus routes (pass) but not on 'L' stations (fail). Each unit's own 2025 ridership predicts its 2026 ridership far better (${rv.bus ? rv.bus.persistence.toFixed(3) : '–'} bus, ${rv.rail ? rv.rail.persistence.toFixed(3) : '–'} 'L'): the model is for routes, places and scenarios without history.</p></div>
     <div class="scorecard">${V.map(c => `<div class="sc ${c.pass === false ? 'fail' : ''}"><div class="sch">${status(c.pass)}<span class="grp">${esc(c.group)}</span></div><h4>${esc(c.label)}</h4><p>${esc(c.summary)}</p></div>`).join('')}</div>
+  </section>
+  <section id="sec-promises" class="sec">
+    <h2>Promised vs delivered ${chip('observed')} ${chip('scheduled')}</h2>
+    ${CM ? `<p class="sub">Each public commitment, where it was published, how it is measured, and a status computed by fixed rules (never typed in). Last checked ${esc(CM.generated)}.</p>
+    <div class="promises">${CM.commitments.map(c => `<div class="promise st-${esc(c.status.replace(/ /g, '-'))}">
+      <div class="ph"><span class="pstat">${esc(c.status)}</span><span class="pag">${esc(c.agency)}</span></div>
+      <blockquote>“${esc(c.quote)}”</blockquote>
+      <p class="fine">${promiseDetail(c)}</p>
+      <p class="fine">Metric: ${esc(c.metric)}. Measured from: ${esc(c.measured_from)}. <a href="${esc(c.source)}" target="_blank" rel="noopener">Source</a>${c.source_title ? ` (${esc(c.source_title)})` : ''} · last checked ${esc(c.last_checked)}</p></div>`).join('')}</div>
+    <details class="corrections"><summary>Corrections log (${CM.corrections.length})</summary><ul>${CM.corrections.map(k => `<li><b>${esc(k.date)}</b> · ${esc(k.commitment)}: ${esc(k.change)} <span class="fine">(${esc(k.reason)})</span></li>`).join('')}</ul></details>` :
+      '<div class="empty">No commitments report yet (<code>python -m simchi.commitments</code>).</div>'}
   </section>
   ${internal ? `<section id="sec-response" class="sec internal">
     <h2>Response to service ${chip('simulated')}</h2>

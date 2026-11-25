@@ -5,8 +5,8 @@ and the experiment runs in `reports/experiments/*/experiment.json`, on the defau
 2,000 requested agents (1,944 drawn, standing for 2,589,487 household residents), seed 1.
 
 Every model check is **out of sample** and compares against a **simple baseline**, with the
-pass criterion fixed before the results were seen. Two checks fail their criterion (commute
-destinations; the simulated holding test); they are reported as failures, not re-defined. The
+pass criterion fixed before the results were seen. Three checks fail their criterion (commute
+destinations; the simulated holding test; the W4 crash ranking); they are reported as failures, not re-defined. The
 'L' ridership check failed under the superseded design (2024 vs 2025-26 counts, mixed counting
 methods) and passes narrowly under the W1 re-baseline; both results are kept below. v0.3 workstream 2 replaced the
 distance-based mode choice and travel times by CTA-network ones; the two checks that failed in
@@ -31,6 +31,7 @@ criteria and now pass (numbers below).
 | Crowding forecast, bus routes (one week ahead, Jan-Aug 2026) | log error 0.1339 vs 0.1569 (same day last week), 27,946 forecasts | below the baseline | **pass** |
 | Crowding forecast, 'L' stations | 0.1280 vs 0.1508, 34,992 forecasts | below the baseline | **pass** |
 | Holding rule (simulated, pre-registered) | mean passenger wait +2.58 min [+1.57, +3.59]; after a later start-up fix −0.94 [−1.80, −0.09] | 95% interval below 0 | **fail** |
+| Crash ranking (W4: empirical Bayes on 2018-2024, test 2025; pre-registered cb367e0) | top 100 sites hold 4.58% of 2025 serious crashes (70 of 1,530) vs 4.64% (71) raw 2018-2024 counts and 3.66% (56) 2024 counts | beat both | **fail** |
 | Anomaly detectors (simulated feed, constructed labels) | precision / recall: jump 1.00 / 0.96, stuck 1.00 / 0.79, off route 0.98 / 0.78, outage 0.75 / 1.00 | none (reported) | info |
 | Engine invariants (3-day run, 5,832 agent-days; 2-day CRN and repeat runs) | every day plan partitions [0, 1440]; safety stays in [0, 1]; no behavioural response ≡ no incidents; runs are deterministic | all hold | **pass** |
 
@@ -190,6 +191,65 @@ typical factor of e^0.45 ≈ 1.57).
   ranges over seeds 0.441-0.458 (bus; all below B_service 0.476) and
   0.496-0.506 ('L'; B_service 0.496). With 2,000 agents, route-level predictions
   from the agents themselves are noisy; the expected (analytic) OD above has no sampling noise.
+
+## Crash safety layer (W4)
+
+`python -m simchi.safety.mirror` (→ `data/raw/mirror/safety/`, aggregates only, pinned in
+`data/sources.toml`) and `python -m simchi.safety.crashes` (→ `reports/safety/crash_ranking.json`,
+`reports/safety/sites.csv.gz`). Design and pass criterion: docstring of
+`simchi/safety/crashes.py`, committed as cb367e0 ("W4 pre-registration") before any crash,
+fatality, camera or volume value was downloaded.
+
+**Data.** 877,921 crashes 2018-2025 (85ca-t3if); 7,130 have no location and 1,097 more lie more
+than 50 m from any street, so 8,227 (0.9%) are unsnapped, including 117 of 16,017 KA crashes.
+11,725 snap to expressways or ramps (not CPD jurisdiction; excluded). 985 Vision Zero deaths, 2 unsnapped.
+80,077 sites (54,309 segments, 25,768 intersections), 76,522 ranked after excluding 3,555
+expressway sites. Traffic counts (gc7y-n4xa, camera-derived, from October 2020) reach 414
+segments, so 987 ranked sites have a volume and the rest are "crash concentration" on the map.
+
+**Deviation found after pre-registration (reported, not corrected).** The Vision Zero dataset
+begins 2019-01-03, so 2018 has no K (death) events and its KA counts are A crashes only. The
+design was run as registered; this lowers the 2018 contribution to all three rankings' training
+data and does not touch the 2025 outcome.
+
+**Result.** 1,530 KA events in 2025 at ranked sites.
+
+| Top k | Empirical Bayes | Raw 2018-2024 | 2024 only |
+|---|---|---|---|
+| 50 | 2.61% (40) | 2.81% (43) | 2.42% (37) |
+| **100 (criterion)** | **4.58% (70)** | **4.64% (71)** | 3.66% (56) |
+| 200 | 8.10% (124) | 7.91% (121) | 5.95% (91) |
+
+**Fail**: the empirical-Bayes ranking beats the 2024-only ranking but not raw counts (70 vs 71
+events at the pre-registered top 100). It leads at the top 200, which is reported but is not the
+criterion. The two top-100 lists share 86 sites. Serious crashes are spread thinly: the top 100
+of 76,522 sites hold under 5% of them. Model: NB2, alpha 1.237; coefficients in the report.
+Lanes are not in the model (no lane data for sites; not imputed).
+
+**Camera slice (descriptive).** 24 speed cameras went live in 2019-2024; no red-light camera did.
+Within 660 ft, 12 months before vs after, against 3 matched intersections each (from 1,647 with
+no camera within 1/2 mile): ratio of ratios 1.00 [0.90, 1.12] for all crashes (852 → 869 at
+cameras, 2,550 → 2,590 at comparisons) and 1.15 [0.45, 2.34] for KA crashes (10 → 10; 55 → 48).
+No change is detectable; the KA counts are too small to say more. Violation counts are mirrored
+for context only.
+
+`python -m simchi.briefs crash-ranking` refuses to write a brief, because the test failed.
+
+## Promised vs delivered (W5)
+
+`python -m simchi.commitments` (→ `reports/commitments/status.json`); rules in the docstring of
+`simchi/commitments.py`, committed as a87759c ("W5 pre-registration") before any status was
+computed; commitments in `data/commitments.toml`, Frequent Network routes and dates in
+`data/frequent_network.toml` (CTA pages, read 2026-11-23). Statuses on 2026-11-25:
+
+| Commitment | Status | Computed from |
+|---|---|---|
+| CTA Frequent Network, scheduled (10 min or better, 6-21 h weekdays, 9-21 h weekends) | not met | 1,793 of 1,794 route-direction-hours (99.9%) on 23 routes in the current timetable; the one short hour is #54 Cicero, direction 1, Sunday 20-21 h (5 trips, 12 min) |
+| CTA Frequent Network, delivered | insufficient data | needs the W2 archive's pre-registered 8 weeks |
+| Vision Zero: no traffic deaths in 2026 | missed | 82 deaths in 2026 (Vision Zero data through 2026-09-27) |
+| Vision Zero: no serious injuries in 2026 | missed | 1,588 incapacitating injuries in 2026 (crash data through 2026-11-25) |
+| Deaths -20% and serious injuries -35% by 2020 | not measurable | the plan states no baseline year |
+| High Crash Areas -40%; hardship-community deaths -25% by 2020 | not measurable | area boundaries not mirrored; victims' home community is not public |
 
 ## Service reliability (scheduled vs observed)
 

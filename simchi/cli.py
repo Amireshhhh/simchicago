@@ -87,6 +87,8 @@ def cmd_demo(args):
     print("insights:", export_insights())
     from simchi.export.mapdata import export_map
     print("2D map data:", export_map())
+    from simchi.safety.export import export_layer as export_safety
+    print("crash safety layer:", export_safety())
     from simchi.portal.catalog import export_viewer as export_catalog
     print("portal catalog:", export_catalog())
 
@@ -123,6 +125,8 @@ def cmd_export(args):
     print("insights:", export_insights())
     from simchi.export.mapdata import export_map
     print("2D map data:", export_map())
+    from simchi.safety.export import export_layer as export_safety
+    print("crash safety layer:", export_safety())
     from simchi.portal.catalog import export_viewer as export_catalog
     print("portal catalog:", export_catalog())
 

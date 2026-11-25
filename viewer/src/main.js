@@ -399,7 +399,7 @@ async function ensureMap() {
   const url = './map.js';
   mapLoading = import(url).then(mod => {
     mapApi = mod.createMap($('#mapCanvas'), { theme, originUtm: D.meta.origin_utm16n, toLonLat: (x, z) => localToLonLat(x, z, D.meta.origin_utm16n) });
-    document.querySelectorAll('.map-panel [data-layer]').forEach(cb => { mapApi.setVisible(cb.dataset.layer, cb.checked); cb.onchange = () => { mapApi.setVisible(cb.dataset.layer, cb.checked); if (cb.dataset.layer === 'benches' && cb.checked) loadBenches(); }; });
+    document.querySelectorAll('.map-panel [data-layer]').forEach(cb => { mapApi.setVisible(cb.dataset.layer, cb.checked); cb.onchange = () => { mapApi.setVisible(cb.dataset.layer, cb.checked); if (cb.dataset.layer === 'benches' && cb.checked) loadBenches(); if (cb.dataset.layer === 'safety') { $('#safetyOpts').hidden = !cb.checked; if (cb.checked) loadSafety(); } }; });
     setupRoutePicker();
     mapApi.onFollowChange(renderFollow);
     $('#onlyFollowed').onchange = e => mapApi.setOnlyFollowed(e.target.checked);
@@ -519,6 +519,18 @@ function renderFollow(list) {
   document.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => mapApi.unfollow(b.dataset.rm));
 }
 
+let safetyFc = null;
+async function loadSafety() {
+  if (!mapApi) return;
+  if (!safetyFc) {
+    try { const r = await fetch('data/map/safety.json'); if (!r.ok) throw new Error(`HTTP ${r.status}`); safetyFc = await r.json(); }
+    catch { toast('No crash safety layer published yet.'); return; }
+    const m = safetyFc.meta, sh = m.test.share;
+    $('#safetyNote').innerHTML += ` ${safetyFc.features.length.toLocaleString('en-US')} sites with a serious crash, data through ${esc(m.data_through)}. Ranking test on 2025 ${m.test.pass ? 'passed' : '<b>failed</b>'}: the top 100 sites by empirical Bayes held ${(sh.EB * 100).toFixed(2)}% of 2025 serious crashes, raw counts ${(sh.raw * 100).toFixed(2)}%, 2024 alone ${(sh.y2024 * 100).toFixed(2)}%.`;
+    $('#safetyBus').onchange = e => mapApi.setSafety(null, e.target.checked);
+  }
+  mapApi.setSafety(safetyFc, $('#safetyBus').checked);
+}
 let benchesLoaded = false;
 async function loadBenches() {
   if (benchesLoaded || !mapApi) return;

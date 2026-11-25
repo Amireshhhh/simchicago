@@ -16,6 +16,9 @@ access is needed to build or run anything.
 | `crimes_all_by_area`, `crimes_cta_by_area` | `data/raw/mirror/crimes_*_by_area.csv.gz` (13 kB) | City of Chicago data portal ijzp-q8t2 (CPD reported crimes), 12 months to 31 Oct 2026, **counts only**, by community area and primary type (and location description for locations starting with "CTA") | descriptive crime join of the reliability report (not causal) |
 | `street_centerlines` | not stored; derived `data/map/streets.json.gz` (1.2 MB) | City of Chicago Street Center Lines (pr57-gg9e): 56,338 segments with names, CLASS codes (City metadata PDF), node ids | 2D map basemap; future street-network routing |
 | portal catalog | `data/portal/catalog.json.gz` (0.4 MB, metadata only) | City of Chicago data portal catalog API: every dataset's name, category, columns and types, last data change, declared update frequency, page views | Data tab; `simchi.portal` client typing and freshness |
+| `safety_*` (W4) | `data/raw/mirror/safety/*.csv.gz` (1.6 MB) | City of Chicago data portal, downloaded 2026-11-25, **aggregates only**: crashes per site and year (85ca-t3if, 2018-2025, 877,921 crashes; people u6pd-qa9d reduced to pedestrian/cyclist KA counts per crash), Vision Zero deaths per site and year (gzaz-isa6, **begins 2019-01-03**), crashes per month within 660 ft of cameras and comparison intersections, camera locations (4i42-qv3h, thvf-6diy), violations per camera-month (hhkd-xvj4, spqx-js37; context only), mean daily traffic per counted segment (gc7y-n4xa, before 2025) | crash safety layer and its pre-registered test |
+| `commitments` | `data/commitments.toml` | public commitments with quote, source URL (and PDF page), metric, measurement and source data; statuses are computed, never typed | promised vs delivered (W5) |
+| `frequent_network` | `data/frequent_network.toml` | CTA Frequent Network standard, 24 routes and join dates, transcribed from transitchicago.com pages read 2026-11-23 (one phase's exact date not found: recorded as a window) | Frequent Network checks (W2, W5) |
 | landmarks | `data/reference/landmarks.json` | 5 tallest buildings: name, height, coordinates | viewer only; copied from the v0.1 export (which cites Wikipedia, 2026-10-14), not re-verified |
 
 ## Method break in CTA ridership (2025-01-01)
@@ -50,7 +53,8 @@ difference is not explained by the published note.
 
 ## City of Chicago data portal: terms
 
-The portal's datasets used here (community areas, CPD records, CTA ridership) are published
+The portal's datasets used here (community areas, CPD records, CTA ridership, traffic crashes,
+Vision Zero fatalities, camera locations and violations, traffic counts) are published
 under the City of Chicago Data Terms of Use (https://www.chicago.gov/city/en/narr/foia/data_disclaimer.html,
 read 2026-11-12). They ask any secondary or derivative application to display this disclaimer
 where it can be accessed, which the viewer (footer) and the README do:

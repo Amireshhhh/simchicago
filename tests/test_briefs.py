@@ -62,3 +62,16 @@ def test_cli_exits_nonzero_when_a_named_brief_is_refused(tmp_path, monkeypatch):
     _crowding(tmp_path, bus_pass=True)
     B.main(["crowding-forecast"])
     assert (tmp_path / "briefs" / "crowding-forecast.md").exists()
+
+
+def test_cli_sees_findings_registered_by_other_modules_and_refuses_failed_crash_ranking(tmp_path):
+    import subprocess
+    import sys
+    rep = tmp_path / "safety"
+    rep.mkdir()
+    (rep / "crash_ranking.json").write_text(json.dumps({"test": {"pass": False}}))
+    code = (f"import simchi.briefs as B, pathlib; B.REPORTS = pathlib.Path({str(tmp_path)!r}); "
+            f"B.BRIEFS_DIR = pathlib.Path({str(tmp_path / 'out')!r}); B.main(['crash-ranking'])")
+    r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+    assert r.returncode == 1 and "did not pass" in r.stdout and "unknown" not in r.stdout
+    assert not (tmp_path / "out").exists()

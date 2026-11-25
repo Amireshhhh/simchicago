@@ -219,8 +219,12 @@ def _load_extra_findings():
     for mod in ("simchi.safety.briefs", "simchi.transit.briefs"):
         try:
             importlib.import_module(mod)
-        except ModuleNotFoundError:
-            pass
+        except ModuleNotFoundError as e:
+            if e.name != mod:
+                raise
+    canonical = importlib.import_module("simchi.briefs")      # under `python -m` this module is __main__
+    if canonical.FINDINGS is not FINDINGS:
+        FINDINGS.update(canonical.FINDINGS)
 
 
 if __name__ == "__main__":

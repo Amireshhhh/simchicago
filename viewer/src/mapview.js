@@ -32,6 +32,7 @@ function style(t) {
       residents: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
       benches: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
       rstops: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+      safety: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
       mystop: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
     },
     layers: [
@@ -55,6 +56,13 @@ function style(t) {
       { id: 'cta-rail', type: 'line', source: 'cta', filter: ['==', ['get', 'kind'], 'rail'], paint: { 'line-color': ['get', 'color'], 'line-width': w(9, 2, 17, 7) } },
       { id: 'stations', type: 'circle', source: 'cta', filter: ['==', ['get', 'kind'], 'station'],
         paint: { 'circle-radius': w(10, 2, 17, 7), 'circle-color': '#ffffff', 'circle-stroke-color': '#222a36', 'circle-stroke-width': 1.5 } },
+      // crash safety (W4): expressways grey (not CPD jurisdiction) and serious-crash sites by EB score
+      { id: 'safety-expressway', type: 'line', source: 'streets', layout: { visibility: 'none' }, filter: ['in', ['get', 'c'], ['literal', ['1', '9']]],
+        paint: { 'line-color': '#8a8f98', 'line-width': w(9, 2, 17, 14), 'line-opacity': 0.85 } },
+      { id: 'safety', type: 'circle', source: 'safety', layout: { visibility: 'none' },
+        paint: { 'circle-radius': ['interpolate', ['linear'], ['get', 'eb'], 0, 2, 2, 4, 6, 8, 15, 13],
+          'circle-color': ['interpolate', ['linear'], ['get', 'eb'], 0, '#f3c26b', 2, '#e8802e', 5, '#d6342c', 10, '#7a0d2a'],
+          'circle-opacity': 0.85, 'circle-stroke-color': ['case', ['get', 'top100'], '#111827', '#ffffff'], 'circle-stroke-width': ['case', ['get', 'top100'], 2, 0.6] } },
       { id: 'benches', type: 'circle', source: 'benches', minzoom: 12, paint: { 'circle-radius': w(12, 1.8, 18, 6), 'circle-color': ['get', 'color'], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 0.8 } },
       { id: 'residents', type: 'circle', source: 'residents', paint: { 'circle-radius': w(10, 2, 17, 6), 'circle-color': ['get', 'color'], 'circle-opacity': t.resident,
         'circle-stroke-color': '#ffffff', 'circle-stroke-width': 0.6 } },
@@ -188,6 +196,13 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
   map.on('mouseleave', 'rstops', () => { map.getCanvas().style.cursor = ''; });
   tip('stations', p => `<b>${esc(p.name)}</b><br><span class="fine">'L' station · scheduled (GTFS)</span>`);
   tip('residents', p => `<b>Synthetic resident</b><br>${esc(p.kind)}${p.mode ? ' · ' + esc(p.mode) : ''}<br><span class="fine">Simulated, not a real person</span>`);
+  let safetyMeta = null;
+  tip('safety', p => `<b>${esc(p.name || (p.type === 'intersection' ? 'Intersection' : 'Street segment'))}</b><br>
+    Serious crashes 2018-2024: ${p.k} fatal (Vision Zero) + ${p.a} incapacitating; ${p.crashes} crashes of any severity<br>
+    Empirical-Bayes score ${(+p.eb).toFixed(2)}${p.top100 === true || p.top100 === 'true' ? ' · top 100' : ''}<br>
+    ${p.volume === true || p.volume === 'true' ? '' : '<b>Crash concentration</b>: no traffic count here, so this is not a rate per vehicle.<br>'}
+    <span class="fine">${safetyMeta ? `Source: ${esc(safetyMeta.source)}. Data through ${esc(safetyMeta.data_through)} (downloaded ${esc(safetyMeta.downloaded)}; Vision Zero from ${esc(safetyMeta.vision_zero_starts)}). Method: ${esc(safetyMeta.method)}. Ranking test on 2025: ${safetyMeta.test.pass ? 'passed' : 'failed (empirical Bayes did not beat raw counts)'}.` : ''}</span>`);
+  tip('safety-expressway', () => `<b>Expressway or ramp</b><br>Not CPD jurisdiction: not ranked in the crash layer.`);
   tip('benches', p => `<b>${esc(p.kind || 'Bench')}</b><br><span class="fine">Source: ${esc(p.source)}${p.note ? ' · ' + esc(p.note) : ''}</span>`);
   tip('cta-rail', p => `<b>${esc(p.name)}</b><br><span class="fine">CTA 'L' · scheduled (GTFS)</span>`);
   tip('cta-bus', p => `<b>Bus ${esc(p.route)} ${esc(p.name)}</b><br><span class="fine">Scheduled (GTFS)</span>`);
@@ -211,7 +226,7 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
   setTheme(theme);
 
   function setVisible(id, on) {
-    const ids = { bus: ['cta-bus'], rail: ['cta-rail', 'cta-rail-case', 'stations'], live: ['live', 'live-badge', 'live-arrow', 'live-follow'], residents: ['residents'],
+    const ids = { bus: ['cta-bus'], rail: ['cta-rail', 'cta-rail-case', 'stations'], live: ['live', 'live-badge', 'live-arrow', 'live-follow'], residents: ['residents'], safety: ['safety', 'safety-expressway'],
       streets: ['st-minor', 'st-minor-case', 'st-coll', 'st-art', 'st-art-case', 'st-exp', 'st-ramp'], areas: ['areas-line'], benches: ['benches'] }[id] || [id];
     const go = () => ids.forEach(l => map.getLayer(l) && map.setLayoutProperty(l, 'visibility', on ? 'visible' : 'none'));
     ready ? go() : map.once('load', go);
@@ -302,9 +317,14 @@ export function createMap(el, { theme = 'real', originUtm, toLonLat, onReady } =
     const go = () => map.getSource('mystop').setData({ type: 'FeatureCollection', features: st ? [{ type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [st.lon, st.lat] } }] : [] });
     ready ? go() : map.once('load', go);
   }
+  function setSafety(fc, busOnly = false) {
+    const go = () => { if (fc) { safetyMeta = fc.meta; map.getSource('safety').setData(fc); }
+      map.setFilter('safety', busOnly ? ['==', ['get', 'bus'], true] : null); };
+    ready ? go() : map.once('load', go);
+  }
   function setBenches(fc) { const go = () => map.getSource('benches').setData(fc); ready ? go() : map.once('load', go); }
 
-  return { map, setTheme, setVisible, setLive, tick, showRouteStops, setMyStop, onStopClick: fn => { onStop = fn; }, liveVehicles: () => (snap ? snap.vehicles : []), liveSnapshot: () => snap,
+  return { map, setSafety, setTheme, setVisible, setLive, tick, showRouteStops, setMyStop, onStopClick: fn => { onStop = fn; }, liveVehicles: () => (snap ? snap.vehicles : []), liveSnapshot: () => snap,
     flyTo: (lon, lat, z = 15) => map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), z), speed: 1.4 }), follow, unfollow, flyToVehicle, setRouteFilter, setOnlyFollowed, setSpeed: v => { const now = Date.now(); if (snap && v > 0 && speed > 0) { const pl = snap.poll_times_utc.map(x => Date.parse(x)); const cur = playbackTime(pl[0], pl[pl.length - 1], loadedMs, now, speed).t; loadedMs = now - (cur - pl[0]) / v; } if (v > 0 && speed === 0) loadedMs = now; speed = v; tick(now, true); }, onFollowChange: fn => { onFollow = fn; },
     routes: () => Object.keys(lineColor), setResidents, setBenches, resize: () => map.resize(), drawLabels, originUtm };
 }
