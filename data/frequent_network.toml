@@ -1,0 +1,63 @@
+# CTA Frequent Network: the service standard, its routes and when each joined.
+# Transcribed from CTA's own pages, read 2026-11-23 (URLs below); every fact names its source.
+# Not typed from memory. Join dates are the dates CTA announced for the new schedules;
+# effective_by is the latest date by which a route is in the network (used by the code).
+
+[standard]
+headway_max_min = 10
+weekday_window = [6, 21]        # 6 a.m. to 9 p.m.
+weekend_window = [9, 21]        # 9 a.m. to 9 p.m. (Saturday and Sunday)
+quote = "Frequent Network bus routes provide service every 10 minutes or better between 6 a.m. and 9 p.m. on weekdays and 9 a.m. to 9 p.m. on weekends."
+source = "https://www.transitchicago.com/frequent/"
+read = "2026-11-23"
+
+[[phase]]
+joined = "2025-03-23"
+effective_by = "2025-03-23"
+routes = ["J14", "34", "47", "54", "60", "63", "79", "95"]
+quote = "Eight bus routes will be part of the initial phase of the Frequent Network, with new schedules going into effect on March 23. ... J14 Jeffery Jump #34 South Michigan #47 47th Street #54 Cicero #60 Blue Island/26th #63 63rd Street #79 79th Street #95 95th Street"
+source = "https://www.transitchicago.com/cta-launches-new-frequent-network-for-buses/"
+published = "2025-03-02"
+
+[[phase]]
+# CTA's 2025-08-14 release says the network reached 16 routes on 2025-08-17 with the four routes
+# of the next phase, so these four joined after 2025-03-23 and on or before 2025-08-17. The release
+# announcing them was not located on transitchicago.com (sitemap and news search, 2026-11-23).
+joined = "unknown, between 2025-03-23 and 2025-08-17"
+effective_by = "2025-08-17"     # latest possible join date
+routes = ["4", "20", "49", "66"]
+quote = "Frequent routes #4 Cottage Grove ... #20 Madison ... #49 Western ... #66 Chicago (route list on the Frequent Network page)"
+source = "https://www.transitchicago.com/frequent/"
+
+[[phase]]
+joined = "2025-08-17"
+effective_by = "2025-08-17"
+routes = ["53", "55", "77", "82"]
+quote = "At the start of service on Sunday, August 17, the following four bus routes will operate as part of the Frequent Network: #53 Pulaski ... #55 Garfield ... #77 Belmont ... #82 Kimball/Homan ... bringing the Frequent Network to a total of 16 routes."
+source = "https://www.transitchicago.com/cta-to-improve-service-on-key-bus-routes-throughout-the-region/"
+published = "2025-08-14"
+
+[[phase]]
+joined = "2025-12-21"
+effective_by = "2025-12-21"
+routes = ["9", "12", "72", "81"]
+quote = "Beginning December 21, the final four routes of the initial 20 routes for 2025 will be joining the Frequent Network: #9 Ashland ... #12 Roosevelt ... #72 North ... #81 Lawrence"
+source = "https://www.transitchicago.com/cta-ready-to-close-out-2025-with-full-frequent-network-and-expanded-service-on-additional-bus-routes/"
+published = "2025-12-17"
+
+[[phase]]
+joined = "2026-08-23"
+effective_by = "2026-08-23"
+routes = ["35", "74", "85"]
+quote = "Beginning August 23, the three routes joining the Frequent Network will be: #35 31st/35th ... #74 Fullerton ... #85 Central"
+source = "https://www.transitchicago.com/cta-bolsters-frequent-network-with-four-additional-routes-by-end-of-2026/"
+published = "2026-08-18"
+
+[[phase]]
+# announced for "December" 2026, no day given: counted from the latest possible date
+joined = "2026-12 (day not announced)"
+effective_by = "2026-12-31"
+routes = ["8"]
+quote = "In December, CTA will add the #8 Halsted route, bringing the network to 24 routes."
+source = "https://www.transitchicago.com/cta-bolsters-frequent-network-with-four-additional-routes-by-end-of-2026/"
+published = "2026-08-18"
