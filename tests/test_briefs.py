@@ -75,3 +75,32 @@ def test_cli_sees_findings_registered_by_other_modules_and_refuses_failed_crash_
     r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
     assert r.returncode == 1 and "did not pass" in r.stdout and "unknown" not in r.stdout
     assert not (tmp_path / "out").exists()
+
+
+def _measured(tmp, years=True):
+    m = tmp / "m.json"
+    m.write_text(json.dumps({"value": 0.25, "years": [{"y": 2020, "v": 0.2}] if years else []}))
+    return B.Finding(name="m", title="A measured share", reports=["m.json"], gate=lambda R: bool(R["m.json"]["years"]),
+                     gate_label="constructed checks", pilot_criterion="", kind="measured",
+                     sections=lambda R: {"Measurement": f"Share {R['m.json']['value']:.0%}.",
+                                         "Robustness": "| year | v |\n|---|---|\n" + "\n".join(f"| {y['y']} | {y['v']:.0%} |" for y in R["m.json"]["years"]),
+                                         "What we don't know": "- Constructed."})
+
+
+def test_measured_fact_brief_has_its_own_form_and_not_causal_line(tmp_path):
+    text = B.render(_measured(tmp_path), tmp_path)
+    assert text.startswith("# Brief (measured fact): A measured share")
+    assert "Descriptive, not causal." in text and "Share 25%." in text and "| 2020 | 20% |" in text
+    assert "Pilot proposal" not in text and "Success criterion" not in text
+
+
+def test_measured_fact_without_robustness_is_refused(tmp_path):
+    with pytest.raises(B.BriefRefused, match="not available"):
+        B.render(_measured(tmp_path, years=False), tmp_path)
+
+
+def test_exploratory_reports_never_go_into_briefs(tmp_path):
+    f = _measured(tmp_path)
+    f.reports = ["explore/m.json"]
+    with pytest.raises(B.BriefRefused, match="exploratory"):
+        B.render(f, tmp_path)

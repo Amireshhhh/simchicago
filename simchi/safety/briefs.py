@@ -26,3 +26,37 @@ register(Finding(
     sections=_sections,
     pilot_criterion="Serious crashes at treated sites fall more than at matched untreated sites over two years.",
 ))
+
+
+def _concentration_sections(R):
+    w4, rb = R["safety/crash_ranking.json"], R["safety/robustness.json"]
+    s = w4["test"]["captured_share"]["100"]
+    n = w4["test"]["ka_2025_at_ranked_sites"]
+    rows = ["| Test year | Top 100 sites, raw count | Top 100, empirical Bayes | Oracle ceiling | Intersections only, raw | Sites with any serious crash |",
+            "|---|---|---|---|---|---|"]
+    for y in rb["years"]:
+        a, i = y["all_sites"], y["intersections"]
+        rows.append(f"| {y['test_year']} | {a['raw']:.2%} | {a['EB']:.2%} | {a['oracle']:.2%} | {i['raw']:.2%} | {a['share_of_units_with_any']:.2%} |")
+    lo = min(y["all_sites"]["oracle"] for y in rb["years"])
+    hi = max(y["all_sites"]["oracle"] for y in rb["years"])
+    return {
+        "Measurement": (f"Serious traffic crashes (deaths and incapacitating injuries) in Chicago are spread over many street "
+                        f"locations. The 100 street sites with the most serious crashes in 2018-2024 held {s['raw']:.2%} of "
+                        f"2025's serious crashes ({int(round(s['raw'] * n))} of {int(n):,}), out of "
+                        f"{w4['test']['sites_ranked']:,} street sites. Even the 100 sites that turned out to have the most "
+                        f"serious crashes in a year held only {lo:.2%}-{hi:.2%} of that year's (2019-2024)."),
+        "Robustness": "Same measurement for each year 2019-2024, ranking on all earlier years from 2018 (D):\n\n" + "\n".join(rows),
+        "What we don't know": ("- Why crashes are spread this way, and whether treating the worst sites would reduce them: "
+                               "nothing here tests an intervention.\n- Traffic volume is counted at few sites, so these are "
+                               "counts, not rates per vehicle.\n- Vision Zero records begin in 2019; reporting of recent months "
+                               "is still being completed."),
+    }
+
+
+register(Finding(
+    name="crash-concentration", title="Serious crashes are spread thinly across Chicago's streets",
+    reports=["safety/crash_ranking.json", "safety/robustness.json"],
+    gate=lambda R: bool(R["safety/robustness.json"].get("years")) and "captured_share" in R["safety/crash_ranking.json"]["test"],
+    gate_label="W4 measurement (simchi/safety/crashes.py) and the pre-registered robustness checks D (simchi/safety/robustness.py)",
+    sections=_concentration_sections, pilot_criterion="", kind="measured",
+))
