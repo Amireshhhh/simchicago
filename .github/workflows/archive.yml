@@ -12,6 +12,9 @@ name: Polling archive (append-only)
 on:
   schedule:
     - cron: "37 7 * * *"        # daily, after the UTC day has ended
+  push:                         # also when the archive code itself changes (first run, fixes)
+    branches: [main]
+    paths: [".github/workflows/archive.yml", "simchi/transit/archive.py"]
   workflow_dispatch:
     inputs:
       stop_time:
