@@ -1,0 +1,50 @@
+{
+ "label": "exploratory",
+ "module": "simchi.safety.lights_explore",
+ "period": [
+  "2018-01-01",
+  "2023-12-31"
+ ],
+ "mirror": {
+  "requests": 350243,
+  "requests_unsnapped": 4725,
+  "windows": 159750,
+  "outage_blocks": 40971,
+  "crimes": 1458767,
+  "crimes_unsnapped": 38622,
+  "crimes_on_outage_blocks": 1282567,
+  "requests_closed_2024_or_later_dropped": 1134
+ },
+ "window_days": {
+  "0.1": 1.0,
+  "0.25": 3.0,
+  "0.5": 9.0,
+  "0.75": 33.0,
+  "0.9": 111.0
+ },
+ "did": {
+  "coef": {
+   "night_x_outage": -5.6150623276242625e-05,
+   "outage": -1.53992652483e-05,
+   "night": 0.0006717799602262951
+  },
+  "se": {
+   "night_x_outage": 5.5416385306963845e-05,
+   "outage": 3.6618165391850085e-05,
+   "night": 4.7402567190809075e-05
+  },
+  "ci95_night_x_outage": [
+   -0.00016476805005113718,
+   5.246680349865193e-05
+  ],
+  "blocks": 39750,
+  "weeks": 287,
+  "rows": 15714784,
+  "mean_y": {
+   "night_outage": 0.0024103860613286857,
+   "night_after": 0.0023672716305990094,
+   "day_outage": 0.0017947567243786302,
+   "day_after": 0.0016954916703727269
+  }
+ }
+}

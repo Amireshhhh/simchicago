@@ -92,10 +92,15 @@ def main(argv=None):
     if "--analyse" in (argv or []):
         from simchi.safety import lights as LG
         req, cr = fetch_period(portal, lane)
+        # explore lane: no information dated 2024 or later, including a 2023 request's later closing date
+        late = pd.to_datetime(req["closed_date"], errors="coerce") >= pd.Timestamp("2024-01-01")
+        req = req[~late]
         W, A, summ = build_mirror(req, cr, "explore")
+        summ["requests_closed_2024_or_later_dropped"] = int(late.sum())
         W["start"], W["end"] = pd.to_datetime(W["start"]), pd.to_datetime(W["end"])
         dur = (W["end"] - W["start"]).dt.days
         Q = LG.panel(W, A)
+        Q = Q[Q["day"] <= "2023-12-31"]                       # no crime data after the explore period
         res = LG.did(Q) if len(Q) else {}
         lane.output("w9_explore.json", {"period": ["2018-01-01", "2023-12-31"], "mirror": summ,
                                         "window_days": {q: float(dur.quantile(q)) for q in (0.1, 0.25, 0.5, 0.75, 0.9)},

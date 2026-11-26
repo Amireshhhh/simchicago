@@ -166,3 +166,19 @@ title = "Row counts, last dates and queries of the W4b test-period mirror"
 source = "City of Chicago data portal 85ca-t3if + gzaz-isa6"
 downloaded = "2026-11-26"
 license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[w9_explore_crime_blocks]
+file = "data/raw/mirror/w9/explore_crime_blocks.csv.gz"
+sha256 = "c0b4c381836531953076e2dc2e88e3e5b5a94aa47cbeae78b35a6cd27e729cf9"
+title = "W9 explore period (2018-2023) per-block aggregates (no individual records): crimes from ijzp-q8t2 per block, date, hour, primary type and indoor/outdoor (data/w9_location_map.csv), blocks with an outage only"
+source = "City of Chicago data portal (explore lane, simchi.lanes)"
+downloaded = "2026-11-26"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[w9_explore_outage_windows]
+file = "data/raw/mirror/w9/explore_outage_windows.csv.gz"
+sha256 = "cdc34bfa616d42fc7b36d00db8f74f3265f2c9f29473776dc9cd605727b9942e"
+title = "W9 explore period (2018-2023) per-block aggregates (no individual records): merged street/alley light outage windows from 311 v6vf-nfxy"
+source = "City of Chicago data portal (explore lane, simchi.lanes)"
+downloaded = "2026-11-26"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"

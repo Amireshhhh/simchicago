@@ -159,3 +159,49 @@ def did(Q: pd.DataFrame) -> dict:
             "blocks": int(G), "weeks": int(b.max() + 1), "rows": int(n),
             "mean_y": {"night_outage": float(Q[(Q.night == 1) & (Q.outage == 1)]["y"].mean()), "night_after": float(Q[(Q.night == 1) & (Q.outage == 0)]["y"].mean()),
                        "day_outage": float(Q[(Q.night == 0) & (Q.outage == 1)]["y"].mean()), "day_after": float(Q[(Q.night == 0) & (Q.outage == 0)]["y"].mean())}}
+
+
+# ----------------------------------------------------------------------------- confirm lane
+CONFIRM_WINDOW = ("2024-01-01", "2026-10-31")
+
+
+def run_confirm() -> dict:
+    """Pre-registered W9 test: reads only through the confirm lane (simchi.lanes)."""
+    import hashlib
+
+    from simchi.lanes import Lane
+    from simchi.portal.client import Portal
+    from simchi.safety.lights_explore import build_mirror, monthly
+    portal, lane = Portal(), Lane("confirm", "simchi.safety.lights")
+    a, b = CONFIRM_WINDOW
+    types = ", ".join(f"'{t}'" for t in OUTAGE_TYPES)
+    req = lane.read("v6vf-nfxy", "created_date", a, b, lambda s, e: monthly(portal, "v6vf-nfxy", "created_date", s, e,
+                    "sr_type, status, created_date, closed_date, latitude, longitude", f"sr_type in ({types})"))
+    cr = lane.read("ijzp-q8t2", "date", a, b, lambda s, e: monthly(portal, "ijzp-q8t2", "date", s, e,
+                   "date, latitude, longitude, primary_type, location_description", None))
+    late = pd.to_datetime(req["closed_date"], errors="coerce") > pd.Timestamp(b) + pd.Timedelta(hours=23, minutes=59, seconds=59)
+    req = req[~late]                                      # closed after the window: information from beyond it
+    W, A, summ = build_mirror(req, cr, "confirm")
+    summ["requests_closed_after_window_dropped"] = int(late.sum())
+    # outage windows must end by the window's end so the after-repair days are inside it
+    W = W[pd.to_datetime(W["end"]) <= pd.Timestamp(b) - pd.Timedelta(days=1)]
+    W = W.assign(start=pd.to_datetime(W["start"]), end=pd.to_datetime(W["end"]))
+    Q = panel(W, A)
+    Q = Q[Q["day"] <= b]
+    res = did(Q)
+    res["pass"] = bool(res["coef"]["night_x_outage"] > 0 and res["ci95_night_x_outage"][0] > 0)
+    files = {f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(W9.glob("confirm_*.csv.gz"))}
+    out = {"design": "W9 pre-registration, docstring of simchi/safety/lights.py", "window": CONFIRM_WINDOW, "mirror": summ,
+           "mirror_sha256": files, "windows_used": int(len(W)), **res}
+    (REPORTS / "safety").mkdir(parents=True, exist_ok=True)
+    (REPORTS / "safety" / "lights.json").write_text(json.dumps(out, indent=1, default=float))
+    return out
+
+
+def main(argv=None):
+    out = run_confirm()
+    print(json.dumps({k: out[k] for k in ("coef", "ci95_night_x_outage", "blocks", "rows", "pass", "mean_y")}, indent=1, default=float))
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
