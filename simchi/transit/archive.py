@@ -63,6 +63,45 @@ FREQUENT NETWORK DELIVERED CHECK
   overall, and the excluded cells. Because polling undercounts gaps, the share meeting is an
   upper bound on compliance.
 
+AMENDMENT 1, 2026-11-26: DAY TYPE FROM SCHEDULED SERVICE (committed as "W2 amendment: day type
+from scheduled service" before any W2 result existed; no aggregate had reached the minimum)
+  Why: day types were assigned from the calendar weekday, so holidays (Thanksgiving 2026-11-26,
+  the day after, 2026-12-25/26 in CTA's feed) would be scored against a regular schedule. The feed
+  also shows that one reference week cannot stand for every date: CTA's service ids differ by
+  weekday (45 services on Mondays, 51 on Tuesdays in the pinned feed) and change with schedule
+  periods (services starting 2026-11-15/16), and the pinned feed ends on 2026-12-31.
+  Day type of a Chicago service date D, from the GTFS feed in effect (one covering D):
+    regular(D) = calendar.txt services with D's weekday flag and start_date <= D <= end_date
+    actual(D)  = regular(D) with calendar_dates applied (added: exception_type 1, removed: 2)
+    actual(D) empty                                   -> "unknown" (the feed does not cover D)
+    actual(D) == regular(D)                           -> D's weekday class (Mon-Fri "weekday",
+                                                         Saturday "saturday", Sunday "sunday")
+    else, actual(D) == regular(S) for a Sunday S within D +- 7 days -> "sunday"; for a Saturday ->
+      "saturday"; for a Monday-Friday -> "weekday"; otherwise -> "holiday"
+  "holiday" and "unknown" dates are excluded from cell eligibility, from the minimum-archive
+  counts (span and dates per day type count only weekday/saturday/sunday dates) and from the
+  Frequent Network check.
+  Scheduled values per date: each archived date's scheduled trips per route, direction and hour
+  (first departure, as in the GTFS extract; one-direction-coded routes halved as before) and
+  scheduled vehicles in service (trips x median trip duration that hour / 60) come from the trips
+  active on that date in the feed in effect, and are stored in that date's statistics with the
+  feed's sha256. Bunching and gap counts compare each headway with that date's scheduled headway.
+  Archive-wide: scheduled headway = 60 / mean scheduled trips per date; delivered = mean vehicles
+  per poll / mean scheduled vehicles in service.
+  Files: the amended statistics are written as stats2-<D>.csv.gz (the append-only rule forbids
+  replacing stats-<D>, which are kept and superseded); aggregation reads stats2 only. Dates whose
+  run artifacts have left retention cannot be re-derived and are reported as missing.
+
+TRAIN STATION HEADWAYS (derived data product for W10; not a test)
+  train_station_headways-<D>.csv.gz, from Train Tracker rows of the live.yml artifacts (before
+  conversion to the ingestion schema, which drops the next-station field): when a train's next
+  station changes from S to another between two consecutive observations of that train at most
+  150 s apart, it is taken to have arrived at S at the midpoint of the two observation times
+  (error at most half the gap). Per station, line and Train Tracker direction, consecutive arrivals
+  give headways. Columns: station_id, line, direction, arrival_utc, headway_min, continuous;
+  continuous = no gap over 150 s between system polls from the previous arrival to this one (else
+  an arrival may have been missed and the headway is an upper bound). No vehicle ids.
+
 RIDER FEEDBACK (schema and comparison; no pass criterion, nothing is tuned to it)
   Schema: route, stop_id (CTA GTFS stop id), timestamp_utc, observed_wait_min, source.
   Each record is matched to its stop's route-direction (the GTFS patterns serving the stop on that
