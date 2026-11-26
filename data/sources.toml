@@ -182,3 +182,19 @@ title = "W9 explore period (2018-2023) per-block aggregates (no individual recor
 source = "City of Chicago data portal (explore lane, simchi.lanes)"
 downloaded = "2026-11-26"
 license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[w9_confirm_crime_blocks]
+file = "data/raw/mirror/w9/confirm_crime_blocks.csv.gz"
+sha256 = "450207e278e0da73755f443fc8d99da619693148bcfcdb20230a18617debd7ea"
+title = "W9 confirm period (2024-01-01..2026-10-31) per-block aggregates (no individual records): crimes from ijzp-q8t2 per block, date, hour, primary type and indoor/outdoor, blocks with an outage only"
+source = "City of Chicago data portal (confirm lane, simchi.lanes)"
+downloaded = "2026-11-26"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[w9_confirm_outage_windows]
+file = "data/raw/mirror/w9/confirm_outage_windows.csv.gz"
+sha256 = "c728f73aa34439fbb72e02400550d564533f3e1f0ca2e87db82a4595dadc7ad9"
+title = "W9 confirm period (2024-01-01..2026-10-31) per-block aggregates (no individual records): merged street/alley light outage windows from 311 v6vf-nfxy"
+source = "City of Chicago data portal (confirm lane, simchi.lanes)"
+downloaded = "2026-11-26"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"

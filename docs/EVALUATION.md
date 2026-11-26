@@ -5,8 +5,9 @@ and the experiment runs in `reports/experiments/*/experiment.json`, on the defau
 2,000 requested agents (1,944 drawn, standing for 2,589,487 household residents), seed 1.
 
 Every model check is **out of sample** and compares against a **simple baseline**, with the
-pass criterion fixed before the results were seen. Four checks fail their criterion (commute
-destinations; the simulated holding test; the W4 site and W4b corridor crash rankings); they are reported as failures, not re-defined. The
+pass criterion fixed before the results were seen. Five checks fail their criterion (commute
+destinations; the simulated holding test; the W4 site and W4b corridor crash rankings; W9 street
+lights and night crime); they are reported as failures, not re-defined. The
 'L' ridership check failed under the superseded design (2024 vs 2025-26 counts, mixed counting
 methods) and passes narrowly under the W1 re-baseline; both results are kept below. v0.3 workstream 2 replaced the
 distance-based mode choice and travel times by CTA-network ones; the two checks that failed in
@@ -33,6 +34,7 @@ criteria and now pass (numbers below).
 | Holding rule (simulated, pre-registered) | mean passenger wait +2.58 min [+1.57, +3.59]; after a later start-up fix −0.94 [−1.80, −0.09] | 95% interval below 0 | **fail** |
 | Crash ranking (W4: empirical Bayes on 2018-2024, test 2025; pre-registered cb367e0) | top 100 sites hold 4.58% of 2025 serious crashes (70 of 1,530) vs 4.64% (71) raw 2018-2024 counts and 3.66% (56) 2024 counts | beat both | **fail** |
 | Corridor crash ranking (W4b: rank 2018-2025, test 2026-01..10; pre-registered 961b085) | top 50 of 10,027 corridors hold 11.51% (150 of 1,303) of test-period serious crashes by empirical Bayes vs 11.74% (153) raw and 11.67% (152) 2025 alone | beat both at top 50 | **fail** |
+| Street-light outages and night outdoor crime (W9: 2024-01..2026-10, confirm lane; pre-registered 5a28741) | night x outage -0.000046 [-0.000312, 0.000220] outdoor crimes per block-day band, 28,281 blocks | > 0 with interval excluding 0 | **fail** |
 | Anomaly detectors (simulated feed, constructed labels) | precision / recall: jump 1.00 / 0.96, stuck 1.00 / 0.79, off route 0.98 / 0.78, outage 0.75 / 1.00 | none (reported) | info |
 | Engine invariants (3-day run, 5,832 agent-days; 2-day CRN and repeat runs) | every day plan partitions [0, 1440]; safety stays in [0, 1]; no behavioural response ≡ no incidents; runs are deterministic | all hold | **pass** |
 
@@ -298,6 +300,25 @@ primary type and CTA location description, no blocks, no 311), read by the relia
 They overlap W9's window in time but carry no block or outage information, so they could not have
 informed the W9 design; the statement should have said "no 311 record and no block-level crime
 record dated 2024 or later".
+
+**Result.** Confirm lane, 2024-01-01 to 2026-10-31 (`python -m simchi.safety.lights` →
+`reports/safety/lights.json`; per-block aggregates pinned as `w9_confirm_*`). 121,856 completed
+outage requests (2,326 unsnapped; 420 closed after the window, dropped) merged into
+85,447 outage windows on 28,281 blocks with panel days; 693,766 crimes.
+
+| | Night (21-04 h) | Day (10-15 h) |
+|---|---|---|
+| During outage (mean outdoor crimes per block-day) | 0.00299 | 0.00194 |
+| After repair | 0.00295 | 0.00185 |
+
+Night x outage (block and week fixed effects, clustered by block): **-0.000046**, 95% interval
+[-0.000312, 0.000220], 28,281 blocks, 148 weeks, 2,678,232 rows.
+**Fail**: the estimate is below zero and its interval includes zero. Lit and unlit nights on the
+same blocks show no detectable difference in reported outdoor crime relative to daytime. The
+interval rules out increases larger than about 7% of the after-repair night mean, under this
+design's limits: outages are resident-reported (blocks enter in proportion to reporting) and
+crimes are counted where reported. The exploratory 2018-2023 estimate pointed the same way
+(`reports/explore/W9_note.md`), which was not used as evidence.
 
 ## Train gaps and crime at CTA rail locations (W10)
 

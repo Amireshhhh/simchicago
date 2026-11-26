@@ -1,0 +1,46 @@
+{
+ "design": "W9 pre-registration, docstring of simchi/safety/lights.py",
+ "window": [
+  "2024-01-01",
+  "2026-10-31"
+ ],
+ "mirror": {
+  "requests": 121856,
+  "requests_unsnapped": 2326,
+  "windows": 85460,
+  "outage_blocks": 32302,
+  "crimes": 693766,
+  "crimes_unsnapped": 10703,
+  "crimes_on_outage_blocks": 522435,
+  "requests_closed_after_window_dropped": 420
+ },
+ "mirror_sha256": {
+  "confirm_crime_blocks.csv.gz": "450207e278e0da73755f443fc8d99da619693148bcfcdb20230a18617debd7ea",
+  "confirm_outage_windows.csv.gz": "c728f73aa34439fbb72e02400550d564533f3e1f0ca2e87db82a4595dadc7ad9"
+ },
+ "windows_used": 85447,
+ "coef": {
+  "night_x_outage": -4.561666695746692e-05,
+  "outage": -9.965795270402365e-05,
+  "night": 0.0010977209325441829
+ },
+ "se": {
+  "night_x_outage": 0.00013566326782838296,
+  "outage": 8.741628251109234e-05,
+  "night": 0.00011223055594898445
+ },
+ "ci95_night_x_outage": [
+  -0.00031152316653458296,
+  0.00022028983261964915
+ ],
+ "blocks": 28281,
+ "weeks": 148,
+ "rows": 2678232,
+ "mean_y": {
+  "night_outage": 0.0029942750465287975,
+  "night_after": 0.002949584789218133,
+  "day_outage": 0.0019421707809420784,
+  "day_after": 0.0018518638566739488
+ },
+ "pass": false
+}

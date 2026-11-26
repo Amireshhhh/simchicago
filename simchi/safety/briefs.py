@@ -60,3 +60,13 @@ register(Finding(
     gate_label="W4 measurement (simchi/safety/crashes.py) and the pre-registered robustness checks D (simchi/safety/robustness.py)",
     sections=_concentration_sections, pilot_criterion="", kind="measured",
 ))
+
+
+register(Finding(
+    name="street-lights-night-crime", title="Street-light outages and nighttime outdoor crime",
+    reports=["safety/lights.json"],
+    gate=lambda R: R["safety/lights.json"]["pass"],
+    gate_label="W9 confirm test (pre-registered in simchi/safety/lights.py)",
+    sections=lambda R: {k: "" for k in ("Finding", "Evidence", "What we don't know", "Cost", "Pilot proposal")},
+    pilot_criterion="(not reached: the test did not pass)",
+))

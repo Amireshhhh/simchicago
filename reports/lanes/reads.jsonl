@@ -4,3 +4,5 @@
 {"utc": "2026-11-26T06:04:51+00:00", "lane": "explore", "module": "simchi.safety.lights_explore", "dataset": "ijzp-q8t2", "date_column": "date", "start": "2018-01-01", "end": "2023-12-31", "rows": 1458767, "refused": false}
 {"utc": "2026-11-26T06:15:11+00:00", "lane": "explore", "module": "simchi.safety.lights_explore", "dataset": "v6vf-nfxy", "date_column": "created_date", "start": "2018-01-01", "end": "2023-12-31", "rows": 368002, "refused": false}
 {"utc": "2026-11-26T06:15:13+00:00", "lane": "explore", "module": "simchi.safety.lights_explore", "dataset": "ijzp-q8t2", "date_column": "date", "start": "2018-01-01", "end": "2023-12-31", "rows": 1458767, "refused": false}
+{"utc": "2026-11-26T06:30:33+00:00", "lane": "confirm", "module": "simchi.safety.lights", "dataset": "v6vf-nfxy", "date_column": "created_date", "start": "2024-01-01", "end": "2026-10-31", "rows": 123880, "refused": false}
+{"utc": "2026-11-26T06:34:10+00:00", "lane": "confirm", "module": "simchi.safety.lights", "dataset": "ijzp-q8t2", "date_column": "date", "start": "2024-01-01", "end": "2026-10-31", "rows": 693766, "refused": false}
