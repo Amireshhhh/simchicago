@@ -33,7 +33,7 @@ concurrency:
 jobs:
   archive:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 360        # backfilling 13 days takes about 20 min a day
     env:
       GH_TOKEN: ${{ github.token }}
       ARCHIVE_RAW: ${{ vars.ARCHIVE_RAW }}
