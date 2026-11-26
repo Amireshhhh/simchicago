@@ -1,0 +1,119 @@
+name: Polling archive (append-only)
+
+# Durable polling history (W2 design: docstring of simchi/transit/archive.py). Each day, for every
+# UTC date of the last 13 days that has no file yet, the vehicle histories of live.yml runs (still
+# within their 14-day artifact retention) are converted to the ingestion schema and uploaded as
+# release assets of "history-<YYYY>": stats-<date>.csv.gz (aggregated sufficient statistics) and
+# traversals-<date>.csv.gz (derived segment run times, no vehicle id or position). The raw
+# vehicles-<date>.csv.gz file is uploaded only if the repository variable ARCHIVE_RAW is "on":
+# the repository is public, and publishing raw CTA position history needs the owner's decision
+# (docs/CTA_TERMS.md). Assets are never replaced (no --clobber). No CTA request is made here.
+# Weekly, once the archive spans 28 days, the W3 seconds-per-stop estimate runs.
+on:
+  schedule:
+    - cron: "37 7 * * *"        # daily, after the UTC day has ended
+  workflow_dispatch:
+    inputs:
+      stop_time:
+        description: "Also run the W3 seconds-per-stop estimate now"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write      # create the history release and upload assets
+  actions: read        # list live.yml runs and download their artifacts
+
+concurrency:
+  group: archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ARCHIVE_RAW: ${{ vars.ARCHIVE_RAW }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install simchi
+        run: python -m pip install -e .
+
+      - name: Archive every missing date of the last 13 days
+        run: |
+          set -euo pipefail
+          for back in $(seq 13 -1 1); do
+            d=$(date -u -d "-$back day" +%Y-%m-%d); y=${d:0:4}; tag="history-$y"
+            gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --title "Polling history $y" --latest=false \
+              --notes "Append-only CTA polling archive (W2): daily stats-<date>.csv.gz (aggregated) and traversals-<date>.csv.gz (derived segment run times). Never overwritten. See simchi/transit/archive.py. Data provided by Chicago Transit Authority (CTA Bus Tracker, CTA Train Tracker); not affiliated with or endorsed by CTA."
+            if gh release view "$tag" --json assets -q '.assets[].name' | grep -qx "stats-$d.csv.gz"; then
+              echo "stats-$d.csv.gz exists: kept as is"; continue
+            fi
+            rm -rf art && mkdir -p art out
+            prev=$(date -u -d "$d -1 day" +%Y-%m-%d); next=$(date -u -d "$d +1 day" +%Y-%m-%d)
+            for id in $(gh run list -R "$GITHUB_REPOSITORY" -w live.yml -s success -L 1000 --created "$prev..$next" --json databaseId -q '.[].databaseId'); do
+              gh run download "$id" -R "$GITHUB_REPOSITORY" -n "vehicles-$id" -D "art/vehicles-$id" || echo "no artifact for run $id"
+            done
+            if ! ls art/*/history.csv.gz >/dev/null 2>&1; then echo "no run artifacts for $d"; continue; fi
+            python -m simchi.transit.archive build --date "$d" --artifacts art --out out
+            if [ "$(zcat "out/vehicles-$d.csv.gz" | wc -l)" -le 1 ]; then echo "no observations on $d"; continue; fi
+            gh release upload "$tag" "out/stats-$d.csv.gz" "out/traversals-$d.csv.gz"     # append-only
+            if [ "${ARCHIVE_RAW:-off}" = "on" ]; then gh release upload "$tag" "out/vehicles-$d.csv.gz"; fi
+          done
+
+      - name: Archive-wide reliability and Frequent Network check (from the daily stats only)
+        run: |
+          mkdir -p stats
+          for tag in $(gh release list -L 100 --json tagName -q '.[].tagName' | grep '^history-' || true); do
+            gh release download "$tag" -p 'stats-*.csv.gz' -D stats --skip-existing || true
+          done
+          python -m simchi.transit.archive aggregate --stats stats --out archive-report
+      - uses: actions/upload-artifact@v7
+        with:
+          name: archive-report
+          path: archive-report
+          retention-days: 90
+
+  stop_time:
+    needs: archive
+    if: github.event_name == 'schedule' || inputs.stop_time
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install simchi
+        run: python -m pip install -e .
+      - name: Weekly gate (Mondays, or on request)
+        id: gate
+        run: |
+          if [ "$(date -u +%u)" = "1" ] || [ "${{ inputs.stop_time }}" = "true" ]; then echo "run=1" >> "$GITHUB_OUTPUT"; else echo "run=0" >> "$GITHUB_OUTPUT"; fi
+      - name: Archive files and OpenStreetMap traffic signals
+        if: steps.gate.outputs.run == '1'
+        run: |
+          mkdir -p trav
+          for tag in $(gh release list -L 100 --json tagName -q '.[].tagName' | grep '^history-' || true); do
+            gh release download "$tag" -p 'traversals-*.csv.gz' -D trav --skip-existing || true
+          done
+          curl -sS -m 300 --data-urlencode 'data=[out:json][timeout:240];area["name"="Chicago"]["boundary"="administrative"]["admin_level"="8"]->.c;node["highway"="traffic_signals"](area.c);out;' \
+            https://overpass-api.de/api/interpreter -o signals.json
+      - name: W3 seconds per stop and the stop-balancing rerun
+        if: steps.gate.outputs.run == '1'
+        run: python -m simchi.transit.stop_time --traversals trav --signals signals.json --replicates 10
+      - uses: actions/upload-artifact@v7
+        if: steps.gate.outputs.run == '1'
+        with:
+          name: stop-time-report
+          path: |
+            reports/service_design/stop_time.json
+            signals.json
+          retention-days: 90

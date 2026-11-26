@@ -48,3 +48,20 @@ def test_keys_only_from_secrets_and_never_echoed():
 def test_pages_workflow_never_sees_cta_keys():
     y = (WF / "pages.yml").read_text()
     assert "CTA_BUS_KEY" not in y and "CTA_TRAIN_KEY" not in y and "{{ secrets." not in y
+
+
+def test_archive_workflow_is_append_only_and_makes_no_cta_requests():
+    text = (WF / "archive.yml").read_text()
+    code = "\n".join(line.split("#")[0] for line in text.splitlines())          # commands, without comments
+    assert "CTA_BUS_KEY" not in text and "CTA_TRAIN_KEY" not in text and "ctabustracker" not in text and "lapi.transitchicago" not in text
+    assert "--clobber" not in code and "gh release upload" in code
+    assert 'tag="history-$y"' in text
+    assert "contents: write" in text
+
+
+def test_raw_positions_are_published_only_with_the_owners_switch():
+    code = "\n".join(line.split("#")[0] for line in (WF / "archive.yml").read_text().splitlines())
+    ups = [line.strip() for line in code.splitlines() if "gh release upload" in line]
+    assert any("stats-" in u and "traversals-" in u and "vehicles-" not in u for u in ups)
+    raw = [u for u in ups if "vehicles-" in u]
+    assert raw and all(u.startswith('if [ "${ARCHIVE_RAW:-off}" = "on" ]') for u in raw)

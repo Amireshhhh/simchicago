@@ -151,6 +151,18 @@ def designs(t: pd.DataFrame, top: list) -> tuple[list, dict]:
     return ivs, info
 
 
+def stop_balancing_rerun(saving_values_s: list, replicates: int) -> list:
+    """W3: stop balancing on the top-10 routes with measured seconds per skipped stop (the values
+    given, e.g. the interval's lower end, the estimate and its upper end)."""
+    from simchi.interventions import run, top_bus_routes
+    rm = balanced_stops(top_bus_routes())
+    ivs = [{"name": f"Bus stop balancing, {v:.1f} s per skipped stop (measured, W3)", "network": {"removed_stops": rm, "stop_saving_s": float(v)},
+            "bands": ("early", "am_peak", "midday", "pm_peak", "evening", "night"), "kind": "priority",
+            "provenance": "measured stop time (W3); behaviour simulated"} for v in saving_values_s]
+    res = run(replicates, ivs=ivs)["interventions"]
+    return [{**r, "stop_saving_s": float(v)} for r, v in zip(res, saving_values_s, strict=True)]
+
+
 def main(argv=None):
     from simchi.interventions import run, top_bus_routes
     argv = sys.argv[1:] if argv is None else argv

@@ -58,8 +58,19 @@ Tracker, GTFS)."
 **Termination.** "Upon any termination or expiration of this Agreement, you will promptly
 delete all CTA Data from your application, computer systems or other storage devices".
 → All CTA Data lives in replaceable places: the derived GTFS extract in `data/transit/`,
-workflow artifacts `vehicles-<run id>` (14-day retention), the `live-latest-*` workflow cache
-and the published snapshot. Removing them is documented in "Deleting CTA data" below.
+workflow artifacts `vehicles-<run id>` (14-day retention), the `live-latest-*` workflow cache,
+the published snapshot, and the polling archive (release assets of `history-<YYYY>`, below).
+Removing them is documented in "Deleting CTA data" below.
+
+**Polling archive (W2, `.github/workflows/archive.yml`).** Durable history is kept as GitHub
+release assets, outside git and outside the 14-day artifact retention, one release per year
+(`history-<YYYY>`), never overwritten, kept until deleted. Because the repository is public,
+release assets are public downloads, so by default only derived data are uploaded: daily
+aggregated statistics (`stats-<date>.csv.gz`) and segment run times without vehicle ids or
+positions (`traversals-<date>.csv.gz`). The raw positions (`vehicles-<date>.csv.gz`, ingestion
+schema) are uploaded only if the repository variable `ARCHIVE_RAW` is set to `on`, which is the
+owner's decision under the caching and termination clauses quoted above. The archive job makes
+no CTA request. Size cap: a daily raw file over 200 MB is refused.
 
 **Key confidentiality.** The terms do not contain a clause on key handling. Keys are kept
 server-side anyway: they live only in the GitHub Actions secrets `CTA_BUS_KEY` and
@@ -140,7 +151,8 @@ per poll than the worst case because only routes with scheduled service are poll
 
 ## Deleting CTA data
 
-1. Disable `live.yml`; delete the workflow artifacts named `vehicles-*` and the caches named
-   `live-latest-*` (Actions → caches).
+1. Disable `live.yml` and `archive.yml`; delete the workflow artifacts named `vehicles-*` and the
+   caches named `live-latest-*` (Actions → caches), and the releases `history-*` with their assets
+   (`gh release delete history-2026 --cleanup-tag --yes`, one per year).
 2. Delete `data/transit/` (and the GTFS entry in `data/sources.toml`).
 3. Redeploy Pages (the deployed site then contains no live snapshot or network layer).

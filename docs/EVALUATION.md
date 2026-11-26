@@ -251,6 +251,30 @@ computed; commitments in `data/commitments.toml`, Frequent Network routes and da
 | Deaths -20% and serious injuries -35% by 2020 | not measurable | the plan states no baseline year |
 | High Crash Areas -40%; hardship-community deaths -25% by 2020 | not measurable | area boundaries not mirrored; victims' home community is not public |
 
+## Polling archive and delivered service (W2) and seconds per stop (W3)
+
+**W2** (design pre-registered 409f44b, docstring of `simchi/transit/archive.py`): durable,
+append-only polling archive as release assets (`.github/workflows/archive.yml`), one ingestion
+schema for any polling source, per route x direction x day type x hour metrics computed exactly
+from daily sufficient statistics, the Frequent Network delivered check, and the rider-feedback
+schema and comparison (`simchi/transit/feedback.py`). Tests on constructed data:
+`tests/test_archive.py`, `tests/test_feedback.py`.
+**Status: insufficient data.** The pre-registered minimum is 56 days and 8 dates of each day
+type; the archive starts with the dates still inside the 14-day artifact retention. No delivered
+metric is reported until then, and the commitments tracker shows "insufficient data".
+Deviation from the storage paragraph, reported: the repository is public, so release assets are
+public; by default only the derived files (daily stats; segment run times without vehicle ids)
+are uploaded, and raw positions only if the owner sets `ARCHIVE_RAW=on` (docs/CTA_TERMS.md).
+The metrics use only the derived files, so nothing in the design depends on that choice.
+No rider feedback has been supplied, so no agreement figure exists.
+
+**W3** (pre-registered b3a4600, docstring of `simchi/transit/stop_time.py`): segment run-time
+regression with route fixed effects and route-clustered errors, then the stop-balancing rerun at
+the interval's ends with the pre-registered pass rule. Tests on constructed data recover a known
+25 s per stop: `tests/test_stop_time.py`. **Status: insufficient data** (minimum 28 days of
+archive and 30 routes). Until then service design keeps its assumed 20 s and stays internal
+(not validated).
+
 ## Service reliability (scheduled vs observed)
 
 `simchi/transit/reliability.py` (definitions in its docstring, fixed before any polled data

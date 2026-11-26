@@ -37,6 +37,16 @@ jobs:
       - name: Tests
         run: python -m pytest -q -p no:cacheprovider
 
+      - name: Archive-wide reliability from the polling archive's daily stats (release assets; W2)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p stats
+          for tag in $(gh release list -R "$GITHUB_REPOSITORY" -L 100 --json tagName -q '.[].tagName' | grep '^history-' || true); do
+            gh release download "$tag" -R "$GITHUB_REPOSITORY" -p 'stats-*.csv.gz' -D stats --skip-existing || true
+          done
+          python -m simchi.transit.archive aggregate --stats stats --out reports/reliability || echo "archive aggregate failed"
+
       - name: Commitment statuses (computed by the rules in simchi/commitments.py; portal counts)
         run: python -m simchi.commitments || echo "commitments refresh failed; using the committed reports/commitments/status.json"
 

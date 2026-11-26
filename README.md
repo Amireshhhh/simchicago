@@ -57,7 +57,7 @@ python -m simchi.cli demo        # build the city, the default week, comparison 
 python -m simchi.cli serve       # http://127.0.0.1:8000  (viewer at /, API docs at /docs)
 python -m simchi.cli validate    # all validation checks -> reports/validation.json (~8 min)
 python -m simchi.eval.ridership --replicates   # ridership validation -> reports/ridership_validation.json
-python -m pytest tests           # 102 tests
+python -m pytest tests           # 143 tests
 cd viewer && npm test            # 14 tests
 ```
 
@@ -182,6 +182,19 @@ reliability** colours bus routes by one of them once data are published. A simul
 quantifies what 5-minute polling can recover (gaps undercounted, bunching slightly overcounted;
 `docs/EVALUATION.md`). No observed reliability numbers exist yet: the polling workflow had not
 run when this was written.
+
+## Polling archive (durable history)
+
+`.github/workflows/archive.yml` keeps an append-only history of the polling as GitHub release
+assets (`history-<YYYY>`, outside git and outside the 14-day artifact retention): daily
+aggregated statistics and segment run times; raw positions only if the repository variable
+`ARCHIVE_RAW` is `on`. `python -m simchi.transit.archive aggregate` computes delivered vs
+scheduled vehicles, headway CV, bunching and gaps (lower bounds) per route, direction, day type
+and hour over the whole archive, and the Frequent Network delivered check, once the archive
+reaches its pre-registered minimum (8 weeks). Other polling sources can be added in the same
+ingestion schema (docstring of `simchi/transit/archive.py`); rider feedback is compared with
+`python -m simchi.transit.feedback`. Seconds saved per skipped stop (W3) are estimated from the
+archive once it spans 28 days (`python -m simchi.transit.stop_time`).
 
 ## Crash safety layer
 
