@@ -286,6 +286,19 @@ the ceiling no ranking can beat).
 - 2019-2024 were W4's training years, so these are not unseen periods; volume counts (from
   2020-10) postdate the early training years.
 
+## Street-light outages and nighttime crime (W9)
+
+Pre-registered in the docstring of `simchi/safety/lights.py`, committed as 5a28741 ("W9
+pre-registration") after the explore lane (2018-2023, `reports/explore/W9_note.md`,
+exploratory) and before the confirm lane read any 311 or block-level crime record dated 2024 or
+later. **Correction to that commit's message**, which said no record dated 2024 or later had been
+read by any code: since 2026-11-12 the repository has held two crime mirrors covering
+2025-11-01 to 2026-10-31 (`crimes_all_by_area`, `crimes_cta_by_area`: counts by community area,
+primary type and CTA location description, no blocks, no 311), read by the reliability crime join.
+They overlap W9's window in time but carry no block or outage information, so they could not have
+informed the W9 design; the statement should have said "no 311 record and no block-level crime
+record dated 2024 or later".
+
 ## Promised vs delivered (W5)
 
 `python -m simchi.commitments` (→ `reports/commitments/status.json`); rules in the docstring of
