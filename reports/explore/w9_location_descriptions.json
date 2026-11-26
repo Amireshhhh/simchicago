@@ -1,0 +1,975 @@
+{
+ "label": "exploratory",
+ "module": "simchi.safety.lights_explore",
+ "period": [
+  "2018-01-01",
+  "2023-12-31"
+ ],
+ "values": [
+  {
+   "location_description": "STREET",
+   "n": "363677",
+   "last_date": "2023-12-31T23:59:00.000"
+  },
+  {
+   "location_description": "APARTMENT",
+   "n": "246670",
+   "last_date": "2023-12-31T23:51:00.000"
+  },
+  {
+   "location_description": "RESIDENCE",
+   "n": "223968",
+   "last_date": "2023-12-31T23:50:00.000"
+  },
+  {
+   "location_description": "SIDEWALK",
+   "n": "92248",
+   "last_date": "2023-12-31T23:30:00.000"
+  },
+  {
+   "location_description": "SMALL RETAIL STORE",
+   "n": "39534",
+   "last_date": "2023-12-31T21:00:00.000"
+  },
+  {
+   "location_description": "RESTAURANT",
+   "n": "31859",
+   "last_date": "2023-12-31T23:00:00.000"
+  },
+  {
+   "location_description": "ALLEY",
+   "n": "30922",
+   "last_date": "2023-12-31T23:25:00.000"
+  },
+  {
+   "location_description": "PARKING LOT / GARAGE (NON RESIDENTIAL)",
+   "n": "30618",
+   "last_date": "2023-12-31T20:44:00.000"
+  },
+  {
+   "location_description": "VEHICLE NON-COMMERCIAL",
+   "n": "22891",
+   "last_date": "2023-12-31T23:30:00.000"
+  },
+  {
+   "location_description": "OTHER",
+   "n": "22765",
+   "last_date": "2020-03-08T01:40:00.000"
+  },
+  {
+   "location_description": "DEPARTMENT STORE",
+   "n": "21930",
+   "last_date": "2023-12-31T21:50:00.000"
+  },
+  {
+   "location_description": "GAS STATION",
+   "n": "19971",
+   "last_date": "2023-12-31T20:46:00.000"
+  },
+  {
+   "location_description": "OTHER (SPECIFY)",
+   "n": "16264",
+   "last_date": "2023-12-31T23:45:00.000"
+  },
+  {
+   "location_description": "GROCERY FOOD STORE",
+   "n": "16138",
+   "last_date": "2023-12-31T18:45:00.000"
+  },
+  {
+   "location_description": "PARKING LOT/GARAGE(NON.RESID.)",
+   "n": "16000",
+   "last_date": "2020-03-08T05:15:00.000"
+  },
+  {
+   "location_description": "COMMERCIAL / BUSINESS OFFICE",
+   "n": "15339",
+   "last_date": "2023-12-31T23:29:00.000"
+  },
+  {
+   "location_description": "RESIDENCE - PORCH / HALLWAY",
+   "n": "12677",
+   "last_date": "2023-12-31T14:00:00.000"
+  },
+  {
+   "location_description": "RESIDENCE - YARD (FRONT / BACK)",
+   "n": "11041",
+   "last_date": "2023-12-31T14:43:00.000"
+  },
+  {
+   "location_description": "CONVENIENCE STORE",
+   "n": "10509",
+   "last_date": "2023-12-31T14:57:00.000"
+  },
+  {
+   "location_description": "RESIDENCE - GARAGE",
+   "n": "10295",
+   "last_date": "2023-12-31T16:00:00.000"
+  },
+  {
+   "location_description": "RESIDENTIAL YARD (FRONT/BACK)",
+   "n": "10274",
+   "last_date": "2020-03-07T19:10:00.000"
+  },
+  {
+   "location_description": "RESIDENCE PORCH/HALLWAY",
+   "n": "10243",
+   "last_date": "2020-03-07T21:42:00.000"
+  },
+  {
+   "location_description": "BAR OR TAVERN",
+   "n": "9904",
+   "last_date": "2023-12-31T23:50:00.000"
+  },
+  {
+   "location_description": "PARK PROPERTY",
+   "n": "9577",
+   "last_date": "2023-12-31T23:00:00.000"
+  },
+  {
+   "location_description": "CTA TRAIN",
+   "n": "9423",
+   "last_date": "2023-12-31T16:46:00.000"
+  },
+  {
+   "location_description": "",
+   "n": "8420",
+   "last_date": "2023-12-31T20:30:00.000"
+  },
+  {
+   "location_description": "RESIDENCE-GARAGE",
+   "n": "7421",
+   "last_date": "2020-03-07T16:00:00.000"
+  },
+  {
+   "location_description": "DRUG STORE",
+   "n": "7164",
+   "last_date": "2023-12-31T16:55:00.000"
+  },
+  {
+   "location_description": "SCHOOL, PUBLIC, BUILDING",
+   "n": "7077",
+   "last_date": "2020-03-06T13:50:00.000"
+  },
+  {
+   "location_description": "BANK",
+   "n": "5246",
+   "last_date": "2023-12-31T13:00:00.000"
+  },
+  {
+   "location_description": "SCHOOL - PUBLIC BUILDING",
+   "n": "5112",
+   "last_date": "2023-12-29T22:05:00.000"
+  },
+  {
+   "location_description": "HOSPITAL BUILDING / GROUNDS",
+   "n": "4987",
+   "last_date": "2023-12-31T22:00:00.000"
+  },
+  {
+   "location_description": "CTA BUS",
+   "n": "4936",
+   "last_date": "2023-12-31T12:00:00.000"
+  },
+  {
+   "location_description": "HOTEL / MOTEL",
+   "n": "4654",
+   "last_date": "2023-12-31T21:56:00.000"
+  },
+  {
+   "location_description": "CTA PLATFORM",
+   "n": "4583",
+   "last_date": "2023-12-31T01:47:00.000"
+  },
+  {
+   "location_description": "DRIVEWAY - RESIDENTIAL",
+   "n": "4444",
+   "last_date": "2023-12-31T20:00:00.000"
+  },
+  {
+   "location_description": "CTA STATION",
+   "n": "4155",
+   "last_date": "2023-12-31T18:50:00.000"
+  },
+  {
+   "location_description": "SCHOOL - PUBLIC GROUNDS",
+   "n": "4088",
+   "last_date": "2023-12-31T19:17:00.000"
+  },
+  {
+   "location_description": "CHA APARTMENT",
+   "n": "3927",
+   "last_date": "2023-12-31T23:15:00.000"
+  },
+  {
+   "location_description": "POLICE FACILITY / VEHICLE PARKING LOT",
+   "n": "3216",
+   "last_date": "2023-12-31T22:45:00.000"
+  },
+  {
+   "location_description": "HOTEL/MOTEL",
+   "n": "3096",
+   "last_date": "2020-03-08T06:45:00.000"
+  },
+  {
+   "location_description": "NURSING / RETIREMENT HOME",
+   "n": "2912",
+   "last_date": "2023-12-31T14:00:00.000"
+  },
+  {
+   "location_description": "HOSPITAL BUILDING/GROUNDS",
+   "n": "2908",
+   "last_date": "2020-03-08T08:30:00.000"
+  },
+  {
+   "location_description": "VACANT LOT / LAND",
+   "n": "2705",
+   "last_date": "2023-12-31T07:50:00.000"
+  },
+  {
+   "location_description": "CTA BUS STOP",
+   "n": "2534",
+   "last_date": "2023-12-31T16:00:00.000"
+  },
+  {
+   "location_description": "SCHOOL, PUBLIC, GROUNDS",
+   "n": "2160",
+   "last_date": "2020-03-05T15:30:00.000"
+  },
+  {
+   "location_description": "ATHLETIC CLUB",
+   "n": "2024",
+   "last_date": "2023-12-31T09:50:00.000"
+  },
+  {
+   "location_description": "NURSING HOME/RETIREMENT HOME",
+   "n": "1977",
+   "last_date": "2020-03-07T16:50:00.000"
+  },
+  {
+   "location_description": "TAVERN / LIQUOR STORE",
+   "n": "1883",
+   "last_date": "2023-12-31T05:13:00.000"
+  },
+  {
+   "location_description": "GOVERNMENT BUILDING / PROPERTY",
+   "n": "1847",
+   "last_date": "2023-12-30T05:12:00.000"
+  },
+  {
+   "location_description": "POLICE FACILITY/VEH PARKING LOT",
+   "n": "1831",
+   "last_date": "2020-03-06T18:30:00.000"
+  },
+  {
+   "location_description": "CHA PARKING LOT / GROUNDS",
+   "n": "1697",
+   "last_date": "2023-12-31T18:00:00.000"
+  },
+  {
+   "location_description": "CURRENCY EXCHANGE",
+   "n": "1605",
+   "last_date": "2023-12-31T01:47:00.000"
+  },
+  {
+   "location_description": "CHURCH / SYNAGOGUE / PLACE OF WORSHIP",
+   "n": "1592",
+   "last_date": "2023-12-31T16:00:00.000"
+  },
+  {
+   "location_description": "CONSTRUCTION SITE",
+   "n": "1521",
+   "last_date": "2023-12-30T15:00:00.000"
+  },
+  {
+   "location_description": "AIRPORT TERMINAL UPPER LEVEL - SECURE AREA",
+   "n": "1446",
+   "last_date": "2023-12-31T19:13:00.000"
+  },
+  {
+   "location_description": "WAREHOUSE",
+   "n": "1382",
+   "last_date": "2023-12-30T18:32:00.000"
+  },
+  {
+   "location_description": "ATM (AUTOMATIC TELLER MACHINE)",
+   "n": "1369",
+   "last_date": "2023-12-27T15:09:00.000"
+  },
+  {
+   "location_description": "AUTO / BOAT / RV DEALERSHIP",
+   "n": "1363",
+   "last_date": "2023-12-29T02:09:00.000"
+  },
+  {
+   "location_description": "VACANT LOT/LAND",
+   "n": "1326",
+   "last_date": "2020-03-07T04:30:00.000"
+  },
+  {
+   "location_description": "SCHOOL, PRIVATE, BUILDING",
+   "n": "1311",
+   "last_date": "2020-03-06T15:06:00.000"
+  },
+  {
+   "location_description": "MEDICAL / DENTAL OFFICE",
+   "n": "1140",
+   "last_date": "2023-12-28T11:45:00.000"
+  },
+  {
+   "location_description": "LIBRARY",
+   "n": "1137",
+   "last_date": "2023-12-28T16:00:00.000"
+  },
+  {
+   "location_description": "CHA PARKING LOT/GROUNDS",
+   "n": "1128",
+   "last_date": "2020-03-05T21:55:00.000"
+  },
+  {
+   "location_description": "TAVERN/LIQUOR STORE",
+   "n": "1111",
+   "last_date": "2020-03-06T13:30:00.000"
+  },
+  {
+   "location_description": "CHURCH/SYNAGOGUE/PLACE OF WORSHIP",
+   "n": "1110",
+   "last_date": "2020-03-05T20:35:00.000"
+  },
+  {
+   "location_description": "GOVERNMENT BUILDING/PROPERTY",
+   "n": "1102",
+   "last_date": "2020-03-06T16:58:00.000"
+  },
+  {
+   "location_description": "BARBERSHOP",
+   "n": "1067",
+   "last_date": "2023-12-31T09:00:00.000"
+  },
+  {
+   "location_description": "ABANDONED BUILDING",
+   "n": "1057",
+   "last_date": "2023-12-29T09:30:00.000"
+  },
+  {
+   "location_description": "AIRPORT TERMINAL LOWER LEVEL - NON-SECURE AREA",
+   "n": "996",
+   "last_date": "2023-12-28T23:03:00.000"
+  },
+  {
+   "location_description": "DAY CARE CENTER",
+   "n": "954",
+   "last_date": "2023-12-29T18:30:00.000"
+  },
+  {
+   "location_description": "SCHOOL - PRIVATE GROUNDS",
+   "n": "952",
+   "last_date": "2023-12-30T06:00:00.000"
+  },
+  {
+   "location_description": "TAXICAB",
+   "n": "830",
+   "last_date": "2023-12-24T03:42:00.000"
+  },
+  {
+   "location_description": "SCHOOL - PRIVATE BUILDING",
+   "n": "814",
+   "last_date": "2023-12-30T21:37:00.000"
+  },
+  {
+   "location_description": "AIRPORT PARKING LOT",
+   "n": "796",
+   "last_date": "2023-12-31T20:05:00.000"
+  },
+  {
+   "location_description": "VEHICLE - COMMERCIAL",
+   "n": "779",
+   "last_date": "2023-12-31T02:30:00.000"
+  },
+  {
+   "location_description": "CAR WASH",
+   "n": "774",
+   "last_date": "2023-12-26T09:51:00.000"
+  },
+  {
+   "location_description": "AIRPORT BUILDING NON-TERMINAL - NON-SECURE AREA",
+   "n": "681",
+   "last_date": "2023-12-31T00:00:00.000"
+  },
+  {
+   "location_description": "APPLIANCE STORE",
+   "n": "674",
+   "last_date": "2023-12-31T11:00:00.000"
+  },
+  {
+   "location_description": "CTA PARKING LOT / GARAGE / OTHER PROPERTY",
+   "n": "650",
+   "last_date": "2023-12-31T05:30:00.000"
+  },
+  {
+   "location_description": "OTHER COMMERCIAL TRANSPORTATION",
+   "n": "637",
+   "last_date": "2023-12-23T13:32:00.000"
+  },
+  {
+   "location_description": "AIRPORT TERMINAL UPPER LEVEL - NON-SECURE AREA",
+   "n": "627",
+   "last_date": "2023-12-28T01:00:00.000"
+  },
+  {
+   "location_description": "CTA GARAGE / OTHER PROPERTY",
+   "n": "595",
+   "last_date": "2020-03-07T04:30:00.000"
+  },
+  {
+   "location_description": "CHA HALLWAY / STAIRWELL / ELEVATOR",
+   "n": "574",
+   "last_date": "2023-12-31T19:46:00.000"
+  },
+  {
+   "location_description": "MEDICAL/DENTAL OFFICE",
+   "n": "546",
+   "last_date": "2020-03-05T17:15:00.000"
+  },
+  {
+   "location_description": "CLEANING STORE",
+   "n": "530",
+   "last_date": "2023-12-29T17:00:00.000"
+  },
+  {
+   "location_description": "SPORTS ARENA/STADIUM",
+   "n": "522",
+   "last_date": "2020-03-03T20:00:00.000"
+  },
+  {
+   "location_description": "FACTORY / MANUFACTURING BUILDING",
+   "n": "515",
+   "last_date": "2023-12-26T20:00:00.000"
+  },
+  {
+   "location_description": "AIRPORT EXTERIOR - NON-SECURE AREA",
+   "n": "493",
+   "last_date": "2023-12-29T12:30:00.000"
+  },
+  {
+   "location_description": "SPORTS ARENA / STADIUM",
+   "n": "486",
+   "last_date": "2023-12-31T15:00:00.000"
+  },
+  {
+   "location_description": "AIRPORT TERMINAL LOWER LEVEL - SECURE AREA",
+   "n": "467",
+   "last_date": "2023-12-29T17:30:00.000"
+  },
+  {
+   "location_description": "VEHICLE-COMMERCIAL",
+   "n": "454",
+   "last_date": "2020-03-05T12:30:00.000"
+  },
+  {
+   "location_description": "VEHICLE - OTHER RIDE SHARE SERVICE (E.G., UBER, LYFT)",
+   "n": "448",
+   "last_date": "2020-03-03T23:28:00.000"
+  },
+  {
+   "location_description": "OTHER RAILROAD PROPERTY / TRAIN DEPOT",
+   "n": "437",
+   "last_date": "2023-12-30T21:02:00.000"
+  },
+  {
+   "location_description": "VEHICLE - OTHER RIDE SHARE SERVICE (LYFT, UBER, ETC.)",
+   "n": "410",
+   "last_date": "2023-12-30T19:07:00.000"
+  },
+  {
+   "location_description": "AIRPORT BUILDING NON-TERMINAL - SECURE AREA",
+   "n": "373",
+   "last_date": "2023-12-29T15:25:00.000"
+  },
+  {
+   "location_description": "OTHER RAILROAD PROP / TRAIN DEPOT",
+   "n": "357",
+   "last_date": "2020-02-11T08:00:00.000"
+  },
+  {
+   "location_description": "SCHOOL, PRIVATE, GROUNDS",
+   "n": "357",
+   "last_date": "2020-03-03T11:51:00.000"
+  },
+  {
+   "location_description": "CHA HALLWAY/STAIRWELL/ELEVATOR",
+   "n": "347",
+   "last_date": "2020-03-01T02:00:00.000"
+  },
+  {
+   "location_description": "AIRCRAFT",
+   "n": "334",
+   "last_date": "2023-12-31T12:15:00.000"
+  },
+  {
+   "location_description": "MOVIE HOUSE/THEATER",
+   "n": "301",
+   "last_date": "2020-02-14T21:20:00.000"
+  },
+  {
+   "location_description": "AUTO",
+   "n": "298",
+   "last_date": "2023-12-15T02:55:00.000"
+  },
+  {
+   "location_description": "COLLEGE/UNIVERSITY GROUNDS",
+   "n": "296",
+   "last_date": "2020-03-04T13:00:00.000"
+  },
+  {
+   "location_description": "VEHICLE - DELIVERY TRUCK",
+   "n": "296",
+   "last_date": "2023-12-23T12:00:00.000"
+  },
+  {
+   "location_description": "LAKEFRONT / WATERFRONT / RIVERBANK",
+   "n": "294",
+   "last_date": "2023-12-23T21:00:00.000"
+  },
+  {
+   "location_description": "FIRE STATION",
+   "n": "285",
+   "last_date": "2023-12-30T01:00:00.000"
+  },
+  {
+   "location_description": "COLLEGE / UNIVERSITY - GROUNDS",
+   "n": "265",
+   "last_date": "2023-12-19T12:15:00.000"
+  },
+  {
+   "location_description": "FACTORY/MANUFACTURING BUILDING",
+   "n": "252",
+   "last_date": "2020-02-21T01:55:00.000"
+  },
+  {
+   "location_description": "MOVIE HOUSE / THEATER",
+   "n": "250",
+   "last_date": "2023-12-31T22:28:00.000"
+  },
+  {
+   "location_description": "FEDERAL BUILDING",
+   "n": "247",
+   "last_date": "2023-12-14T14:00:00.000"
+  },
+  {
+   "location_description": "AIRPORT EXTERIOR - SECURE AREA",
+   "n": "244",
+   "last_date": "2023-12-31T18:50:00.000"
+  },
+  {
+   "location_description": "PAWN SHOP",
+   "n": "238",
+   "last_date": "2023-12-29T17:46:00.000"
+  },
+  {
+   "location_description": "JAIL / LOCK-UP FACILITY",
+   "n": "238",
+   "last_date": "2023-12-05T00:30:00.000"
+  },
+  {
+   "location_description": "AIRPORT/AIRCRAFT",
+   "n": "208",
+   "last_date": "2023-06-20T16:40:00.000"
+  },
+  {
+   "location_description": "HIGHWAY / EXPRESSWAY",
+   "n": "199",
+   "last_date": "2023-12-20T21:16:00.000"
+  },
+  {
+   "location_description": "ANIMAL HOSPITAL",
+   "n": "176",
+   "last_date": "2023-12-13T17:15:00.000"
+  },
+  {
+   "location_description": "HOUSE",
+   "n": "162",
+   "last_date": "2023-12-18T17:10:00.000"
+  },
+  {
+   "location_description": "AIRPORT VENDING ESTABLISHMENT",
+   "n": "161",
+   "last_date": "2023-12-24T12:00:00.000"
+  },
+  {
+   "location_description": "POOL ROOM",
+   "n": "156",
+   "last_date": "2023-08-01T19:00:00.000"
+  },
+  {
+   "location_description": "BOWLING ALLEY",
+   "n": "147",
+   "last_date": "2023-12-29T19:00:00.000"
+  },
+  {
+   "location_description": "LAKEFRONT/WATERFRONT/RIVERBANK",
+   "n": "135",
+   "last_date": "2020-02-02T17:03:00.000"
+  },
+  {
+   "location_description": "COIN OPERATED MACHINE",
+   "n": "128",
+   "last_date": "2023-12-08T02:30:00.000"
+  },
+  {
+   "location_description": "PORCH",
+   "n": "120",
+   "last_date": "2023-12-17T11:32:00.000"
+  },
+  {
+   "location_description": "YARD",
+   "n": "119",
+   "last_date": "2023-12-23T21:58:00.000"
+  },
+  {
+   "location_description": "HIGHWAY/EXPRESSWAY",
+   "n": "117",
+   "last_date": "2020-03-01T03:00:00.000"
+  },
+  {
+   "location_description": "BRIDGE",
+   "n": "117",
+   "last_date": "2023-11-25T19:48:00.000"
+  },
+  {
+   "location_description": "CTA TRACKS - RIGHT OF WAY",
+   "n": "115",
+   "last_date": "2023-10-05T03:16:00.000"
+  },
+  {
+   "location_description": "PARKING LOT",
+   "n": "106",
+   "last_date": "2023-12-20T13:25:00.000"
+  },
+  {
+   "location_description": "BOAT / WATERCRAFT",
+   "n": "105",
+   "last_date": "2023-09-30T14:15:00.000"
+  },
+  {
+   "location_description": "CREDIT UNION",
+   "n": "101",
+   "last_date": "2023-12-22T10:00:00.000"
+  },
+  {
+   "location_description": "COLLEGE / UNIVERSITY - RESIDENCE HALL",
+   "n": "86",
+   "last_date": "2023-12-03T00:04:00.000"
+  },
+  {
+   "location_description": "CEMETARY",
+   "n": "82",
+   "last_date": "2023-12-10T15:49:00.000"
+  },
+  {
+   "location_description": "AIRPORT TRANSPORTATION SYSTEM (ATS)",
+   "n": "77",
+   "last_date": "2023-12-25T14:00:00.000"
+  },
+  {
+   "location_description": "COLLEGE/UNIVERSITY RESIDENCE HALL",
+   "n": "73",
+   "last_date": "2020-02-26T08:55:00.000"
+  },
+  {
+   "location_description": "FOREST PRESERVE",
+   "n": "71",
+   "last_date": "2023-11-01T18:00:00.000"
+  },
+  {
+   "location_description": "BOAT/WATERCRAFT",
+   "n": "67",
+   "last_date": "2019-11-07T01:30:00.000"
+  },
+  {
+   "location_description": "AIRPORT TERMINAL MEZZANINE - NON-SECURE AREA",
+   "n": "57",
+   "last_date": "2023-10-29T00:15:00.000"
+  },
+  {
+   "location_description": "SAVINGS AND LOAN",
+   "n": "56",
+   "last_date": "2023-12-28T16:50:00.000"
+  },
+  {
+   "location_description": "VACANT LOT",
+   "n": "37",
+   "last_date": "2023-11-17T13:51:00.000"
+  },
+  {
+   "location_description": "GAS STATION DRIVE/PROP.",
+   "n": "28",
+   "last_date": "2023-09-07T21:47:00.000"
+  },
+  {
+   "location_description": "RETAIL STORE",
+   "n": "28",
+   "last_date": "2023-10-09T15:03:00.000"
+  },
+  {
+   "location_description": "HALLWAY",
+   "n": "23",
+   "last_date": "2023-11-10T15:40:00.000"
+  },
+  {
+   "location_description": "GARAGE",
+   "n": "22",
+   "last_date": "2023-10-02T08:59:00.000"
+  },
+  {
+   "location_description": "CHA PARKING LOT",
+   "n": "18",
+   "last_date": "2023-09-04T14:32:00.000"
+  },
+  {
+   "location_description": "NEWSSTAND",
+   "n": "18",
+   "last_date": "2021-10-01T23:30:00.000"
+  },
+  {
+   "location_description": "KENNEL",
+   "n": "18",
+   "last_date": "2023-08-02T14:04:00.000"
+  },
+  {
+   "location_description": "VEHICLE - COMMERCIAL: TROLLEY BUS",
+   "n": "15",
+   "last_date": "2023-11-14T05:05:00.000"
+  },
+  {
+   "location_description": "VEHICLE - COMMERCIAL: ENTERTAINMENT / PARTY BUS",
+   "n": "15",
+   "last_date": "2023-10-12T20:45:00.000"
+  },
+  {
+   "location_description": "BARBER SHOP/BEAUTY SALON",
+   "n": "14",
+   "last_date": "2023-03-31T10:43:00.000"
+  },
+  {
+   "location_description": "VESTIBULE",
+   "n": "11",
+   "last_date": "2023-08-01T13:26:00.000"
+  },
+  {
+   "location_description": "HOTEL",
+   "n": "11",
+   "last_date": "2023-11-04T07:54:00.000"
+  },
+  {
+   "location_description": "VEHICLE-COMMERCIAL - ENTERTAINMENT/PARTY BUS",
+   "n": "10",
+   "last_date": "2019-11-10T03:03:00.000"
+  },
+  {
+   "location_description": "VEHICLE-COMMERCIAL - TROLLEY BUS",
+   "n": "10",
+   "last_date": "2019-07-09T16:00:00.000"
+  },
+  {
+   "location_description": "GANGWAY",
+   "n": "9",
+   "last_date": "2023-09-26T21:30:00.000"
+  },
+  {
+   "location_description": "FARM",
+   "n": "8",
+   "last_date": "2022-09-24T16:00:00.000"
+  },
+  {
+   "location_description": "CTA \"L\" TRAIN",
+   "n": "8",
+   "last_date": "2022-10-16T04:51:00.000"
+  },
+  {
+   "location_description": "DRIVEWAY",
+   "n": "8",
+   "last_date": "2023-11-15T23:53:00.000"
+  },
+  {
+   "location_description": "HOSPITAL",
+   "n": "7",
+   "last_date": "2023-09-04T21:06:00.000"
+  },
+  {
+   "location_description": "CHA GROUNDS",
+   "n": "7",
+   "last_date": "2023-09-01T18:34:00.000"
+  },
+  {
+   "location_description": "STAIRWELL",
+   "n": "7",
+   "last_date": "2023-12-22T04:32:00.000"
+  },
+  {
+   "location_description": "LIQUOR STORE",
+   "n": "6",
+   "last_date": "2022-08-31T16:50:00.000"
+  },
+  {
+   "location_description": "SCHOOL YARD",
+   "n": "6",
+   "last_date": "2023-11-07T14:20:00.000"
+  },
+  {
+   "location_description": "CTA \"L\" PLATFORM",
+   "n": "6",
+   "last_date": "2023-03-11T03:39:00.000"
+  },
+  {
+   "location_description": "CTA PROPERTY",
+   "n": "6",
+   "last_date": "2022-08-16T10:23:00.000"
+  },
+  {
+   "location_description": "OFFICE",
+   "n": "5",
+   "last_date": "2023-02-25T23:24:00.000"
+  },
+  {
+   "location_description": "HORSE STABLE",
+   "n": "3",
+   "last_date": "2019-12-13T22:50:00.000"
+  },
+  {
+   "location_description": "TAVERN",
+   "n": "3",
+   "last_date": "2023-04-14T20:55:00.000"
+  },
+  {
+   "location_description": "CHA LOBBY",
+   "n": "3",
+   "last_date": "2023-05-13T03:19:00.000"
+  },
+  {
+   "location_description": "CLUB",
+   "n": "3",
+   "last_date": "2021-11-14T00:43:00.000"
+  },
+  {
+   "location_description": "MOTEL",
+   "n": "2",
+   "last_date": "2021-10-08T02:40:00.000"
+  },
+  {
+   "location_description": "RAILROAD PROPERTY",
+   "n": "2",
+   "last_date": "2022-01-27T15:20:00.000"
+  },
+  {
+   "location_description": "RIVER BANK",
+   "n": "2",
+   "last_date": "2022-09-27T22:51:00.000"
+  },
+  {
+   "location_description": "GARAGE/AUTO REPAIR",
+   "n": "2",
+   "last_date": "2018-03-10T18:07:00.000"
+  },
+  {
+   "location_description": "CTA SUBWAY STATION",
+   "n": "2",
+   "last_date": "2023-03-25T04:38:00.000"
+  },
+  {
+   "location_description": "CHA HALLWAY",
+   "n": "2",
+   "last_date": "2023-11-07T19:56:00.000"
+  },
+  {
+   "location_description": "BASEMENT",
+   "n": "2",
+   "last_date": "2022-12-29T20:00:00.000"
+  },
+  {
+   "location_description": "WOODED AREA",
+   "n": "2",
+   "last_date": "2018-08-20T02:17:00.000"
+  },
+  {
+   "location_description": "TRAILER",
+   "n": "1",
+   "last_date": "2019-08-02T13:41:00.000"
+  },
+  {
+   "location_description": "PUBLIC GRAMMAR SCHOOL",
+   "n": "1",
+   "last_date": "2022-10-22T21:03:00.000"
+  },
+  {
+   "location_description": "ELEVATOR",
+   "n": "1",
+   "last_date": "2021-01-27T15:56:00.000"
+  },
+  {
+   "location_description": "GOVERNMENT BUILDING",
+   "n": "1",
+   "last_date": "2018-02-13T14:12:00.000"
+  },
+  {
+   "location_description": "LAKE",
+   "n": "1",
+   "last_date": "2020-09-27T00:30:00.000"
+  },
+  {
+   "location_description": "ROOF",
+   "n": "1",
+   "last_date": "2023-05-12T16:46:00.000"
+  },
+  {
+   "location_description": "NURSING HOME",
+   "n": "1",
+   "last_date": "2020-01-03T08:58:00.000"
+  },
+  {
+   "location_description": "CHA ELEVATOR",
+   "n": "1",
+   "last_date": "2021-01-17T08:36:00.000"
+  },
+  {
+   "location_description": "CASINO/GAMBLING ESTABLISHMENT",
+   "n": "1",
+   "last_date": "2020-12-24T05:30:00.000"
+  },
+  {
+   "location_description": "BEACH",
+   "n": "1",
+   "last_date": "2023-06-26T13:51:00.000"
+  },
+  {
+   "location_description": "POLICE FACILITY",
+   "n": "1",
+   "last_date": "2022-08-28T20:28:00.000"
+  },
+  {
+   "location_description": "YMCA",
+   "n": "1",
+   "last_date": "2018-01-12T07:00:00.000"
+  },
+  {
+   "location_description": "BANQUET HALL",
+   "n": "1",
+   "last_date": "2022-07-23T01:09:00.000"
+  },
+  {
+   "location_description": "CHA STAIRWELL",
+   "n": "1",
+   "last_date": "2023-08-06T00:34:00.000"
+  },
+  {
+   "location_description": "CHA PLAY LOT",
+   "n": "1",
+   "last_date": "2019-04-19T16:14:00.000"
+  },
+  {
+   "location_description": "TRUCK",
+   "n": "1",
+   "last_date": "2022-06-23T20:07:00.000"
+  }
+ ]
+}

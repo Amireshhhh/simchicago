@@ -1,0 +1,40 @@
+{
+ "label": "exploratory",
+ "module": "simchi.safety.lights_explore",
+ "period": [
+  "2018-01-01",
+  "2023-12-31"
+ ],
+ "sr_types": [
+  {
+   "sr_type": "Street Light Out Complaint",
+   "n": "296983",
+   "last_date": "2023-12-31T21:35:21.000"
+  },
+  {
+   "sr_type": "Alley Light Out Complaint",
+   "n": "71019",
+   "last_date": "2023-12-31T22:57:53.000"
+  },
+  {
+   "sr_type": "Street Light Pole Damage Complaint",
+   "n": "23047",
+   "last_date": "2023-12-31T17:23:21.000"
+  },
+  {
+   "sr_type": "Street Light On During Day Complaint",
+   "n": "8165",
+   "last_date": "2023-12-31T11:45:06.000"
+  },
+  {
+   "sr_type": "Street Light Pole Door Missing Complaint",
+   "n": "4009",
+   "last_date": "2023-12-31T15:20:19.000"
+  },
+  {
+   "sr_type": "Viaduct Light Out Complaint",
+   "n": "2379",
+   "last_date": "2023-12-27T11:41:40.000"
+  }
+ ]
+}
