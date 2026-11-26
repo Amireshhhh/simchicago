@@ -150,3 +150,19 @@ license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
 file = "data/raw/mirror/safety/summary.json"
 sha256 = "8f94190c25b78ad19a011a98939b229f88d87626b788e54b4bd0e9a55b5c0d10"
 title = "Row counts, unsnapped tallies, date ranges and the exact portal queries of the safety mirror"
+
+[safety_w4b_test_sites]
+file = "data/raw/mirror/safety/w4b_test_sites.csv.gz"
+sha256 = "bdf046ee8f4ec4c317b44e9e7a923572f95ca527709c6cec7004512cc7de06b4"
+title = "W4b test period 2026-01-01..2026-10-31 per snapped site (aggregates only): crashes, A crashes (crash table 85ca-t3if), Vision Zero fatal crashes (gzaz-isa6, through 2026-09-27), crash-table fatal crashes after that date"
+source = "City of Chicago data portal 85ca-t3if + gzaz-isa6"
+downloaded = "2026-11-26"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"
+
+[safety_w4b_test_summary]
+file = "data/raw/mirror/safety/w4b_test_summary.json"
+sha256 = "cfcbd2db95adb24947f26349d81ebb914274e7b46e5c1de7550501e3ca0eff93"
+title = "Row counts, last dates and queries of the W4b test-period mirror"
+source = "City of Chicago data portal 85ca-t3if + gzaz-isa6"
+downloaded = "2026-11-26"
+license = "City of Chicago Data Terms of Use (see docs/DATASETS.md)"

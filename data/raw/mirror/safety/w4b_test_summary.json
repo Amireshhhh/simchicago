@@ -1,0 +1,18 @@
+{
+ "test_period": [
+  "2026-01-01",
+  "2026-10-31"
+ ],
+ "crashes": 93719,
+ "crashes_unsnapped": 1247,
+ "crash_date_max": "2026-10-31 23:55:00",
+ "vision_zero_deaths": 82,
+ "vision_zero_last": "2026-09-27 23:20:00",
+ "ka_a": 1268,
+ "k_after_vz_crash_table": 7,
+ "downloaded": "2026-11-26",
+ "queries": {
+  "crashes": "crash_date >= '2026-01-01T00:00:00' AND crash_date <= '2026-10-31T23:59:59'",
+  "vision_zero": "crash_date >= '2026-01-01T00:00:00' AND crash_date <= '2026-10-31T23:59:59'"
+ }
+}

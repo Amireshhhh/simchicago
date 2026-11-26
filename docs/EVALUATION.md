@@ -5,8 +5,8 @@ and the experiment runs in `reports/experiments/*/experiment.json`, on the defau
 2,000 requested agents (1,944 drawn, standing for 2,589,487 household residents), seed 1.
 
 Every model check is **out of sample** and compares against a **simple baseline**, with the
-pass criterion fixed before the results were seen. Three checks fail their criterion (commute
-destinations; the simulated holding test; the W4 crash ranking); they are reported as failures, not re-defined. The
+pass criterion fixed before the results were seen. Four checks fail their criterion (commute
+destinations; the simulated holding test; the W4 site and W4b corridor crash rankings); they are reported as failures, not re-defined. The
 'L' ridership check failed under the superseded design (2024 vs 2025-26 counts, mixed counting
 methods) and passes narrowly under the W1 re-baseline; both results are kept below. v0.3 workstream 2 replaced the
 distance-based mode choice and travel times by CTA-network ones; the two checks that failed in
@@ -32,6 +32,7 @@ criteria and now pass (numbers below).
 | Crowding forecast, 'L' stations | 0.1280 vs 0.1508, 34,992 forecasts | below the baseline | **pass** |
 | Holding rule (simulated, pre-registered) | mean passenger wait +2.58 min [+1.57, +3.59]; after a later start-up fix −0.94 [−1.80, −0.09] | 95% interval below 0 | **fail** |
 | Crash ranking (W4: empirical Bayes on 2018-2024, test 2025; pre-registered cb367e0) | top 100 sites hold 4.58% of 2025 serious crashes (70 of 1,530) vs 4.64% (71) raw 2018-2024 counts and 3.66% (56) 2024 counts | beat both | **fail** |
+| Corridor crash ranking (W4b: rank 2018-2025, test 2026-01..10; pre-registered 961b085) | top 50 of 10,027 corridors hold 11.51% (150 of 1,303) of test-period serious crashes by empirical Bayes vs 11.74% (153) raw and 11.67% (152) 2025 alone | beat both at top 50 | **fail** |
 | Anomaly detectors (simulated feed, constructed labels) | precision / recall: jump 1.00 / 0.96, stuck 1.00 / 0.79, off route 0.98 / 0.78, outage 0.75 / 1.00 | none (reported) | info |
 | Engine invariants (3-day run, 5,832 agent-days; 2-day CRN and repeat runs) | every day plan partitions [0, 1440]; safety stays in [0, 1]; no behavioural response ≡ no incidents; runs are deterministic | all hold | **pass** |
 
@@ -234,6 +235,56 @@ No change is detectable; the KA counts are too small to say more. Violation coun
 for context only.
 
 `python -m simchi.briefs crash-ranking` refuses to write a brief, because the test failed.
+
+## Corridor crash ranking (W4b)
+
+`python -m simchi.safety.corridors` (→ `reports/safety/corridors.json`); test-period data mirrored
+by `python -m simchi.safety.corridors --mirror` (per-site aggregates, pinned). Design: docstring of
+`simchi/safety/corridors.py`, committed as 961b085 before any code read location-level 2026 crash
+data (the W5 tracker had read two citywide 2026 totals, as stated in that commit).
+
+**Data.** 10,027 corridors (median length 409 m; 10th-90th percentile 102-1,616 m), 2,047 of them
+bus corridors. Test period 2026-01-01 to 2026-10-31: 93,719 crashes (1,247 unsnapped); 1,303 KA
+events at ranked corridors (Vision Zero deaths through 2026-09-27, its last update, then 7 fatal
+crashes from the crash table). Ranking-period KA at corridors: 15,503. NB2 alpha 0.783.
+
+| Top k | Empirical Bayes | Raw 2018-2025 | 2025 only | Bus corridors: EB / raw / 2025 |
+|---|---|---|---|---|
+| 25 | 7.21% (94) | 7.21% (94) | 6.45% (84) | 9.81% / 10.02% / 8.96% |
+| **50 (criterion)** | **11.51% (150)** | **11.74% (153)** | **11.67% (152)** | 15.99% / 15.78% / 15.46% |
+| 100 | 20.80% (271) | 21.03% (274) | 18.80% (245) | 27.61% / 28.04% / 24.63% |
+
+**Fail**: at the top 50 the empirical-Bayes ranking is below both raw counts and the 2025-only
+ranking (the three differ by 1-3 events; the EB and raw top-50 lists share 48 corridors). As in
+W4, shrinking toward a model expectation does not improve on plain counts at the top of the list.
+Descriptive, not a test: the top 100 of 10,027 corridors (1% of units) hold about 21% of serious
+crashes, against under 5% for the top 100 of 76,522 sites (0.13% of units).
+
+## Robustness of the crash concentration (D)
+
+`python -m simchi.safety.robustness` (→ `reports/safety/robustness.json`). Checks pre-registered in
+the docstring of `simchi/safety/robustness.py` (8d9650a); descriptive, not causal, no pass or
+fail. Top-100 share of each test year's serious (KA) crashes, ranking on all earlier years from
+2018. Each cell: empirical Bayes / raw count / oracle (the 100 units with most crashes that year,
+the ceiling no ranking can beat).
+
+| Test year | All 76,522 sites | Segments >= 100 m, per mile (35,875) | Intersections only (25,239) | KA events (all / segments / intersections) |
+|---|---|---|---|---|
+| 2019 | 2.84% / 3.18% / 10.98% | 3.80% / 1.81% / 23.69% | 4.08% / 4.50% / 15.64% | 2076 / 553 / 1445 |
+| 2020 | 2.83% / 2.93% / 11.26% | 2.41% / 1.30% / 23.01% | 4.02% / 4.31% / 16.22% | 1980 / 539 / 1369 |
+| 2021 | 3.80% / 4.27% / 11.87% | 4.05% / 2.82% / 24.12% | 5.45% / 5.99% / 16.76% | 2132 / 568 / 1486 |
+| 2022 | 3.36% / 3.90% / 11.35% | 4.73% / 3.09% / 22.73% | 4.99% / 5.56% / 16.24% | 2052 / 550 / 1422 |
+| 2023 | 4.22% / 4.16% / 11.88% | 2.69% / 2.69% / 23.76% | 6.05% / 5.70% / 16.60% | 1969 / 484 / 1404 |
+| 2024 | 5.07% / 5.19% / 13.61% | 3.02% / 1.39% / 28.07% | 7.14% / 7.39% / 19.10% | 1697 / 431 / 1204 |
+
+- **The concentration finding holds every year**: the top 100 sites hold 2.83-5.19% of the next
+  year's serious crashes, and even the oracle reaches only 10.98-13.61%. Each year only 2.44%, 2.33%, 2.43%, 2.39%, 2.29%, 1.99%
+  of ranked sites (2019-2024) have any serious crash at all.
+- **Intersections** are more concentrated (top 100: 4.02-7.39%; oracle 15.64-19.10%). **Per mile**, the
+  empirical-Bayes rate beats the raw rate in 5 of 6 years (equal in 2023), because a raw rate
+  ranks short segments with one crash first.
+- 2019-2024 were W4's training years, so these are not unseen periods; volume counts (from
+  2020-10) postdate the early training years.
 
 ## Promised vs delivered (W5)
 

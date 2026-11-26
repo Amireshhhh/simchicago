@@ -21,3 +21,74 @@ Also reported: the share of ranked units holding any KA event in year Y, and the
 oracle would reach (the k units with most year-Y KA), as the ceiling.
 Output: reports/safety/robustness.json and a table in docs/EVALUATION.md.
 """
+
+from __future__ import annotations  # noqa: E402  (after the pre-registration docstring)
+
+import json
+import sys
+
+import numpy as np
+import pandas as pd
+
+from simchi.paths import REPORTS
+from simchi.safety import crashes as C
+
+YEARS = tuple(range(2019, 2025))
+K = 100
+MIN_SEG_M = 100.0
+
+
+def site_year_ka(site_year: pd.DataFrame, vz_site_year: pd.DataFrame) -> pd.DataFrame:
+    a = site_year.set_index(["site", "year"])
+    k = vz_site_year.set_index(["site", "year"])["fatal_crashes"]
+    idx = a.index.union(k.index)
+    return pd.DataFrame({"ka": a["a_crashes"].reindex(idx).fillna(0) + k.reindex(idx).fillna(0),
+                         "crashes": a["crashes"].reindex(idx).fillna(0)}).reset_index()
+
+
+def shares_for(ids, keys: dict, outcome: pd.Series, k: int = K) -> dict:
+    out = {n: C.captured(C.top_k(ids, kk, k), outcome) for n, kk in keys.items()}
+    out["oracle"] = C.captured(C.top_k(ids, [outcome.reindex(ids).fillna(0).to_numpy()], k), outcome)
+    out["share_of_units_with_any"] = float((outcome.reindex(ids).fillna(0) > 0).mean())
+    out["units"] = int(len(ids))
+    out["events"] = float(outcome.reindex(ids).fillna(0).sum())
+    return out
+
+
+def year_checks(sites: pd.DataFrame, sy: pd.DataFrame, site_adt: pd.DataFrame, Y: int, k: int = K) -> dict:
+    ranked = sites[~sites["expressway"]]
+    ids = ranked.index.to_numpy()
+    tr = sy[(sy["year"] >= 2018) & (sy["year"] < Y)].groupby("site")[["ka", "crashes"]].sum().reindex(ids).fillna(0)
+    yt = sy[sy["year"] == Y].groupby("site")["ka"].sum().reindex(ids).fillna(0)
+    X = C.design(ranked, site_adt)
+    y = tr["ka"].to_numpy(float)
+    fit = C.nb2_fit(X.to_numpy(float), y)
+    eb, _ = C.empirical_bayes(fit["mu"], y, fit["alpha"])
+    eb = pd.Series(eb, index=ids)
+    out = {"train_years": [2018, Y - 1], "test_year": Y, "alpha": fit["alpha"]}
+    out["all_sites"] = shares_for(ids, {"EB": [eb.to_numpy()], "raw": [y, tr["crashes"].to_numpy(float)]}, yt, k)
+    seg = ranked[(ranked["type"] == "segment") & (ranked["length_m"].astype(float) >= MIN_SEG_M)]
+    sid = seg.index.to_numpy()
+    miles = seg["length_m"].astype(float).to_numpy() / 1609.344
+    out["segments_per_mile"] = shares_for(sid, {"EB": [eb[sid].to_numpy() / miles, tr.loc[sid, "ka"].to_numpy()],
+                                                "raw": [tr.loc[sid, "ka"].to_numpy() / miles, tr.loc[sid, "ka"].to_numpy()]}, yt[sid], k)
+    it = ranked[ranked["type"] == "intersection"].index.to_numpy()
+    out["intersections"] = shares_for(it, {"EB": [eb[it].to_numpy()], "raw": [tr.loc[it, "ka"].to_numpy(), tr.loc[it, "crashes"].to_numpy()]}, yt[it], k)
+    return out
+
+
+def main(argv=None):
+    from simchi.safety.mirror import load_sites
+    D = C.load_mirror()
+    S, _ = load_sites()
+    sy = site_year_ka(D["site_year"], D["vz_site_year"])
+    res = {"design": "D pre-registration, docstring of simchi/safety/robustness.py (commit 8d9650a)", "k": K,
+           "label": "descriptive, not causal; no pass or fail", "years": [year_checks(S.table, sy, D["site_adt"], Y) for Y in YEARS]}
+    (REPORTS / "safety").mkdir(parents=True, exist_ok=True)
+    (REPORTS / "safety" / "robustness.json").write_text(json.dumps(res, indent=1, default=float))
+    for r in res["years"]:
+        print(r["test_year"], {u: {n: round(r[u][n], 4) for n in ("EB", "raw", "oracle")} for u in ("all_sites", "segments_per_mile", "intersections")})
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

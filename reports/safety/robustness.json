@@ -1,0 +1,199 @@
+{
+ "design": "D pre-registration, docstring of simchi/safety/robustness.py (commit 8d9650a)",
+ "k": 100,
+ "label": "descriptive, not causal; no pass or fail",
+ "years": [
+  {
+   "train_years": [
+    2018,
+    2018
+   ],
+   "test_year": 2019,
+   "alpha": 1.036542523910188,
+   "all_sites": {
+    "EB": 0.02842003853564547,
+    "raw": 0.031791907514450865,
+    "oracle": 0.10982658959537572,
+    "share_of_units_with_any": 0.024359007867018636,
+    "units": 76522,
+    "events": 2076.0
+   },
+   "segments_per_mile": {
+    "EB": 0.0379746835443038,
+    "raw": 0.018083182640144666,
+    "oracle": 0.23688969258589512,
+    "share_of_units_with_any": 0.014550522648083623,
+    "units": 35875,
+    "events": 553.0
+   },
+   "intersections": {
+    "EB": 0.04083044982698962,
+    "raw": 0.04498269896193772,
+    "oracle": 0.156401384083045,
+    "share_of_units_with_any": 0.050120844724434406,
+    "units": 25239,
+    "events": 1445.0
+   }
+  },
+  {
+   "train_years": [
+    2018,
+    2019
+   ],
+   "test_year": 2020,
+   "alpha": 1.1833898021645917,
+   "all_sites": {
+    "EB": 0.028282828282828285,
+    "raw": 0.029292929292929294,
+    "oracle": 0.11262626262626263,
+    "share_of_units_with_any": 0.023274352473798384,
+    "units": 76522,
+    "events": 1980.0
+   },
+   "segments_per_mile": {
+    "EB": 0.02411873840445269,
+    "raw": 0.012987012987012988,
+    "oracle": 0.2300556586270872,
+    "share_of_units_with_any": 0.014355400696864112,
+    "units": 35875,
+    "events": 539.0
+   },
+   "intersections": {
+    "EB": 0.04017531044558072,
+    "raw": 0.04309715120525932,
+    "oracle": 0.16216216216216217,
+    "share_of_units_with_any": 0.04746622290899005,
+    "units": 25239,
+    "events": 1369.0
+   }
+  },
+  {
+   "train_years": [
+    2018,
+    2020
+   ],
+   "test_year": 2021,
+   "alpha": 1.1917965027714696,
+   "all_sites": {
+    "EB": 0.03799249530956848,
+    "raw": 0.042682926829268296,
+    "oracle": 0.11866791744840526,
+    "share_of_units_with_any": 0.024254462768876925,
+    "units": 76522,
+    "events": 2132.0
+   },
+   "segments_per_mile": {
+    "EB": 0.040492957746478875,
+    "raw": 0.028169014084507043,
+    "oracle": 0.24119718309859156,
+    "share_of_units_with_any": 0.014801393728222997,
+    "units": 35875,
+    "events": 568.0
+   },
+   "intersections": {
+    "EB": 0.05450874831763122,
+    "raw": 0.059892328398384924,
+    "oracle": 0.16756393001345896,
+    "share_of_units_with_any": 0.049407662744165776,
+    "units": 25239,
+    "events": 1486.0
+   }
+  },
+  {
+   "train_years": [
+    2018,
+    2021
+   ],
+   "test_year": 2022,
+   "alpha": 1.2535114349772276,
+   "all_sites": {
+    "EB": 0.033625730994152045,
+    "raw": 0.03898635477582846,
+    "oracle": 0.11354775828460038,
+    "share_of_units_with_any": 0.02394082747445179,
+    "units": 76522,
+    "events": 2052.0
+   },
+   "segments_per_mile": {
+    "EB": 0.04727272727272727,
+    "raw": 0.03090909090909091,
+    "oracle": 0.22727272727272727,
+    "share_of_units_with_any": 0.014634146341463415,
+    "units": 35875,
+    "events": 550.0
+   },
+   "intersections": {
+    "EB": 0.04992967651195499,
+    "raw": 0.05555555555555555,
+    "oracle": 0.16244725738396623,
+    "share_of_units_with_any": 0.048734101985023176,
+    "units": 25239,
+    "events": 1422.0
+   }
+  },
+  {
+   "train_years": [
+    2018,
+    2022
+   ],
+   "test_year": 2023,
+   "alpha": 1.2245553604257606,
+   "all_sites": {
+    "EB": 0.042153377348908075,
+    "raw": 0.04164550533265617,
+    "oracle": 0.11884205180294566,
+    "share_of_units_with_any": 0.02294764904210554,
+    "units": 76522,
+    "events": 1969.0
+   },
+   "segments_per_mile": {
+    "EB": 0.026859504132231406,
+    "raw": 0.026859504132231406,
+    "oracle": 0.23760330578512398,
+    "share_of_units_with_any": 0.013073170731707317,
+    "units": 35875,
+    "events": 484.0
+   },
+   "intersections": {
+    "EB": 0.06054131054131054,
+    "raw": 0.05698005698005698,
+    "oracle": 0.16595441595441596,
+    "share_of_units_with_any": 0.04790205634137644,
+    "units": 25239,
+    "events": 1404.0
+   }
+  },
+  {
+   "train_years": [
+    2018,
+    2023
+   ],
+   "test_year": 2024,
+   "alpha": 1.2208633994196687,
+   "all_sites": {
+    "EB": 0.050677666470241606,
+    "raw": 0.05185621685327048,
+    "oracle": 0.136122569239835,
+    "share_of_units_with_any": 0.019863568646925067,
+    "units": 76522,
+    "events": 1697.0
+   },
+   "segments_per_mile": {
+    "EB": 0.030162412993039442,
+    "raw": 0.013921113689095127,
+    "oracle": 0.28074245939675174,
+    "share_of_units_with_any": 0.011428571428571429,
+    "units": 35875,
+    "events": 431.0
+   },
+   "intersections": {
+    "EB": 0.07142857142857142,
+    "raw": 0.0739202657807309,
+    "oracle": 0.19102990033222592,
+    "share_of_units_with_any": 0.041641903403462896,
+    "units": 25239,
+    "events": 1204.0
+   }
+  }
+ ]
+}
