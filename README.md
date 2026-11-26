@@ -208,6 +208,19 @@ filter, "crash concentration" where no traffic count exists, and source, age and
 tooltip. The camera before/after slice (24 speed cameras, one year either side) is internal /
 underpowered: it is kept in `reports/safety/` and not shown in the public modes.
 
+## Safety tests (W4b, W9, W10) and data lanes (W8)
+
+- **W4b** corridors (same-name segment chains split at the arterial grid): pre-registered test of
+  empirical Bayes vs raw counts on 2026 data: **fails** (docs/EVALUATION.md).
+- **D** robustness of the crash concentration (descriptive): docs/EVALUATION.md and the
+  measured-fact brief `docs/briefs/crash-concentration.md`.
+- **W8** explore/confirm lanes (`simchi/lanes.py`): exploration may only read data before 2024;
+  every read is logged; exploratory outputs never reach the public site or briefs.
+- **W9** street-light outages and nighttime outdoor crime (`simchi/safety/lights.py`): explored on
+  2018-2023, then pre-registered and tested on 2024-01..2026-10.
+- **W10** long train gaps and crime at CTA rail locations (`simchi/transit/train_gaps.py`):
+  pre-registered; runs once 84 days of station headways exist (from 2027-02-11).
+
 ## Promised vs delivered
 
 `python -m simchi.commitments` computes the status of each commitment in `data/commitments.toml`

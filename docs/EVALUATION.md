@@ -299,6 +299,20 @@ They overlap W9's window in time but carry no block or outage information, so th
 informed the W9 design; the statement should have said "no 311 record and no block-level crime
 record dated 2024 or later".
 
+## Train gaps and crime at CTA rail locations (W10)
+
+Pre-registered in the docstring of `simchi/transit/train_gaps.py`, committed as 3bd3579 ("W10
+pre-registration"). **Status: insufficient data.** It needs station headways for at least 84
+dates; the first file is for 2026-11-13, so the minimum is reached with the file for 2027-02-04
+and the analysis can first run on 2027-02-11 (crime data lag), if no date is missed.
+
+## Explore / confirm lanes (W8)
+
+`simchi/lanes.py`: the explore lane refuses any window or record dated 2024-01-01 or later and
+logs every read to `reports/lanes/reads.jsonl`; `tests/test_lanes.py` fails if an explore read
+overlapped a confirm module's test window before that module's pre-registration commit.
+Exploratory outputs (`reports/explore/`) are labelled and never public or briefed.
+
 ## Promised vs delivered (W5)
 
 `python -m simchi.commitments` (→ `reports/commitments/status.json`); rules in the docstring of
