@@ -49,18 +49,35 @@ jobs:
       - name: Archive every missing date of the last 13 days
         run: |
           set -euo pipefail
+          wait_for_quota() {   # sleep until the token's API rate limit resets if fewer than $1 calls remain
+            rem=$(gh api rate_limit -q .resources.core.remaining)
+            if [ "$rem" -lt "$1" ]; then rst=$(gh api rate_limit -q .resources.core.reset); w=$((rst - $(date +%s) + 10)); echo "rate limit: waiting ${w}s"; if [ "$w" -gt 0 ]; then sleep "$w"; fi; fi
+          }
+          wait_for_quota 300
           for back in $(seq 13 -1 1); do
             d=$(date -u -d "-$back day" +%Y-%m-%d); y=${d:0:4}; tag="history-$y"
             gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --title "Polling history $y" --latest=false \
-              --notes "Append-only CTA polling archive (W2): daily stats-<date>.csv.gz (aggregated) and traversals-<date>.csv.gz (derived segment run times). Never overwritten. See simchi/transit/archive.py. Data provided by Chicago Transit Authority (CTA Bus Tracker, CTA Train Tracker); not affiliated with or endorsed by CTA."
+              --notes "Append-only CTA polling archive (W2): daily stats-<date>.csv.gz (aggregated) and traversals-<date>.csv.gz (derived segment run times). Never overwritten. See simchi/transit/archive.py. Data provided by Chicago Transit Authority (CTA Bus Tracker, CTA Train Tracker); not affiliated with or endorsed by CTA." \
+              || gh release view "$tag" >/dev/null    # created meanwhile, or a transient error on the first view
             if gh release view "$tag" --json assets -q '.assets[].name' | grep -qx "stats-$d.csv.gz"; then
               echo "stats-$d.csv.gz exists: kept as is"; continue
             fi
             rm -rf art && mkdir -p art out
             prev=$(date -u -d "$d -1 day" +%Y-%m-%d); next=$(date -u -d "$d +1 day" +%Y-%m-%d)
+            incomplete=0; n=0
             for id in $(gh run list -R "$GITHUB_REPOSITORY" -w live.yml -s success -L 1000 --created "$prev..$next" --json databaseId -q '.[].databaseId'); do
-              gh run download "$id" -R "$GITHUB_REPOSITORY" -n "vehicles-$id" -D "art/vehicles-$id" || echo "no artifact for run $id"
+              # stay under the token's API rate limit: every 25 downloads, wait for the reset if < 100 calls remain
+              n=$((n + 1))
+              if [ $((n % 25)) -eq 0 ]; then wait_for_quota 100; fi
+              if ! msg=$(gh run download "$id" -R "$GITHUB_REPOSITORY" -n "vehicles-$id" -D "art/vehicles-$id" 2>&1); then
+                case "$msg" in
+                  *"no valid artifacts"*|*"no artifact matches"*) echo "run $id has no vehicles artifact" ;;
+                  *) echo "download failed for run $id: $msg"; incomplete=1 ;;
+                esac
+              fi
             done
+            # never publish a partial day: the archive is append-only, so retry the whole date on the next run
+            if [ "$incomplete" -eq 1 ]; then echo "SKIPPED $d: some downloads failed; retried next run"; continue; fi
             if ! ls art/*/history.csv.gz >/dev/null 2>&1; then echo "no run artifacts for $d"; continue; fi
             python -m simchi.transit.archive build --date "$d" --artifacts art --out out
             if [ "$(zcat "out/vehicles-$d.csv.gz" | wc -l)" -le 1 ]; then echo "no observations on $d"; continue; fi

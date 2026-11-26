@@ -267,6 +267,11 @@ public; by default only the derived files (daily stats; segment run times withou
 are uploaded, and raw positions only if the owner sets `ARCHIVE_RAW=on` (docs/CTA_TERMS.md).
 The metrics use only the derived files, so nothing in the design depends on that choice.
 No rider feedback has been supplied, so no agreement figure exists.
+First archive run (2026-11-26): 2026-11-13 and 2026-11-14 archived from complete artifact
+downloads; on 2026-11-15 the workflow token hit GitHub's API rate limit, so that day was built from
+an incomplete set of runs and its upload also failed (nothing partial was published). Since then
+any failed download marks the date incomplete and it is not uploaded (retried the next run), and
+the job waits for the rate-limit reset instead of failing.
 
 **W3** (pre-registered b3a4600, docstring of `simchi/transit/stop_time.py`): segment run-time
 regression with route fixed effects and route-clustered errors, then the stop-balancing rerun at
