@@ -171,7 +171,16 @@ def normalise(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     return out[SCHEMA].reset_index(drop=True), {"rows_in": int(len(df)), "rows_kept": int(len(out)), "rows_dropped": int((~ok).sum())}
 
 
-def to_reliability_frame(df: pd.DataFrame) -> pd.DataFrame:
+def service_day(dates, day_types: dict | None = None) -> np.ndarray:
+    """Day type of each Chicago service date (W2 amendment 1): from `day_types` (date -> type, from
+    the feed in effect) or else from data/transit/calendar.json (pinned feed); "unknown" if absent."""
+    if day_types is None:
+        from simchi.transit.calendar import load_table
+        day_types = load_table()["dates"]
+    return np.array([day_types.get(str(d), "unknown") for d in dates], dtype=object)
+
+
+def to_reliability_frame(df: pd.DataFrame, day_types: dict | None = None) -> pd.DataFrame:
     """Ingestion schema -> the frame simchi.transit.reliability.positions expects."""
     from simchi.transit.reliability import CHICAGO
     d = df.copy()
@@ -184,15 +193,15 @@ def to_reliability_frame(df: pd.DataFrame) -> pd.DataFrame:
     d["poll"] = pd.to_datetime(d["poll_utc"], utc=True)
     loc = d["poll"].dt.tz_convert(CHICAGO)
     d["hour"] = loc.dt.hour
-    wd = loc.dt.weekday
-    d["day"] = np.where(wd < 5, "weekday", np.where(wd == 5, "saturday", "sunday"))
     d["date"] = loc.dt.date.astype(str)
+    d["day"] = service_day(d["date"], day_types)
     return d
 
 
 # ----------------------------------------------------------------------------- daily build
-def build_day(history_paths, date: str) -> tuple[pd.DataFrame, dict]:
-    """All live.yml history files -> the date's rows (UTC date of poll) in the schema."""
+def build_day(history_paths, date: str, raw_out: list | None = None) -> tuple[pd.DataFrame, dict]:
+    """All live.yml history files -> the date's rows (UTC date of poll) in the schema. If raw_out is
+    a list, the date's raw Train Tracker rows (with next-station fields) are appended to it."""
     frames = []
     for p in history_paths:
         p = Path(p)
@@ -200,6 +209,9 @@ def build_day(history_paths, date: str) -> tuple[pd.DataFrame, dict]:
             h = pd.read_csv(f, dtype={"route": str, "id": str, "pid": str, "train_dir": str})
         if len(h):
             frames.append(from_live(h, p.parent.name.replace("vehicles-", "")))
+            if raw_out is not None and "next_station_id" in h:
+                tr = h[(h["mode"] == "train") & (h["poll_utc"].astype(str).str[:10] == date)]
+                raw_out.append(tr[["id", "mode", "route", "train_dir", "next_station_id", "poll_utc"]])
     if not frames:
         return pd.DataFrame(columns=SCHEMA), {"rows_in": 0, "rows_kept": 0, "rows_dropped": 0}
     df, counts = normalise(pd.concat(frames, ignore_index=True))
@@ -208,8 +220,11 @@ def build_day(history_paths, date: str) -> tuple[pd.DataFrame, dict]:
     return df, counts
 
 
-def daily_stats(df: pd.DataFrame, sched=None, frame=None) -> pd.DataFrame:
-    """Sufficient statistics of one day's rows (schema) per cell and date, plus system polls."""
+def daily_stats(df: pd.DataFrame, sched=None, frame=None, day_types: dict | None = None, schedules: dict | None = None,
+                feed_sha: str = "") -> pd.DataFrame:
+    """Sufficient statistics of one day's rows (schema) per cell and date, plus system polls.
+    schedules: Chicago date -> date_schedule() frame (W2 amendment 1); the date's scheduled trips and
+    vehicles in service go into each cell, and bunching/gaps use that date's scheduled headway."""
     from simchi.transit import reliability as RL
     if df.empty:
         return pd.DataFrame()
@@ -218,13 +233,18 @@ def daily_stats(df: pd.DataFrame, sched=None, frame=None) -> pd.DataFrame:
     if frame is None:
         from simchi.data.cds import load_cds
         frame = load_cds().frame
-    R = to_reliability_frame(df)
+    R = to_reliability_frame(df, day_types)
     sys_polls = R.groupby(["mode", "day", "hour", "date"])["poll"].nunique().rename("polls").reset_index()
     sys_polls.insert(0, "kind", "polls")
     P = RL.positions(R, sched, frame)
     if P.empty:
         return sys_polls
     H = RL.headways(P, sched)
+    sch = _date_sched_lookup(schedules, sched) if schedules else None
+    if sch is not None and len(H):
+        H["date"] = pd.to_datetime(H["poll"], utc=True).dt.tz_convert(RL.CHICAGO).dt.date.astype(str)
+        k = list(zip(H["route"], H["direction"], H["date"], H["hour"], strict=True))
+        H["scheduled_headway_min"] = [60.0 / sch[x][0] if x in sch and sch[x][0] > 0 else np.nan for x in k]
     per_poll = P.groupby(CELL + ["date", "poll"]).size().rename("n").reset_index()
     cell = per_poll.groupby(CELL + ["date"]).agg(polls_seen=("poll", "nunique"), veh_sum=("n", "sum")).reset_index()
     ob = P.groupby(CELL + ["date"]).agg(obs=("dly", "size"), dly=("dly", "sum")).reset_index()
@@ -240,8 +260,59 @@ def daily_stats(df: pd.DataFrame, sched=None, frame=None) -> pd.DataFrame:
         if c not in cell:
             cell[c] = 0
         cell[c] = cell[c].fillna(0)
+    if sch is not None:
+        k = list(zip(cell["route"], cell["direction"], cell["date"], cell["hour"], strict=True))
+        cell["sched_trips"] = [sch[x][0] if x in sch else 0.0 for x in k]
+        cell["sched_in_service"] = [sch[x][1] if x in sch else 0.0 for x in k]
+        cell["feed_sha256"] = feed_sha
     cell.insert(0, "kind", "cell")
     return pd.concat([cell, sys_polls], ignore_index=True)
+
+
+def _date_sched_lookup(schedules: dict, sched) -> dict:
+    """(route, direction, date, hour) -> (trips, vehicles in service), one-direction-coded routes halved."""
+    out = {}
+    for d, t in schedules.items():
+        for r in t.itertuples():
+            f = 0.5 if (r.route, int(r.direction)) in sched.both_ways else 1.0
+            out[(r.route, int(r.direction), str(d), int(r.hour))] = (float(r.trips) * f, float(r.in_service) * f)
+    return out
+
+
+def station_headways(raw: pd.DataFrame, poll_times_utc) -> pd.DataFrame:
+    """Train arrivals at stations from Train Tracker rows (live history: id, route, train_dir,
+    next_station_id, poll_utc) and headways per station, line and direction (W2 amendment 1,
+    TRAIN STATION HEADWAYS). No vehicle ids in the output."""
+    cols = ["station_id", "line", "direction", "arrival_utc", "headway_min", "continuous"]
+    t = raw[(raw["mode"].astype(str) == "train") & raw["next_station_id"].notna()].copy()
+    if t.empty:
+        return pd.DataFrame(columns=cols)
+    t["ns"] = pd.to_datetime(t["poll_utc"], utc=True).astype("int64")          # nanoseconds since the epoch
+    t["next_station_id"] = t["next_station_id"].astype(str).str.replace(r"\.0$", "", regex=True)
+    t = t.sort_values(["id", "ns"])
+    arr = []
+    for (_vid, line, dr), g in t.groupby(["id", "route", "train_dir"], dropna=False):
+        ts, ns = g["ns"].to_numpy(np.int64), g["next_station_id"].to_numpy()
+        for k in range(len(g) - 1):
+            gap = (ts[k + 1] - ts[k]) / 1e9
+            if 0 < gap <= 150 and ns[k] != ns[k + 1]:
+                arr.append((ns[k], str(line), str(dr), (ts[k] + ts[k + 1]) // 2))
+    if not arr:
+        return pd.DataFrame(columns=cols)
+    a = pd.DataFrame(arr, columns=["station_id", "line", "direction", "arrival"]).sort_values(["station_id", "line", "direction", "arrival"])
+    polls = np.sort(pd.to_datetime(pd.Series(list(poll_times_utc)), utc=True).astype("int64").unique())
+    pgap = np.diff(polls) / 1e9 if len(polls) > 1 else np.array([])
+    rows = []
+    for (st, line, dr), g in a.groupby(["station_id", "line", "direction"]):
+        tt = g["arrival"].to_numpy(np.int64)
+        for k in range(1, len(tt)):
+            lo, hi = np.searchsorted(polls, tt[k - 1]), np.searchsorted(polls, tt[k])
+            inside = pgap[max(lo - 1, 0):hi] if len(pgap) else np.array([])
+            rows.append({"station_id": st, "line": line, "direction": dr,
+                         "arrival_utc": pd.Timestamp(int(tt[k]), unit="ns", tz="UTC").strftime("%Y-%m-%dT%H:%M:%SZ"),
+                         "headway_min": round((tt[k] - tt[k - 1]) / 1e9 / 60.0, 2),
+                         "continuous": bool(len(inside) == 0 or inside.max() <= 150)})
+    return pd.DataFrame(rows, columns=cols)
 
 
 def daily_traversals(df: pd.DataFrame, sched=None, frame=None) -> pd.DataFrame:
@@ -276,8 +347,11 @@ def aggregate(stats: pd.DataFrame, sched=None, fn: dict | None = None) -> dict:
     if stats is None or stats.empty:
         return {"minimum_reached": False, "reason": "no archived days yet", "weeks_observed": 0}
     sched = sched or RL.Schedule()
+    stats = stats[stats["day"].isin(["weekday", "saturday", "sunday"])]      # holidays and unknown dates excluded (amendment 1)
     polls = stats[stats["kind"] == "polls"]
     cells = stats[stats["kind"] == "cell"].copy()
+    if polls.empty:
+        return {"minimum_reached": False, "reason": "no archived days with a regular day type yet", "weeks_observed": 0}
     dates = sorted(polls["date"].unique())
     span = (pd.Timestamp(dates[-1]) - pd.Timestamp(dates[0])).days + 1 if dates else 0
     per_day = polls.drop_duplicates(["date"])[["date", "day"]].groupby("day")["date"].nunique().to_dict()
@@ -299,8 +373,14 @@ def aggregate(stats: pd.DataFrame, sched=None, fn: dict | None = None) -> dict:
     g = g.merge(hd, on=CELL, how="left").merge(sp[["mode", "day", "hour", "polls", "coverage"]], on=["mode", "day", "hour"], how="left")
     g["headway_dates"] = g["headway_dates"].fillna(0).astype(int)
     g["vehicles_per_poll"] = g["veh_sum"] / g["polls"]
-    g["scheduled_in_service"] = [sched.in_service(r, d, day, h) for r, d, day, h in zip(g["route"], g["direction"], g["day"], g["hour"], strict=True)]
-    g["scheduled_headway_min"] = [sched.headway(r, d, day, h) for r, d, day, h in zip(g["route"], g["direction"], g["day"], g["hour"], strict=True)]
+    if "sched_trips" in cells:                       # per-date schedules (amendment 1): means over the cell's dates
+        sm = cells.groupby(CELL).agg(sched_trips_mean=("sched_trips", "mean"), sched_in_service_mean=("sched_in_service", "mean")).reset_index()
+        g = g.merge(sm, on=CELL, how="left")
+        g["scheduled_in_service"] = g["sched_in_service_mean"]
+        g["scheduled_headway_min"] = 60.0 / g["sched_trips_mean"].where(g["sched_trips_mean"] > 0)
+    else:
+        g["scheduled_in_service"] = [sched.in_service(r, d, day, h) for r, d, day, h in zip(g["route"], g["direction"], g["day"], g["hour"], strict=True)]
+        g["scheduled_headway_min"] = [sched.headway(r, d, day, h) for r, d, day, h in zip(g["route"], g["direction"], g["day"], g["hour"], strict=True)]
     g["service_delivered"] = g["vehicles_per_poll"] / g["scheduled_in_service"]
     mean = g["h_sum"] / g["h_n"].where(g["h_n"] > 0)
     var = (g["h_sumsq"] / g["h_n"].where(g["h_n"] > 0) - mean ** 2).clip(lower=0)
@@ -379,13 +459,15 @@ def main(argv=None):
     b.add_argument("--date", required=True)
     b.add_argument("--artifacts", required=True, help="directory with vehicles-<run id>/history.csv.gz")
     b.add_argument("--out", required=True)
+    b.add_argument("--feed", default=None, help="GTFS zip in effect for the date (day types and per-date schedules)")
     a = sub.add_parser("aggregate", help="archive-wide metrics from stats-*.csv.gz")
     a.add_argument("--stats", required=True)
     a.add_argument("--out", default=str(REPORTS / "reliability"))
     x = ap.parse_args(sys.argv[1:] if argv is None else argv)
     if x.cmd == "build":
         paths = sorted(Path(x.artifacts).glob("*/history.csv.gz"))
-        df, counts = build_day(paths, x.date)
+        raw = []
+        df, counts = build_day(paths, x.date, raw)
         out = Path(x.out)
         out.mkdir(parents=True, exist_ok=True)
         vf = out / f"vehicles-{x.date}.csv.gz"
@@ -393,12 +475,27 @@ def main(argv=None):
         if vf.stat().st_size > SIZE_CAP_BYTES:          # cap applies whether or not the raw file is published
             vf.unlink()
             sys.exit(f"vehicles-{x.date}.csv.gz exceeds the {SIZE_CAP_BYTES // 2**20} MB cap; not written")
-        daily_stats(df).to_csv(out / f"stats-{x.date}.csv.gz", index=False, compression={"method": "gzip", "mtime": 0})
+        day_types, schedules, sha = None, None, ""
+        if x.feed:
+            from datetime import date as _date
+
+            from simchi.transit.calendar import date_schedule, day_type
+            from simchi.transit.gtfs import read_feed, sha256_file
+            feed, sha = read_feed(x.feed), sha256_file(x.feed)
+            local = sorted(set(to_reliability_frame(df, {})["date"])) if len(df) else []
+            day_types = {d: day_type(feed, _date.fromisoformat(d)) for d in local}
+            schedules = {d: date_schedule(feed, _date.fromisoformat(d)) for d in local if day_types[d] != "unknown"}
+            counts["day_types"] = day_types
+        daily_stats(df, day_types=day_types, schedules=schedules, feed_sha=sha).to_csv(
+            out / f"stats2-{x.date}.csv.gz", index=False, compression={"method": "gzip", "mtime": 0})
+        rawdf = pd.concat(raw, ignore_index=True) if raw else pd.DataFrame(columns=["id", "mode", "route", "train_dir", "next_station_id", "poll_utc"])
+        station_headways(rawdf, df["poll_utc"].unique() if len(df) else []).to_csv(
+            out / f"train_station_headways-{x.date}.csv.gz", index=False, compression={"method": "gzip", "mtime": 0})
         daily_traversals(df).to_csv(out / f"traversals-{x.date}.csv.gz", index=False, compression={"method": "gzip", "mtime": 0})
         print("ARCHIVE", x.date, json.dumps(counts))
     else:
         fn = tomllib.loads((DATA / "frequent_network.toml").read_text())
-        res = aggregate(load_stats(sorted(Path(x.stats).glob("stats-*.csv.gz"))), fn=fn)
+        res = aggregate(load_stats(sorted(Path(x.stats).glob("stats2-*.csv.gz"))), fn=fn)    # amendment 1: stats2 only
         write_report(res, Path(x.out))
         print(json.dumps({k: res.get(k) for k in ("archive_dates", "span_days", "dates_by_day_type", "minimum_reached", "reason", "cells", "cells_eligible")}, default=str))
 

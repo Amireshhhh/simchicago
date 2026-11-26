@@ -3,8 +3,10 @@ name: Polling archive (append-only)
 # Durable polling history (W2 design: docstring of simchi/transit/archive.py). Each day, for every
 # UTC date of the last 13 days that has no file yet, the vehicle histories of live.yml runs (still
 # within their 14-day artifact retention) are converted to the ingestion schema and uploaded as
-# release assets of "history-<YYYY>": stats-<date>.csv.gz (aggregated sufficient statistics) and
-# traversals-<date>.csv.gz (derived segment run times, no vehicle id or position). The raw
+# release assets of "history-<YYYY>": stats2-<date>.csv.gz (aggregated sufficient statistics, day
+# type and schedule from the GTFS feed in effect; W2 amendment 1), traversals-<date>.csv.gz (derived
+# segment run times) and train_station_headways-<date>.csv.gz (derived; no vehicle ids). stats-<date>
+# files from before the amendment are kept and superseded. The raw
 # vehicles-<date>.csv.gz file is uploaded only if the repository variable ARCHIVE_RAW is "on":
 # the repository is public, and publishing raw CTA position history needs the owner's decision
 # (docs/CTA_TERMS.md). Assets are never replaced (no --clobber). No CTA request is made here.
@@ -26,9 +28,9 @@ permissions:
   contents: write      # create the history release and upload assets
   actions: read        # list live.yml runs and download their artifacts
 
-concurrency:
+concurrency:                  # a newer run replaces a running one; runs skip files already uploaded, so none is lost
   group: archive
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   archive:
@@ -54,13 +56,19 @@ jobs:
             if [ "$rem" -lt "$1" ]; then rst=$(gh api rate_limit -q .resources.core.reset); w=$((rst - $(date +%s) + 10)); echo "rate limit: waiting ${w}s"; if [ "$w" -gt 0 ]; then sleep "$w"; fi; fi
           }
           wait_for_quota 300
+          # GTFS feed in effect: day types and per-date schedules (W2 amendment 1); its sha256 goes into stats2
+          curl -sSfL https://www.transitchicago.com/downloads/sch_data/google_transit.zip -o gtfs.zip
+          upload_new() {   # append-only: upload each file only if no asset of that name exists
+            have=$(gh release view "$1" --json assets -q '.assets[].name'); shift
+            for f in "$@"; do if ! grep -qx "$(basename "$f")" <<< "$have"; then gh release upload "$tag" "$f"; else echo "$(basename "$f") exists: kept"; fi; done
+          }
           for back in $(seq 13 -1 1); do
             d=$(date -u -d "-$back day" +%Y-%m-%d); y=${d:0:4}; tag="history-$y"
             gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --title "Polling history $y" --latest=false \
               --notes "Append-only CTA polling archive (W2): daily stats-<date>.csv.gz (aggregated) and traversals-<date>.csv.gz (derived segment run times). Never overwritten. See simchi/transit/archive.py. Data provided by Chicago Transit Authority (CTA Bus Tracker, CTA Train Tracker); not affiliated with or endorsed by CTA." \
               || gh release view "$tag" >/dev/null    # created meanwhile, or a transient error on the first view
-            if gh release view "$tag" --json assets -q '.assets[].name' | grep -qx "stats-$d.csv.gz"; then
-              echo "stats-$d.csv.gz exists: kept as is"; continue
+            if gh release view "$tag" --json assets -q '.assets[].name' | grep -qx "stats2-$d.csv.gz"; then
+              echo "stats2-$d.csv.gz exists: kept as is"; continue
             fi
             rm -rf art && mkdir -p art out
             prev=$(date -u -d "$d -1 day" +%Y-%m-%d); next=$(date -u -d "$d +1 day" +%Y-%m-%d)
@@ -79,17 +87,17 @@ jobs:
             # never publish a partial day: the archive is append-only, so retry the whole date on the next run
             if [ "$incomplete" -eq 1 ]; then echo "SKIPPED $d: some downloads failed; retried next run"; continue; fi
             if ! ls art/*/history.csv.gz >/dev/null 2>&1; then echo "no run artifacts for $d"; continue; fi
-            python -m simchi.transit.archive build --date "$d" --artifacts art --out out
+            python -m simchi.transit.archive build --date "$d" --artifacts art --out out --feed gtfs.zip
             if [ "$(zcat "out/vehicles-$d.csv.gz" | wc -l)" -le 1 ]; then echo "no observations on $d"; continue; fi
-            gh release upload "$tag" "out/stats-$d.csv.gz" "out/traversals-$d.csv.gz"     # append-only
-            if [ "${ARCHIVE_RAW:-off}" = "on" ]; then gh release upload "$tag" "out/vehicles-$d.csv.gz"; fi
+            upload_new "$tag" "out/stats2-$d.csv.gz" "out/traversals-$d.csv.gz" "out/train_station_headways-$d.csv.gz"     # append-only
+            if [ "${ARCHIVE_RAW:-off}" = "on" ]; then upload_new "$tag" "out/vehicles-$d.csv.gz"; fi
           done
 
       - name: Archive-wide reliability and Frequent Network check (from the daily stats only)
         run: |
           mkdir -p stats
           for tag in $(gh release list -L 100 --json tagName -q '.[].tagName' | grep '^history-' || true); do
-            gh release download "$tag" -p 'stats-*.csv.gz' -D stats --skip-existing || true
+            gh release download "$tag" -p 'stats2-*.csv.gz' -D stats --skip-existing || true
           done
           python -m simchi.transit.archive aggregate --stats stats --out archive-report
       - uses: actions/upload-artifact@v7

@@ -61,14 +61,17 @@ def test_archive_workflow_is_append_only_and_makes_no_cta_requests():
 
 def test_raw_positions_are_published_only_with_the_owners_switch():
     code = "\n".join(line.split("#")[0] for line in (WF / "archive.yml").read_text().splitlines())
-    ups = [line.strip() for line in code.splitlines() if "gh release upload" in line]
-    assert any("stats-" in u and "traversals-" in u and "vehicles-" not in u for u in ups)
-    raw = [u for u in ups if "vehicles-" in u]
-    assert raw and all(u.startswith('if [ "${ARCHIVE_RAW:-off}" = "on" ]') for u in raw)
+    calls = [line.strip() for line in code.splitlines() if line.strip().startswith(("upload_new", 'if [ "${ARCHIVE_RAW'))]
+    assert any("stats2-" in c and "traversals-" in c and "train_station_headways-" in c and "vehicles-" not in c for c in calls)
+    raw = [c for c in calls if "vehicles-" in c]
+    assert raw and all(c.startswith('if [ "${ARCHIVE_RAW:-off}" = "on" ]') for c in raw)
+    # the only direct upload is inside the helper, which skips names that already exist
+    direct = [line for line in code.splitlines() if "gh release upload" in line]
+    assert len(direct) == 1 and "grep -qx" in direct[0]
 
 
 def test_archive_never_uploads_a_partial_day_and_throttles():
     text = (WF / "archive.yml").read_text()
     i_skip = text.index('if [ "$incomplete" -eq 1 ]; then echo "SKIPPED')
-    i_upload = text.index("gh release upload")
+    i_upload = text.index('upload_new "$tag"')
     assert i_skip < i_upload and "incomplete=1" in text and "gh api rate_limit" in text

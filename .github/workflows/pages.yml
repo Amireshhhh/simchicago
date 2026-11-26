@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir -p stats
           for tag in $(gh release list -R "$GITHUB_REPOSITORY" -L 100 --json tagName -q '.[].tagName' | grep '^history-' || true); do
-            gh release download "$tag" -R "$GITHUB_REPOSITORY" -p 'stats-*.csv.gz' -D stats --skip-existing || true
+            gh release download "$tag" -R "$GITHUB_REPOSITORY" -p 'stats2-*.csv.gz' -D stats --skip-existing || true
           done
           python -m simchi.transit.archive aggregate --stats stats --out reports/reliability || echo "archive aggregate failed"
 

@@ -62,9 +62,9 @@ def load_history(paths) -> pd.DataFrame:
     df["poll"] = pd.to_datetime(df["poll_utc"], utc=True)
     loc = df["poll"].dt.tz_convert(CHICAGO)
     df["hour"] = loc.dt.hour
-    wd = loc.dt.weekday
-    df["day"] = np.where(wd < 5, "weekday", np.where(wd == 5, "saturday", "sunday"))
     df["date"] = loc.dt.date.astype(str)
+    from simchi.transit.archive import service_day        # day type from scheduled service (W2 amendment 1)
+    df["day"] = service_day(df["date"])
     df["dly"] = df["dly"].astype(str).str.lower().isin(["true", "1"])
     return df
 
