@@ -10,6 +10,30 @@ used: both datasets are block-level). Outage request types (311 v6vf-nfxy sr_typ
 Indoor/outdoor: data/w9_location_map.csv (all 193 location_description values of 2018-2023;
 values not in the file are "other" and unused). Night = 21:00-04:59, day = 10:00-15:59 Chicago
 time (dark, respectively light, in every season).
+
+PRE-REGISTERED CONFIRM TEST, W9 (committed as "W9 pre-registration" after the explore lane
+(2018-2023; reports/explore/W9_note.md) and before any record dated 2024 or later was read)
+  Window: 2024-01-01 .. 2026-10-31, read only through the confirm lane (simchi.lanes).
+  Outages: completed 311 requests of the two outage types created in the window; requests closed
+  after 2026-10-31 are dropped (their closing date lies beyond the window). Requests snapped to a
+  block are merged into outage windows (overlapping or touching requests on a block are one window),
+  start = creation date, end = closing date (Chicago dates). Windows ending later than 2026-10-30
+  are dropped, so their after-repair days fall inside the window.
+  Panel (simchi.safety.lights.panel): for each window, the days strictly inside it (outage = 1) and
+  the same number of days right after the repair, at most 30 (outage = 0); after-repair days inside
+  another window of the block are dropped; days after 2026-10-31 are dropped. Each block-day gives
+  two rows: outdoor crimes at night (21:00-04:59) and in the day (10:00-15:59), outdoor by
+  data/w9_location_map.csv (values first seen after 2023 are "other" and not counted).
+  Model: y = b1 night x outage + b2 outage + b3 night + block fixed effects + week (ISO) fixed
+  effects + error, OLS after removing both sets of fixed effects; standard errors clustered by
+  block (CR1); 95% interval b1 +- t(G-1, 0.975) SE, G = blocks.
+  PASS: b1 > 0 and its 95% interval excludes 0.
+  Reported, not criteria: b2, b3, the four cell means, blocks, rows, windows used.
+  Limits stated in advance: outages are resident-reported, so where residents report less (or
+  repairs come faster) outages are missed or shorter, and blocks enter the test in proportion to
+  reporting; crimes are counted where reported and geocoded to the block; the after-repair period
+  is the same block shortly after, so seasonal change within a few weeks is absorbed by week fixed
+  effects only on average.
 """
 
 from __future__ import annotations
