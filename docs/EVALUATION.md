@@ -267,6 +267,14 @@ public; by default only the derived files (daily stats; segment run times withou
 are uploaded, and raw positions only if the owner sets `ARCHIVE_RAW=on` (docs/CTA_TERMS.md).
 The metrics use only the derived files, so nothing in the design depends on that choice.
 No rider feedback has been supplied, so no agreement figure exists.
+**Amendment 1 (4de0ce4, "W2 amendment: day type from scheduled service")**, committed before any
+W2 result existed: day types come from the GTFS calendar of the feed in effect (holidays and
+uncovered dates excluded) and scheduled values from each date's own trips. In the pinned feed
+2026-11-26, 11-27, 12-25 and 12-26 are holidays. Effect on the earliest qualifying date: it moves
+from 2027-01-07 to 2027-01-09, because Saturday 2026-12-26 no longer counts and the eighth
+regular Saturday is 2027-01-09. That date assumes 2026-11-13 is re-derived as stats2 before its
+artifacts leave retention, no day is lost, and 2027-01-02 and 01-09 are regular Saturdays in the
+feed then in effect (no published feed covers 2027 yet).
 First archive run (2026-11-26): 2026-11-13 and 2026-11-14 archived from complete artifact
 downloads; on 2026-11-15 the workflow token hit GitHub's API rate limit, so that day was built from
 an incomplete set of runs and its upload also failed (nothing partial was published). Since then
