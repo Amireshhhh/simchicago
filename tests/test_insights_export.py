@@ -21,3 +21,9 @@ def test_ridership_block_never_compares_across_the_method_break():
     # the mirror ends 2026-08-31, so the year before the last 12 months starts 2024-09: no comparison
     assert R["period"][1] == "2026-08-31"
     assert R["bus_yoy"] is None and R["rail_yoy"] is None
+
+
+def test_camera_slice_is_not_in_the_public_export():
+    from simchi.export.insights import _public_safety
+    s = _public_safety()
+    assert s is None or ("camera_slice" not in s and "test" in s)

@@ -159,7 +159,13 @@ def build_insights() -> dict:
     return {"schema": "simchi.insights/1", "network": network_block(), "ridership": ridership_block(),
             "validation": validation_block(), "models": models_block(), "interventions": interventions_block(),
             "ops": ops_block(), "service_design": service_design_block(), "commitments": _load(REPORTS / "commitments" / "status.json"),
-            "safety": _load(REPORTS / "safety" / "crash_ranking.json")}
+            "safety": _public_safety()}
+
+
+def _public_safety():
+    """Crash ranking for the public site, without the camera slice (internal / underpowered)."""
+    r = _load(REPORTS / "safety" / "crash_ranking.json")
+    return {k: v for k, v in r.items() if k != "camera_slice"} if r else None
 
 
 def export_insights(out: Path | None = None) -> Path:

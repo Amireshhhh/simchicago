@@ -72,6 +72,22 @@ schema) are uploaded only if the repository variable `ARCHIVE_RAW` is set to `on
 owner's decision under the caching and termination clauses quoted above. The archive job makes
 no CTA request. Size cap: a daily raw file over 200 MB is refused.
 
+**Why the derived files are enough (so `ARCHIVE_RAW` stays off).** Every archive-based analysis
+is computed from the derived daily files alone:
+- W2 (delivered service, headway regularity, bunching, gaps, Frequent Network delivered check)
+  needs only per route, direction, day type and hour sums: polls, vehicles per poll, delay flags,
+  headway count, sum and sum of squares, bunching and gap counts, scheduled trips and vehicles in
+  service. `stats2-<date>` holds exactly these, so archive-wide means, coefficients of variation
+  and shares are exact without positions.
+- W3 (seconds per skipped stop) needs only segment run times with their route, direction,
+  segment and hour; stops, signals and lengths are joined by segment. `traversals-<date>` holds
+  these.
+- W10 (train gaps and CTA-location crime) needs only arrival times and headways per station,
+  line and direction. `train_station_headways-<date>` holds these.
+The one thing raw positions would add is the ability to re-derive these files under a different
+definition later. Each definition is fixed in a pre-registration, so that is not needed for the
+registered analyses; a changed definition would need new data in any case.
+
 **Key confidentiality.** The terms do not contain a clause on key handling. Keys are kept
 server-side anyway: they live only in the GitHub Actions secrets `CTA_BUS_KEY` and
 `CTA_TRAIN_KEY`, are read from environment variables, are masked in logs, are never written to

@@ -205,7 +205,8 @@ an empirical-Bayes estimate. The pre-registered test (top 100 sites' share of 20
 must beat raw counts and the 2024 counts) **fails**: 4.58% vs 4.64% (raw) and 3.66% (2024). Map tab
 → **Serious crashes**: severity by site, expressways grey (not CPD jurisdiction), a bus-corridor
 filter, "crash concentration" where no traffic count exists, and source, age and method in each
-tooltip. Camera before/after slice: no detectable change around 24 speed cameras.
+tooltip. The camera before/after slice (24 speed cameras, one year either side) is internal /
+underpowered: it is kept in `reports/safety/` and not shown in the public modes.
 
 ## Promised vs delivered
 

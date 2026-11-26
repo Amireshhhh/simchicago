@@ -25,7 +25,7 @@ function setInternal(v) { try { localStorage.setItem('simchi-internal', v ? '1' 
 const banner = why => `<div class="internal-banner" role="note"><b>Internal · not validated.</b> ${why}</div>`;
 
 function promiseDetail(c) {
-  if (c.rule === 'frequent_scheduled') return `${c.units_meeting.toLocaleString('en-US')} of ${c.units.toLocaleString('en-US')} route-direction-hours in the service windows are scheduled at 10 minutes or better (${(c.share_meeting * 100).toFixed(1)}%), ${c.routes_checked.length} routes, CTA timetable for the week of ${esc(c.reference_dates.weekday)}.${Object.keys(c.routes_short).length ? ' Short: ' + Object.entries(c.routes_short).map(([r, v]) => `#${esc(r)} (${v.units - v.meeting} of ${v.units})`).join(', ') + '.' : ''}`;
+  if (c.rule === 'frequent_scheduled') return `${(c.share_meeting * 100).toFixed(1)}% of route-direction-hours meet it (${c.units_meeting.toLocaleString('en-US')} of ${c.units.toLocaleString('en-US')}).${Object.keys(c.routes_short).length ? ' Exceptions: ' + Object.entries(c.routes_short).map(([r, v]) => `#${esc(r)}, ${v.units - v.meeting} of ${v.units} hours`).join('; ') + '.' : ''} ${c.routes_checked.length} routes, CTA timetable for the week of ${esc(c.reference_dates.weekday)}.`;
   if (c.rule === 'zero_by_year') return `${Math.round(c.count).toLocaleString('en-US')} in ${esc(String(c.query.year))} so far (data through ${esc(c.data_through)}).`;
   if (c.reason) return esc(c.reason) + (c.weeks_observed != null ? ` (${c.weeks_observed} weeks observed)` : '');
   return c.share_meeting != null ? `${(c.share_meeting * 100).toFixed(1)}% of ${c.units} units meet it.` : '';
@@ -77,9 +77,10 @@ export function renderInsights(root, I) {
     <h2>Promised vs delivered ${chip('observed')} ${chip('scheduled')}</h2>
     ${CM ? `<p class="sub">Each public commitment, where it was published, how it is measured, and a status computed by fixed rules (never typed in). Last checked ${esc(CM.generated)}.</p>
     <div class="promises">${CM.commitments.map(c => `<div class="promise st-${esc(c.status.replace(/ /g, '-'))}">
-      <div class="ph"><span class="pstat">${esc(c.status)}</span><span class="pag">${esc(c.agency)}</span></div>
+      <div class="ph"><span class="pag">${esc(c.agency)}</span></div>
       <blockquote>“${esc(c.quote)}”</blockquote>
-      <p class="fine">${promiseDetail(c)}</p>
+      <p class="pmeasure">${promiseDetail(c)}</p>
+      <p class="pstatline">Status by the fixed rule: <span class="pstat">${esc(c.status)}</span></p>
       <p class="fine">Metric: ${esc(c.metric)}. Measured from: ${esc(c.measured_from)}. <a href="${esc(c.source)}" target="_blank" rel="noopener">Source</a>${c.source_title ? ` (${esc(c.source_title)})` : ''} · last checked ${esc(c.last_checked)}</p></div>`).join('')}</div>
     <details class="corrections"><summary>Corrections log (${CM.corrections.length})</summary><ul>${CM.corrections.map(k => `<li><b>${esc(k.date)}</b> · ${esc(k.commitment)}: ${esc(k.change)} <span class="fine">(${esc(k.reason)})</span></li>`).join('')}</ul></details>` :
       '<div class="empty">No commitments report yet (<code>python -m simchi.commitments</code>).</div>'}

@@ -507,3 +507,5 @@ pre.code { background: rgba(0, 0, 0, .3); border: 1px solid var(--line); border-
 .st-met .pstat { color: #2fae6b; } .st-not-met .pstat, .st-missed .pstat { color: #e0484f; } .st-on-track .pstat { color: #3f7be0; }
 .st-insufficient-data .pstat, .st-not-measurable .pstat { color: var(--muted); }
 .corrections { margin-top: 12px; font-size: 13px; }
+.pmeasure { font-size: 14px; font-weight: 600; margin: 6px 0; line-height: 1.45; }
+.pstatline { font-size: 12px; margin: 4px 0 8px; }

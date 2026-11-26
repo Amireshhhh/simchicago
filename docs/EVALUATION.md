@@ -227,7 +227,7 @@ criterion. The two top-100 lists share 86 sites. Serious crashes are spread thin
 of 76,522 sites hold under 5% of them. Model: NB2, alpha 1.237; coefficients in the report.
 Lanes are not in the model (no lane data for sites; not imputed).
 
-**Camera slice (descriptive).** 24 speed cameras went live in 2019-2024; no red-light camera did.
+**Camera slice (descriptive; internal / underpowered, not shown in the public modes).** 24 speed cameras went live in 2019-2024; no red-light camera did.
 Within 660 ft, 12 months before vs after, against 3 matched intersections each (from 1,647 with
 no camera within 1/2 mile): ratio of ratios 1.00 [0.90, 1.12] for all crashes (852 → 869 at
 cameras, 2,550 → 2,590 at comparisons) and 1.15 [0.45, 2.34] for KA crashes (10 → 10; 55 → 48).
